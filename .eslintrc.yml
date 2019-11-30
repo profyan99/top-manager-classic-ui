@@ -1,0 +1,53 @@
+env:
+  browser: true
+  es6: true
+extends:
+  - "eslint:recommended"
+  - "plugin:vue/essential"
+  - "eslint-config-airbnb-base"
+parserOptions:
+  extraFileExtensions: [".vue"]
+  ecmaVersion: 2018
+  sourceType: module
+plugins:
+  - vue
+globals:
+  expect: false
+  test: false
+  describe: false
+  jest: false
+rules:
+  indent:
+    - error
+    - 2
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - always
+  max-len:
+    - error
+    - code: 80
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: ^_
+  operator-linebreak: off
+  import/no-unresolved: off
+  vue/valid-v-if: off
+  vue/script-indent:
+    - error
+    - 2
+    - baseIndent: 1
+overrides:
+  -
+    files: ["*.vue"]
+    rules:
+      indent: off
+
+  - files: ["**/store/**/mutations.js"]
+    rules:
+      no-param-reassign: off

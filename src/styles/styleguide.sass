@@ -1,0 +1,38 @@
+// The base unit
+$base: 16
+$base-font-size: $base * 1px
+
+@function base-unit($num)
+  @return ($num / $base) * 1rem
+
+$base-border-radius: base-unit(5)
+$max-content-width: base-unit(1600)
+
+$screen-sm-min: base-unit(576)
+$screen-md-min: base-unit(768)
+$screen-lg-min: base-unit(992)
+
+// Colors
+$bg-main: #0E0E0E
+$fg-main: white
+$purple: #6947CA
+$red: #CA4747
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap')
+@mixin main-font
+  font-family: 'Roboto', sans-serif
+
+// Media sizes
+@mixin small-devices
+  @media (max-width: $screen-sm-min)
+    @content
+
+
+@mixin medium-devices
+  @media (min-width: $screen-md-min)
+    @content
+
+@mixin large-devices
+  @media (min-width: $screen-lg-min)
+    @content
