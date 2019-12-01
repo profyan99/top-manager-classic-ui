@@ -31,10 +31,17 @@
           <label>
             <input :type="input.type"
                    :placeholder="input.placeholder"
+                   @blur="$v.form[type][input.field].$touch()"
                    v-model="form[type][input.field]">
           </label>
+          <span class="error" v-if="$v.form[type][input.field].$error">
+            {{ input.errorMessage }}
+          </span>
         </div>
-        <div class="button" @click="action.method()">{{ action.name }}</div>
+        <div class="button"
+             @click="action.method()">
+          {{ action.name }}
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +49,9 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import {
+    required, email, minLength, sameAs,
+  } from 'vuelidate/lib/validators';
 
   export default {
     name: 'login',
@@ -49,8 +59,16 @@
       return {
         type: 'signIn',
         form: {
-          signIn: {},
-          signUp: {},
+          signIn: {
+            login: '',
+            password: '',
+          },
+          signUp: {
+            login: '',
+            email: '',
+            password: '',
+            repeatedPassword: '',
+          },
         },
       };
     },
@@ -63,24 +81,28 @@
               placeholder: 'Никнейм',
               type: 'text',
               field: 'login',
+              errorMessage: 'Никнейм должен быть длиннее 5-ти символов',
             },
             {
               label: 'Почта',
               placeholder: 'Электронная почта',
               type: 'text',
               field: 'email',
+              errorMessage: 'Почтовый адрес должен быть действительным',
             },
             {
               label: 'Пароль',
               placeholder: 'Пароль',
               type: 'password',
               field: 'password',
+              errorMessage: 'Пароль должен быть длиннее 5-ти символов',
             },
             {
-              label: 'Повтор пароль',
+              label: 'Повтор пароля',
               placeholder: 'Пароль',
               type: 'password',
               field: 'repeatedPassword',
+              errorMessage: 'Пароли должены совпадать',
             },
           ];
         }
@@ -90,12 +112,14 @@
             placeholder: 'Логин',
             type: 'text',
             field: 'login',
+            errorMessage: 'Логин должен быть длиннее 5-ти символов',
           },
           {
             label: 'Пароль',
             placeholder: 'Пароль',
             type: 'password',
             field: 'password',
+            errorMessage: 'Пароль должен быть длиннее 5-ти символов',
           },
         ];
       },
@@ -127,14 +151,28 @@
         this.type = type;
       },
       performSignIn() {
-        const { form: { signIn }, signInAction } = this;
+        const {
+          form: { signIn }, signInAction, $v, type,
+        } = this;
+
+        if ($v.form[type].$invalid) {
+          return;
+        }
+
         signInAction(signIn)
           .catch((err) => {
             // TODO notify
           });
       },
       performSignUp() {
-        const { form: { signUp }, signUpAction, toggleType } = this;
+        const {
+          form: { signUp }, signUpAction, toggleType, $v, type,
+        } = this;
+
+        if ($v.form[type].$invalid) {
+          return;
+        }
+
         signUpAction(signUp)
           .then(() => {
             // TODO notify
@@ -143,6 +181,38 @@
           .catch((err) => {
             // TODO notify
           });
+      },
+    },
+    validations: {
+      form: {
+        signIn: {
+          login: {
+            required,
+            minLength: minLength(6),
+          },
+          password: {
+            required,
+            minLength: minLength(6),
+          },
+        },
+        signUp: {
+          login: {
+            required,
+            minLength: minLength(6),
+          },
+          email: {
+            required,
+            email,
+          },
+          password: {
+            required,
+            minLength: minLength(6),
+          },
+          repeatedPassword: {
+            required,
+            sameAs: sameAs('password'),
+          },
+        },
       },
     },
   };
@@ -181,7 +251,7 @@
 
   .modal
     width: base-unit(340)
-    height: base-unit(420)
+    min-height: base-unit(420)
     border-radius: $base-border-radius
     background-color: $grey
     display: flex
@@ -262,13 +332,43 @@
       .or
         display: flex
         color: $light-grey
-        font-size: base-unit(11)
+        font-size: base-unit(12)
         font-weight: normal
         justify-content: center
         margin-top: base-unit(10)
 
       .input
         margin-top: base-unit(20)
+        display: flex
+        flex-direction: column
+
+        .label
+          color: $fg-main
+          font-weight: 500
+          font-size: base-unit(12)
+          text-transform: uppercase
+
+        .error
+          color: $red
+          font-size: base-unit(12)
+          font-weight: 300
+          margin-top: base-unit(2)
+
+        input
+          background-color: transparent
+          border: 0
+          border-bottom: base-unit(2) solid $light-grey
+          outline: 0
+          +main-font
+          color: $fg-main
+          font-size: base-unit(16)
+          font-weight: normal
+          padding: base-unit(10) 0
+          width: 100%
+
+          &:focus
+            border-bottom: base-unit(2) solid $red
+
 
       .button
         margin-top: base-unit(34)
@@ -280,4 +380,7 @@
         font-size: base-unit(18)
         border-radius: base-unit(5)
         padding: base-unit(10) 0
+
+        &:hover
+          opacity: 0.8
 </style>
