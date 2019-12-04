@@ -1,6 +1,16 @@
 <template>
   <div class="wrapper">
-    <router-view v-if="isLoggedIn"></router-view>
+    <div class="container" v-if="isLoggedIn">
+      <div class="header-wrapper">
+        <nav-bar></nav-bar>
+      </div>
+      <div class="content-wrapper">
+        <router-view></router-view>
+      </div>
+      <div class="footer-wrapper">
+
+      </div>
+    </div>
     <login v-else></login>
   </div>
 </template>
@@ -8,11 +18,13 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import Login from '~/pages/login';
+  import NavBar from '~/components/NavBar';
 
   export default {
     name: 'layout',
     components: {
       Login,
+      NavBar,
     },
     computed: {
       ...mapGetters('user', ['isLoggedIn']),
@@ -38,4 +50,24 @@
     max-width: $max-content-width
     margin: 0 auto
     display: flex
+
+  .container
+    margin: auto
+    display: flex
+    flex-direction: column
+    min-height: 100vh
+    width: 100%
+    padding: 0 base-unit(40)
+
+  .header-wrapper
+    flex-direction: column
+    flex: 0 0 auto
+
+  .content-wrapper
+    flex: 1 0 auto
+    display: flex
+
+  .footer-wrapper
+    flex: 0 0 auto
+
 </style>

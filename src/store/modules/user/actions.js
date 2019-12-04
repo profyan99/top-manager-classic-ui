@@ -5,7 +5,7 @@ const actions = {
     const user = await axios.get('/api/me')
       .catch((_error) => {
       });
-    commit('setUser', user);
+    //commit('setUser', user);
   },
   async signIn({ commit }, form) {
     const user = await axios.post('/api/signin', {
@@ -21,6 +21,13 @@ const actions = {
       userName: form.login,
       ...form,
     });
+  },
+  async logout({ commit }) {
+    await axios.post('/api/logout', {})
+      .catch((_error) => {
+
+      });
+    commit('setUser', null);
   },
 };
 
