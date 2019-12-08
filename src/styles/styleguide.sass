@@ -8,10 +8,6 @@ $base-font-size: $base * 1px
 $base-border-radius: base-unit(5)
 $max-content-width: base-unit(1600)
 
-$screen-sm-min: base-unit(576)
-$screen-md-min: base-unit(768)
-$screen-lg-min: base-unit(992)
-
 // Colors
 $bg-main: #0E0E0E
 $fg-main: white
@@ -23,19 +19,73 @@ $red: #CA4747
 
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap')
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap')
+
 @mixin main-font
   font-family: 'Roboto', sans-serif
 
-// Media sizes
-@mixin small-devices
-  @media (max-width: $screen-sm-min)
-    @content
+@mixin sub-font
+  font-family: 'Open Sans', sans-serif
 
+// flex 12 columns grid
+$grid__bp-sm: 576
+$grid__bp-md: 768
+$grid__bp-lg: 992
+$grid__bp-xl: 1200
+$grid__cols: 12
 
-@mixin medium-devices
-  @media (min-width: $screen-md-min)
-    @content
+$map-grid-props: ('': 0, '-sm': $grid__bp-sm, '-md': $grid__bp-md, '-lg': $grid__bp-lg, '-xl': $grid__bp-xl)
 
-@mixin large-devices
-  @media (min-width: $screen-lg-min)
+@mixin create-mq($breakpoint, $min-or-max)
+  @if ($breakpoint == 0)
     @content
+  @else
+    @media screen and (#{$min-or-max}-width: $breakpoint *1px)
+      @content
+
+@mixin create-col-classes($modifier, $grid-cols, $breakpoint)
+  @include create-mq($breakpoint, 'min')
+    .col#{$modifier}-offset-0
+      margin-left: 0
+
+    @for $i from 1 through $grid-cols
+      .col#{$modifier}-#{$i}
+        flex-basis: (100 / ($grid-cols / $i) ) * 1%
+
+      .col#{$modifier}-offset-#{$i}
+        margin-left: (100 / ($grid-cols / $i) ) * 1%
+
+@each $modifier, $breakpoint in $map-grid-props
+  @if ($modifier == '')
+    $modifier: '-xs'
+
+  @include create-mq($breakpoint - 1, 'max')
+    .hidden#{$modifier}-down
+      display: none !important
+
+  @include create-mq($breakpoint, 'min')
+    .hidden#{$modifier}-up
+      display: none !important
+
+.container
+  max-width: $grid__bp-md * 1px
+  margin: 0 auto
+
+  &--fluid
+    margin: 0
+    max-width: 100%
+
+.row
+  display: flex
+  flex-wrap: wrap
+  width: 100%
+
+@each $modifier, $breakpoint in $map-grid-props
+  @include create-col-classes($modifier, $grid__cols, $breakpoint)
+
+// Common mixins
+@mixin title
+  font-size: base-unit(28)
+  font-weight: bold
+  font-style: normal
+  color: $fg-main

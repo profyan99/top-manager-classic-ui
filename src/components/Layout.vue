@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="container" v-if="isLoggedIn">
+    <div class="layout-container" v-if="isLoggedIn">
       <div class="header-wrapper">
         <nav-bar></nav-bar>
       </div>
@@ -51,13 +51,14 @@
     margin: 0 auto
     display: flex
 
-  .container
+  .layout-container
     margin: auto
     display: flex
     flex-direction: column
     min-height: 100vh
     width: 100%
     padding: 0 base-unit(40)
+    box-sizing: border-box
 
   .header-wrapper
     flex-direction: column

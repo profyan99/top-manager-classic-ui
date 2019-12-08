@@ -1,5 +1,10 @@
 <template>
   <div class="nav-bar">
+    <!--<div class="modal-wrapper"
+         v-if="modalActive"
+         @click="modalActive = false">
+
+    </div>-->
     <div class="logo">
       <span class="main">Top Manager</span>
       <span class="sub">oil tycoon</span>
@@ -14,14 +19,14 @@
       </div>
     </div>
     <div class="profile"
-         @mouseover="modalActive = true">
+         @click="modalActive = !modalActive">
       <div class="avatar">
 
       </div>
       <span class="user-name">{{ user.username }}</span>
       <div class="modal"
            v-if="modalActive"
-           @mouseleave="modalActive = false">
+           @focusout="modalActive = false">
         <span @click="logout">Выход</span>
       </div>
     </div>
@@ -74,26 +79,27 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
+  $nav-font-size: base-unit(14)
+
   .nav-bar
-    padding: base-unit(20) 0
+    padding: base-unit(10) 0
     display: flex
     flex-direction: row
     align-items: center
-    height: base-unit(50)
 
   .logo
     display: flex
     flex-direction: column
 
     .main
-      font-size: base-unit(20)
+      font-size: base-unit(16)
       font-style: normal
       font-weight: 900
       color: $fg-main
       text-transform: uppercase
 
     .sub
-      font-size: base-unit(10)
+      font-size: base-unit(8)
       font-style: normal
       font-weight: 300
       letter-spacing: 0.93em
@@ -105,11 +111,11 @@
     flex-direction: row
     flex: 1
     align-items: center
-    margin-left: base-unit(70)
+    margin-left: base-unit(40)
 
     .link-item
       padding: base-unit(10)
-      margin-right: base-unit(20)
+      margin-right: base-unit(5)
       cursor: pointer
 
       &:hover span
@@ -117,10 +123,10 @@
 
       span
         font-weight: 500
-        font-size: base-unit(16)
+        font-size: $nav-font-size
         font-style: normal
         color: $dark-fg-main
-        padding: base-unit(10) 0
+        padding: base-unit(5) 0
 
     .link-selected
 
@@ -146,7 +152,7 @@
 
     .user-name
       font-weight: 500
-      font-size: base-unit(16)
+      font-size: $nav-font-size
       font-style: normal
       color: $dark-fg-main
       margin-left: base-unit(20)
@@ -165,10 +171,19 @@
       padding-left: base-unit(42)
       color: $dark-fg-main
       font-weight: normal
-      font-size: base-unit(14)
+      font-size: $nav-font-size
       font-style: normal
 
     &:hover
       color: #b1b1b1
+
+  .modal-wrapper
+    position: fixed
+    z-index: 15
+    width: 100vw
+    height: 100vh
+    left: 0
+    top: 0
+    opacity: 0
 
 </style>
