@@ -41,6 +41,23 @@
         <span>Онлайн: {{ playersOnline }}</span>
       </template>
     </chat>
+    <modal v-if="!!modalData">
+      <template v-slot:header>
+        <span>Комната {{ modalData.name }}</span>
+      </template>
+      <template v-slot:content>
+        <span>Раунд: {{ modalData.name }}</span>
+        <span>Игроки: {{ modalData.name }}</span>
+        <span>Состояние: {{ modalData.name }}</span>
+        <span>Тип: {{ modalData.name }}</span>
+        <span v-if="modalData.scenario">
+          Сценарий: {{ modalData.scenario }}
+        </span>
+      </template>
+      <template v-slot:actions>
+
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -49,6 +66,7 @@
   import Chat from '~/components/rooms/Chat';
   import AppInput from '~/components/AppInput';
   import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
+  import Modal from '~/components/Modal';
 
   export default {
     name: 'rooms',
@@ -56,11 +74,13 @@
       Chat,
       AppInput,
       RoomPreviewListItem,
+      Modal,
     },
     data() {
       return {
         roomSearchWord: '',
         playersOnline: 93,
+        modalData: null,
       };
     },
     computed: {
@@ -76,7 +96,7 @@
     },
     methods: {
       openRoomPreview(room) {
-
+        this.modalData = room;
       },
     },
   };
