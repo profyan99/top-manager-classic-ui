@@ -38,31 +38,49 @@
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-4 col-xl-4">
       <template v-slot:chat-header-description>
-        <span>Онлайн: {{ playersOnline }}</span>
+        <span>Онлайн: {{ playersAmount }}</span>
       </template>
     </chat>
-    <modal v-if="!!modalData">
+    <modal v-if="!!modalData" @close="modalData = null">
       <template v-slot:header>
         <span>Комната {{ modalData.name }}</span>
       </template>
       <template v-slot:content>
-        <span>Раунд: {{ modalData.name }}</span>
-        <span>Игроки: {{ modalData.name }}</span>
-        <span>Состояние: {{ modalData.name }}</span>
-        <span>Тип: {{ modalData.name }}</span>
-        <span v-if="modalData.scenario">
-          Сценарий: {{ modalData.scenario }}
-        </span>
+        <div class="room-information">
+          <div class="field-names">
+            <span>Раунд</span>
+            <span>Игроки</span>
+            <span>Состояние</span>
+            <span>Тип</span>
+            <span v-if="modalData.scenario">Сценарий</span>
+            <span v-if="modalData.locked" class="password">Пароль</span>
+          </div>
+          <div class="field-values">
+            <span>{{ modalData.currentRound }}</span>
+            <span>{{ modalData.currentPlayers }}</span>
+            <span>{{ getRoomState(modalData) }}</span>
+            <span>{{ getRoomType(modalData) }}</span>
+            <span v-if="modalData.scenario">{{ modalData.scenario }}</span>
+            <span v-if="modalData.locked">
+                  <app-input v-model="connectPassword"
+                             color="#555555"
+                             type="password"
+                             placeholder="Введите пароль"/>
+          </span>
+          </div>
+        </div>
       </template>
       <template v-slot:actions>
-
+        <div class="confirm-button" @click="connect(modalData)">
+          Присоединиться
+        </div>
       </template>
     </modal>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import Chat from '~/components/rooms/Chat';
   import AppInput from '~/components/AppInput';
   import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
@@ -79,12 +97,12 @@
     data() {
       return {
         roomSearchWord: '',
-        playersOnline: 93,
         modalData: null,
+        connectPassword: '',
       };
     },
     computed: {
-      ...mapState('rooms', ['rooms']),
+      ...mapState('rooms', ['rooms', 'playersAmount']),
       filteredRooms() {
         return this.rooms
           .filter((room) => room.name.toLowerCase()
@@ -95,8 +113,30 @@
       },
     },
     methods: {
+      ...mapActions('rooms', ['connectToRoom']),
       openRoomPreview(room) {
         this.modalData = room;
+      },
+      connect() {
+
+      },
+      getRoomState(room) {
+        switch (room.state) {
+          case 'PREPARE':
+            return 'Ожидание игроков';
+          case 'PLAY':
+            return 'Идет игра';
+          case 'END':
+            return 'Игра закончилась';
+          default:
+            return 'Неизвестно';
+        }
+      },
+      getRoomType(room) {
+        if (room.tournament) {
+          return 'Турнир';
+        }
+        return 'Обычный';
       },
     },
   };
@@ -191,4 +231,32 @@
     width: 100%
     background: $grey
     height: base-unit(2)
+
+  .room-information
+    display: flex
+
+    .field
+      &-names
+        display: flex
+        flex-direction: column
+        color: $fg-main
+        font-size: base-unit(14)
+        font-weight: bold
+        margin-right: base-unit(20)
+
+        .password
+          padding: base-unit(12) 0
+
+        span
+          padding: base-unit(2) 0
+
+      &-values
+        display: flex
+        flex-direction: column
+        color: $dark-fg-main
+        font-size: base-unit(14)
+        font-weight: normal
+
+        span
+          padding: base-unit(2) 0
 </style>

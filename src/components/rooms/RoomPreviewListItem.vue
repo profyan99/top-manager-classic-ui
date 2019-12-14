@@ -1,6 +1,7 @@
 <template>
   <div class="room-preview"
-       @click="$emit('selected')" :class="{ playing: !!data.playing }">
+       @click="$emit('selected')"
+       :class="{ playing: data.state !== 'PREPARE' }">
     <div class="name col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
       {{ data.name }}
     </div>

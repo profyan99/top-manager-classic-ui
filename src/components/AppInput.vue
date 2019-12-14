@@ -6,12 +6,11 @@
           v-if="icon"
           class="icon" :style="{ color: color }"></icon>
     <input :type="type"
-           :value="value"
+           v-model="inputData"
            :placeholder="placeholder"
            @focus="focus = true"
-           @blur="focus = false"
            @keyup.enter="$emit('submit')"
-           @input="$emit('input', $event.target.value)">
+           @blur="focus = false">
   </label>
 </template>
 
@@ -44,6 +43,16 @@
       return {
         focus: false,
       };
+    },
+    computed: {
+      inputData: {
+        get() {
+          return this.value;
+        },
+        set(value) {
+          this.$emit('input', value);
+        },
+      },
     },
   };
 </script>

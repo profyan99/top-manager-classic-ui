@@ -1,5 +1,9 @@
 import axios from 'axios';
 
-const actions = {};
+const actions = {
+  connectToRoom({}, data) {
+    // TODO add functional
+  },
+};
 
 export default actions;
