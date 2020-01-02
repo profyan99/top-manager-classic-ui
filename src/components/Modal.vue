@@ -51,7 +51,7 @@
     max-width: base-unit(500)
     min-width: base-unit(300)
     width: fit-content
-    max-height: base-unit(300)
+    max-height: base-unit(700)
     min-height: base-unit(200)
     height: fit-content
     box-sizing: border-box
@@ -80,12 +80,16 @@
         cursor: pointer
         padding: base-unit(5)
 
+        &:hover
+          opacity: 0.7
+
     .content
       flex: 1
       display: flex
       flex-direction: column
       width: 100%
       padding: base-unit(16)
+      box-sizing: border-box
 
     .actions
       display: flex

@@ -1,8 +1,18 @@
 import axios from 'axios';
 
 const actions = {
-  connectToRoom({}, data) {
-    // TODO add functional
+  async connectToRoom({ commit }, data) {
+    return axios.post(`/api/room/${ data.id }`, {
+      password: data.password,
+    })
+      .then((roomData) => {
+        commit('setGameData', roomData);
+      });
+  },
+  async createRoom({}, form) {
+    return axios.post('/api/room', {
+      ...form,
+    });
   },
 };
 

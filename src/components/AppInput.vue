@@ -1,17 +1,22 @@
 <template>
-  <label class="input-wrapper"
-         :style="{ 'border-bottom-color': color }"
-         :class="{ focused: focus }">
-    <icon :icon="icon"
-          v-if="icon"
-          class="icon" :style="{ color: color }"></icon>
-    <input :type="type"
-           v-model="inputData"
-           :placeholder="placeholder"
-           @focus="focus = true"
-           @keyup.enter="$emit('submit')"
-           @blur="focus = false">
-  </label>
+  <div class="">
+    <label class="input-wrapper"
+           :style="{ 'border-bottom-color': color }"
+           :class="{ focused: focus }">
+      <icon :icon="icon"
+            v-if="icon"
+            class="icon" :style="{ color: color }"></icon>
+      <input :type="type"
+             v-model="inputData"
+             :placeholder="placeholder"
+             @focus="focus = true"
+             @keyup.enter="$emit('submit')"
+             @blur="blur">
+    </label>
+    <span class="error" v-show="error">
+      {{ errorMessage }}
+    </span>
+  </div>
 </template>
 
 <script>
@@ -21,6 +26,14 @@
       value: {
         type: String,
         required: true,
+      },
+      error: {
+        type: Boolean,
+        default: false,
+      },
+      errorMessage: {
+        type: String,
+        default: null,
       },
       placeholder: {
         type: String,
@@ -54,6 +67,12 @@
         },
       },
     },
+    methods: {
+      blur() {
+        this.focus = false;
+        this.$emit('blur');
+      },
+    },
   };
 </script>
 
@@ -80,6 +99,13 @@
     font-size: base-unit(14)
     +sub-font
     color: $fg-main
-    padding: base-unit(10) 0
+    padding-top: base-unit(6)
+    padding-bottom: base-unit(10)
     width: 100%
+
+  .error
+    color: $red
+    font-size: base-unit(12)
+    font-weight: 300
+    margin-top: base-unit(2)
 </style>
