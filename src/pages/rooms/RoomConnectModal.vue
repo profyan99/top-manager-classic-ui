@@ -96,7 +96,10 @@
         }
         this.connectToRoom(room)
           .then(() => {
-            // TODO push router
+            this.$router.push({
+              name: 'game',
+              params: { roomId: room.id },
+            });
             this.$emit('close');
           })
           .catch((_error) => {

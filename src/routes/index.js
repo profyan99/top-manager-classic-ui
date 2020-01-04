@@ -1,4 +1,5 @@
 import Rooms from '~/pages/rooms';
+import Game from '~/pages/game';
 import Login from '~/pages/login';
 
 export default [
@@ -11,5 +12,10 @@ export default [
     path: '/signin',
     component: Login,
     name: 'login',
+  },
+  {
+    name: 'game',
+    path: '/game/:roomId',
+    component: Game,
   },
 ];

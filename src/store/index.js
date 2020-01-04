@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import user from './modules/user';
 import chat from './modules/chat';
 import rooms from './modules/rooms';
+import game from './modules/game';
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
     user,
     chat,
     rooms,
+    game,
   },
   plugins: [],
 });
