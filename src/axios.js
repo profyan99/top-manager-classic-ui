@@ -7,3 +7,4 @@ axios.interceptors.response.use((response) => response.data, (error) => {
   }
   return Promise.reject(error.response.data && error.response.data.message);
 });
+axios.defaults.baseURL = '/api';

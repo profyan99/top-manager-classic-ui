@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  proxy:
+    network_mode: host
+    build: .
+    volumes:
+      - ../../dist:/var/www/root
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: tmot
+      POSTGRES_USER: tmot_user
+      POSTGRES_DB: tmot
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 80:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@localhost
+      PGADMIN_DEFAULT_PASSWORD: test
