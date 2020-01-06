@@ -23,7 +23,7 @@
       <div class="avatar">
 
       </div>
-      <span class="user-name">{{ user.username }}</span>
+      <span class="user-name">{{ user.userName }}</span>
       <div class="modal"
            v-if="modalActive"
            @focusout="modalActive = false">
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
 
   export default {
     name: 'navbar',

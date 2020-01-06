@@ -20,8 +20,12 @@
       <div class="form">
         <span class="title">{{ title }}</span>
         <div class="social">
-          <div class="social-ring google">G</div>
-          <div class="social-ring vk">Vk</div>
+          <div class="social-ring google">
+            <a href="/api/auth/google">G</a>
+          </div>
+          <div class="social-ring vk">
+            <a href="/api/auth/vkontakte">Vk</a>
+          </div>
         </div>
         <span class="or">или</span>
         <div class="input"
@@ -50,7 +54,10 @@
 <script>
   import { mapActions } from 'vuex';
   import {
-    required, email, minLength, sameAs,
+    email,
+    minLength,
+    required,
+    sameAs,
   } from 'vuelidate/lib/validators';
 
   export default {
@@ -60,11 +67,11 @@
         type: 'signIn',
         form: {
           signIn: {
-            login: '',
+            userName: '',
             password: '',
           },
           signUp: {
-            login: '',
+            userName: '',
             email: '',
             password: '',
             repeatedPassword: '',
@@ -80,7 +87,7 @@
               label: 'Никнейм',
               placeholder: 'Никнейм',
               type: 'text',
-              field: 'login',
+              field: 'userName',
               errorMessage: 'Никнейм должен быть длиннее 5-ти символов',
             },
             {
@@ -111,7 +118,7 @@
             label: 'Логин',
             placeholder: 'Логин',
             type: 'text',
-            field: 'login',
+            field: 'userName',
             errorMessage: 'Логин должен быть длиннее 5-ти символов',
           },
           {
@@ -146,13 +153,14 @@
       ...mapActions('user', {
         signInAction: 'signIn',
         signUpAction: 'signUp',
+        getCurrentUser: 'getCurrentUser',
       }),
       toggleType(type) {
         this.type = type;
       },
       performSignIn() {
         const {
-          form: { signIn }, signInAction, $v, type,
+          form: { signIn }, signInAction, $v, type, getCurrentUser,
         } = this;
 
         if ($v.form[type].$invalid) {
@@ -160,9 +168,10 @@
         }
 
         signInAction(signIn)
-          .catch((err) => {
-            // TODO notify
-          });
+            .then(() => getCurrentUser())
+            .catch((_error) => {
+              // TODO notify
+            });
       },
       performSignUp() {
         const {
@@ -174,19 +183,19 @@
         }
 
         signUpAction(signUp)
-          .then(() => {
-            // TODO notify
-            toggleType('signIn');
-          })
-          .catch((err) => {
-            // TODO notify
-          });
+            .then(() => {
+              // TODO notify
+              toggleType('signIn');
+            })
+            .catch((_error) => {
+              // TODO notify
+            });
       },
     },
     validations: {
       form: {
         signIn: {
-          login: {
+          userName: {
             required,
             minLength: minLength(6),
           },
@@ -196,7 +205,7 @@
           },
         },
         signUp: {
-          login: {
+          userName: {
             required,
             minLength: minLength(6),
           },

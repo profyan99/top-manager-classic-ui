@@ -2,21 +2,21 @@
   <div class="wrapper">
     <div class="layout-container" v-if="isLoggedIn">
       <div class="header-wrapper">
-        <nav-bar></nav-bar>
+        <nav-bar/>
       </div>
       <div class="content-wrapper">
-        <router-view></router-view>
+        <router-view/>
       </div>
       <div class="footer-wrapper">
 
       </div>
     </div>
-    <login v-else></login>
+    <login v-else/>
   </div>
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import Login from '~/pages/login';
   import NavBar from '~/components/NavBar';
 
@@ -29,11 +29,28 @@
     computed: {
       ...mapGetters('user', ['isLoggedIn']),
     },
-    created() {
-      this.getCurrentUser();
+    async created() {
+      const {
+        $route: { query },
+        getCurrentUser,
+        signInThrowSocial,
+      } = this;
+      if (query.access_token && query.refresh_token) {
+        signInThrowSocial(query)
+            .then(getCurrentUser())
+            .then(() => this.$router.replace('/'));
+      } else {
+        getCurrentUser()
+            .catch((_error) => {
+
+            });
+      }
     },
     methods: {
-      ...mapActions('user', ['getCurrentUser']),
+      ...mapActions('user', [
+        'getCurrentUser',
+        'signInThrowSocial',
+      ]),
     },
   };
 </script>
