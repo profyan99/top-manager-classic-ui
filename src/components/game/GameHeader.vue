@@ -1,33 +1,27 @@
 <template>
   <div class="game-header">
-    <span>{{ roomData.name }}</span>
-    <span>{{ currentState }}</span>
-    <span>Квартал: {{ roomData.currentRound }}</span>
+    <span>Состояние: {{ currentState }}</span>
+    <span>Квартал: {{ gameData.currentRound }}</span>
     <span>Время: {{ currentTime }}</span>
-    <app-button label="Выход" @click="exitFromRoom"/>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex';
-  import AppButton from '~/components/AppButton';
   import { convertRoomState, convertSecondsToMinutes } from '~/helpers/room';
 
   export default {
     name: 'GameHeader',
-    components: { AppButton },
     computed: {
-      ...mapState('game', ['roomData']),
+      ...mapState('game', ['gameData']),
       currentState() {
-        return convertRoomState(this.roomData.currentState);
+        return convertRoomState(this.gameData.state);
       },
       currentTime() {
-        return convertSecondsToMinutes(this.roomData.currentSecond);
-      },
-    },
-    methods: {
-      exitFromRoom() {
-
+        const { gameData: { currentSecond, prepareSecond, state } } = this;
+        return convertSecondsToMinutes(
+          state === 'PREPARE' ? prepareSecond : currentSecond
+        );
       },
     },
   };
@@ -41,5 +35,10 @@
     flex-direction: row
     justify-content: space-between
     align-items: center
+    background-color: $red
+    border-radius: $base-border-radius
+    color: $bg-main
     min-height: base-unit(40)
+    padding: 0 base-unit(20)
+    margin-top: base-unit(15)
 </style>

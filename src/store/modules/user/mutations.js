@@ -4,9 +4,11 @@ const mutations = {
   },
   SetRefreshToken(state, token) {
     state.refreshToken = token;
+    localStorage.setItem('refreshToken', token);
   },
   SetAccessToken(state, token) {
     state.accessToken = token;
+    localStorage.setItem('accessToken', token);
   },
 };
 

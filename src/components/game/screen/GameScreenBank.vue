@@ -1,5 +1,7 @@
 <template>
-
+  <div class="">
+    BANK
+  </div>
 </template>
 
 <script>

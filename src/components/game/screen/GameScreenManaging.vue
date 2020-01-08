@@ -1,5 +1,7 @@
 <template>
-
+  <div class="">
+    MANAGE
+  </div>
 </template>
 
 <script>

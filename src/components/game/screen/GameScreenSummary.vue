@@ -1,5 +1,7 @@
 <template>
-
+  <div class="">
+    SUMMARY
+  </div>
 </template>
 
 <script>

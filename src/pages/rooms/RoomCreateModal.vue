@@ -37,12 +37,12 @@
 
         <div class="inputs-margin">
           <span class="label">Время раунда</span>
-          <app-input v-model="form.periodDelay"
+          <app-input v-model="form.roomPeriodDelay"
                      color="#555555"
                      type="number"
-                     @blur="$v.form.periodDelay.$touch()"
+                     @blur="$v.form.roomPeriodDelay.$touch()"
                      error-message="Значение должно быть от 1 до 10"
-                     :error="$v.form.periodDelay.$error"/>
+                     :error="$v.form.roomPeriodDelay.$error"/>
         </div>
 
         <toggle v-model="form.locked"
@@ -59,20 +59,20 @@
                      :error="$v.form.password.$error"/>
         </div>
 
-        <toggle v-model="form.isScenario"
+        <toggle v-model="form.scenario"
                 class="inputs-margin"
                 label="Сценарий"/>
 
-        <div class="inputs-margin inner" v-if="form.isScenario">
+        <div class="inputs-margin inner" v-if="form.scenario">
           <span class="label">Сценарий</span>
-          <app-input v-model="form.scenario"
+          <app-input v-model="form.scenarioName"
                      color="#555555"
-                     @blur="$v.form.scenario.$touch()"
+                     @blur="$v.form.scenarioName.$touch()"
                      error-message="Поле должно быть заполнено"
-                     :error="$v.form.scenario.$error"/>
+                     :error="$v.form.scenarioName.$error"/>
         </div>
 
-        <toggle v-model="form.isTournament"
+        <toggle v-model="form.tournament"
                 class="inputs-margin"
                 label="Турнир"/>
 
@@ -89,7 +89,11 @@
 <script>
   import { mapActions } from 'vuex';
   import {
-    required, minLength, numeric, minValue, maxValue,
+    maxValue,
+    minLength,
+    minValue,
+    numeric,
+    required,
   } from 'vuelidate/lib/validators';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
@@ -108,12 +112,19 @@
           name: '',
           maxPlayers: '',
           maxRounds: '',
-          isTournament: false,
+          tournament: false,
           locked: false,
-          isScenario: false,
-          scenario: '',
+          scenario: false,
+          scenarioName: '',
           password: '',
-          periodDelay: '',
+          roomPeriodDelay: '',
+          requirement: {
+            minHoursInGameAmount: 0,
+            requireAchievements: [],
+            requireRoles: [
+              'PLAYER',
+            ],
+          },
         },
       };
     },
@@ -152,12 +163,12 @@
           minValue: minValue(2),
           maxValue: maxValue(16),
         },
-        isTournament: {},
+        tournament: {},
         locked: {},
-        isScenario: {},
         scenario: {},
+        scenarioName: {},
         password: {},
-        periodDelay: {
+        roomPeriodDelay: {
           required,
           numeric,
           minValue: minValue(1),

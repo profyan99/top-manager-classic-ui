@@ -1,17 +1,14 @@
 import axios from 'axios';
 
 const actions = {
-  sendMessage({ commit }, content) {
-    commit('addMessage', {
-      id: Math.random() * 100000,
-      user: {
-        id: 0,
-        userName: 'Kostya',
-      },
-      content,
-      date: new Date(Date.now()),
+  sendMessage({}, { message, roomId }) {
+    const url = roomId ? `/room/${ roomId }/message` : '/rooms/message';
+    return axios.post(url, {
+      message,
     });
-    return Promise.resolve();
+  },
+  addMessageWebsocket({ commit }, message) {
+    commit('addMessage', message);
   },
 };
 

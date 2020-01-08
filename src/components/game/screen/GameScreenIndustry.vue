@@ -1,5 +1,7 @@
 <template>
-
+  <div class="">
+    INDUSTRY
+  </div>
 </template>
 
 <script>

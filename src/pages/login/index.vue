@@ -168,10 +168,10 @@
         }
 
         signInAction(signIn)
-            .then(() => getCurrentUser())
-            .catch((_error) => {
-              // TODO notify
-            });
+          .then(() => getCurrentUser())
+          .catch((_error) => {
+            // TODO notify
+          });
       },
       performSignUp() {
         const {
@@ -183,13 +183,13 @@
         }
 
         signUpAction(signUp)
-            .then(() => {
-              // TODO notify
-              toggleType('signIn');
-            })
-            .catch((_error) => {
-              // TODO notify
-            });
+          .then(() => {
+            // TODO notify
+            toggleType('signIn');
+          })
+          .catch((_error) => {
+            // TODO notify
+          });
       },
     },
     validations: {

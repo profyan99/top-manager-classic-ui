@@ -5,11 +5,11 @@ const actions = {
   async getCurrentUser({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/profile')
-          .then((user) => {
-            commit('setUser', user);
-            resolve();
-          })
-          .catch(reject);
+        .then((user) => {
+          commit('setUser', user);
+          resolve();
+        })
+        .catch(reject);
     });
   },
   async signIn({ commit, state: { authSecret } }, form) {
@@ -28,12 +28,12 @@ const actions = {
         url: '/oauth/token',
       };
       axios(options)
-          .then(({ access_token, refresh_token }) => {
-            commit('SetAccessToken', access_token);
-            commit('SetRefreshToken', refresh_token);
-            resolve();
-          })
-          .catch(reject);
+        .then(({ access_token, refresh_token }) => {
+          commit('SetAccessToken', access_token);
+          commit('SetRefreshToken', refresh_token);
+          resolve();
+        })
+        .catch(reject);
     });
   },
   signInThrowSocial({ commit }, { access_token, refresh_token }) {
@@ -50,6 +50,10 @@ const actions = {
     commit('setUser', null);
     commit('SetRefreshToken', null);
     commit('SetAccessToken', null);
+  },
+  fetchAuthTokens({ commit }) {
+    commit('SetAccessToken', localStorage.getItem('accessToken'));
+    commit('SetRefreshToken', localStorage.getItem('refreshToken'));
   },
 };
 

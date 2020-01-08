@@ -1,24 +1,31 @@
 <template>
   <div class="game">
-    <game-header/>
     <div class="game-body">
-      <div class="game-content col-sm-8 col-md-8 col-lg-7 col-xl-7">
+      <div class="game-name">
+        <span class="title">{{ gameData.name }}</span>
+        <app-button label="Выход" @click="exitFromRoom"/>
+      </div>
+      <game-header/>
+      <div class="game-content">
         <game-left-menu class="game-content-left-menu"
                         @selected-screen="currentScreen = $event"/>
         <component :is="currentScreen" class="game-content-screen">
         </component>
       </div>
-      <chat class="col-sm-3 col-md-3 col-lg-4 col-xl-4">
-      </chat>
     </div>
+    <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
+          :room-id="gameData.roomId">
+    </chat>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import Chat from '~/components/rooms/Chat';
+  import AppButton from '~/components/AppButton.vue';
   import GameHeader from '~/components/game/GameHeader';
   import GameLeftMenu from '~/components/game/GameLeftMenu';
+  import { connectRoom, disconnectRoom } from '~/websocket.js';
   import GameScreenBank from '~/components/game/screen/GameScreenBank';
   import GameScreenIndustry from '~/components/game/screen/GameScreenIndustry';
   import GameScreenManaging from '~/components/game/screen/GameScreenManaging';
@@ -34,6 +41,7 @@
       GameLeftMenu,
       GameHeader,
       Chat,
+      AppButton,
       GameScreenBank,
       GameScreenSummary,
       GameScreenWarehouse,
@@ -41,8 +49,37 @@
       GameScreenManaging,
       GameScreenIndustry,
     },
+    data() {
+      return {
+        currentScreen: 'GameScreenSummary',
+      };
+    },
     computed: {
-      ...mapState('game', ['currentScreen']),
+      ...mapState('game', ['gameData']),
+      screenToShow() {
+        return () => import(`~/components/game/screen/${ this.currentScreen }`);
+      },
+    },
+    methods: {
+      ...mapActions('game', ['tryConnectRoom']),
+      exitFromRoom() {
+        disconnectRoom();
+        this.$router.push({ name: 'rooms' });
+      },
+    },
+    created() {
+      if (!this.gameData) {
+        this.$router.push({ name: 'rooms' });
+        return;
+      }
+
+      connectRoom(this.$route.params.roomId)
+        .catch((_error) => {
+          // TODO
+        });
+    },
+    beforeDestroy() {
+      disconnectRoom();
     },
   };
 </script>
@@ -52,13 +89,25 @@
 
   .game
     display: flex
+    width: 100%
+    justify-content: space-between
+
+    &-name
+      display: flex
+      flex-direction: row
+      align-items: center
+      min-height: base-unit(40)
+      justify-content: space-between
 
     &-body
       display: flex
-      margin-top: base-unit(15)
+      flex-direction: column
+      flex: 1
+      margin-right: base-unit(40)
 
     &-content
       display: flex
+      margin-top: base-unit(10)
 
       &-left-menu
         margin-right: base-unit(15)
@@ -67,5 +116,7 @@
         display: flex
         flex: 1
 
+  .title
+    +title
 
 </style>

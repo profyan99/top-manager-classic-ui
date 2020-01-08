@@ -1,10 +1,10 @@
 <template>
   <div class="message">
     <div class="header">
-      <span class="author">{{ data.user.userName }}</span>
-      <span>{{ data.date.toLocaleTimeString() }}</span>
+      <span class="author">{{ data.player.userName }}</span>
+      <span>{{ time }}</span>
     </div>
-    <span class="content">{{ data.content }}</span>
+    <span class="content">{{ data.message }}</span>
   </div>
 </template>
 
@@ -15,6 +15,11 @@
       data: {
         type: Object,
         required: true,
+      },
+    },
+    computed: {
+      time() {
+        return new Date(this.data.date).toLocaleTimeString();
       },
     },
   };
@@ -32,7 +37,7 @@
     width: 100%
     box-sizing: border-box
     padding: base-unit(10)
-    margin: base-unit(5) 0
+    margin-bottom: base-unit(10)
 
     .header
       font-style: normal

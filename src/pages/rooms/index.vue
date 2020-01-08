@@ -12,8 +12,7 @@
       </div>
       <div class="table">
         <div class="header">
-          <span
-            class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">Название</span>
+          <span class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">Название</span>
           <span class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Игроки</span>
           <span class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Раунд</span>
           <span class="hidden-md-down col-md-3 col-lg-3 col-xl-3">Режимы</span>
@@ -21,12 +20,12 @@
         <div class="content">
           <template v-for="(room, index) in filteredRooms">
             <room-preview-list-item
-              @selected="openRoomPreview(room)"
-              :data="room"
-              :key="room.id">
+                    @selected="openRoomPreview(room)"
+                    :data="room"
+                    :key="room.id">
             </room-preview-list-item>
             <div class="divider"
-                 v-if="index < rooms.length - 1"
+                 v-if="index < roomList.length - 1"
                  :key="-1 - index"></div>
           </template>
         </div>
@@ -53,12 +52,13 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import Chat from '~/components/rooms/Chat';
   import AppInput from '~/components/AppInput';
   import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
   import RoomCreateModal from '~/pages/rooms/RoomCreateModal';
   import RoomConnectModal from '~/pages/rooms/RoomConnectModal';
+  import { subscribeRoomList, unsubscribeRoomList } from '~/websocket';
 
   export default {
     name: 'rooms',
@@ -77,20 +77,36 @@
       };
     },
     computed: {
-      ...mapState('rooms', ['rooms', 'playersAmount']),
+      ...mapGetters('rooms', ['roomList']),
       filteredRooms() {
-        return this.rooms
+        return this.roomList
           .filter((room) => room.name.toLowerCase()
             .includes(this.roomSearchWord.toLocaleLowerCase()));
       },
       roomsAmount() {
-        return this.rooms.length;
+        return this.roomList.length;
+      },
+      playersAmount() {
+        return this.roomList
+          .map((room) => room.currentPlayers)
+          .reduce((sum, next) => sum + next, 0);
       },
     },
     methods: {
+      ...mapActions('rooms', ['getRooms']),
       openRoomPreview(room) {
         this.connectRoomData = room;
       },
+    },
+    created() {
+      this.getRooms()
+        .then(subscribeRoomList())
+        .catch((_error) => {
+          // TODO
+        });
+    },
+    beforeDestroy() {
+      unsubscribeRoomList();
     },
   };
 </script>

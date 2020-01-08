@@ -41,11 +41,10 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import {
-    required, minLength,
-  } from 'vuelidate/lib/validators';
+  import { minLength, required, } from 'vuelidate/lib/validators';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
+  import { convertRoomState } from '~/helpers/room';
 
   export default {
     name: 'RoomConnectModal',
@@ -61,21 +60,12 @@
     },
     data() {
       return {
-        connectPassword: null,
+        connectPassword: '',
       };
     },
     computed: {
       roomState() {
-        switch (this.room.state) {
-          case 'PREPARE':
-            return 'Ожидание игроков';
-          case 'PLAY':
-            return 'Идет игра';
-          case 'END':
-            return 'Игра закончилась';
-          default:
-            return 'Неизвестно';
-        }
+        return convertRoomState(this.room.state);
       },
       roomType() {
         if (this.room.tournament) {
@@ -87,14 +77,18 @@
     methods: {
       ...mapActions('rooms', ['connectToRoom']),
       connect() {
-        const { room } = this;
+        const { room, connectPassword } = this;
         if (room.locked) {
           this.$v.connectPassword.$touch();
           if (this.$v.$error) {
             return;
           }
         }
-        this.connectToRoom(room)
+        this.connectToRoom({
+          id: room.id,
+          password: connectPassword,
+          companyName: 'test123456', // TODO
+        })
           .then(() => {
             this.$router.push({
               name: 'game',

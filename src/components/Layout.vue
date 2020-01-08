@@ -34,22 +34,25 @@
         $route: { query },
         getCurrentUser,
         signInThrowSocial,
+        fetchAuthTokens,
       } = this;
       if (query.access_token && query.refresh_token) {
         signInThrowSocial(query)
-            .then(getCurrentUser())
-            .then(() => this.$router.replace('/'));
+          .then(getCurrentUser())
+          .then(() => this.$router.replace('/'));
       } else {
-        getCurrentUser()
-            .catch((_error) => {
+        await fetchAuthTokens();
+        await getCurrentUser()
+          .catch((_error) => {
 
-            });
+          });
       }
     },
     methods: {
       ...mapActions('user', [
         'getCurrentUser',
         'signInThrowSocial',
+        'fetchAuthTokens',
       ]),
     },
   };

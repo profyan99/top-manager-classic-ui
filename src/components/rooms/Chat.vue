@@ -3,11 +3,11 @@
     <div class="title">
       <span class="main">Чат</span>
       <div class="description">
-        <slot name="chat-header-description"></slot>
+        <slot name="chat-header-description"/>
       </div>
     </div>
     <div class="content" ref="content">
-      <message v-for="message in messages"
+      <message v-for="message in formattedMessages"
                :key="message.id"
                :data="message">
       </message>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import Message from '~/components/rooms/Message';
   import AppInput from '~/components/AppInput';
 
@@ -39,8 +39,17 @@
         newMessage: '',
       };
     },
+    props: {
+      roomId: {
+        type: Number,
+        default: null,
+      },
+    },
     computed: {
       ...mapState('chat', ['messages']),
+      formattedMessages() {
+        return this.messages.slice(-50);
+      },
     },
     methods: {
       ...mapActions('chat', ['sendMessage']),
@@ -49,17 +58,20 @@
         content.scrollTop = content.scrollHeight * 2;
       },
       send() {
-        const { sendMessage, newMessage } = this;
+        const { sendMessage, newMessage, roomId } = this;
 
         if (!newMessage) {
           return;
         }
 
-        sendMessage(newMessage)
+        sendMessage({
+          message: newMessage,
+          roomId,
+        })
           .then(() => {
             this.newMessage = '';
           })
-          .catch((err) => {
+          .catch((_error) => {
             // TODO notify
           });
       },
