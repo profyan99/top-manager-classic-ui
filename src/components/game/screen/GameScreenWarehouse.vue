@@ -1,10 +1,7 @@
 <template>
-  <template>
-    <div class="">
-      WAREHOUSE
-    </div>
-  </template>
-
+  <div class="">
+    WAREHOUSE
+  </div>
 </template>
 
 <script>
