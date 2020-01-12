@@ -10,6 +10,7 @@
           <span>Игроки</span>
           <span>Состояние</span>
           <span>Тип</span>
+          <span v-if="!isUserAlreadyInRoom">Название компании</span>
           <span v-if="room.scenario">Сценарий</span>
           <span v-if="room.locked" class="password">Пароль</span>
         </div>
@@ -18,8 +19,16 @@
           <span>{{ room.currentPlayers }}</span>
           <span>{{ roomState }}</span>
           <span>{{ roomType }}</span>
-          <span v-if="room.scenario">{{ room.scenario }}</span>
-          <span v-if="room.locked">
+          <span v-if="!isUserAlreadyInRoom">
+                  <app-input v-model="companyName"
+                             color="#555555"
+                             placeholder="Введите название"
+                             @blur="$v.companyName.$touch()"
+                             error-message="Поле должно быть заполнено"
+                             :error="$v.companyName.$error"/>
+          </span>
+          <span v-if="room.scenario">{{ room.scenarioName }}</span>
+          <span v-if="room.locked && !isUserAlreadyInRoom">
                   <app-input v-model="connectPassword"
                              color="#555555"
                              type="password"
@@ -40,7 +49,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import { minLength, required, } from 'vuelidate/lib/validators';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
@@ -61,9 +70,13 @@
     data() {
       return {
         connectPassword: '',
+        companyName: '',
       };
     },
     computed: {
+      ...mapState('user', [
+        'user',
+      ]),
       roomState() {
         return convertRoomState(this.room.state);
       },
@@ -73,11 +86,15 @@
         }
         return 'Обычный';
       },
+      isUserAlreadyInRoom() {
+        const { room, user: { userName } } = this;
+        return room.players.some((player) => player === userName);
+      },
     },
     methods: {
       ...mapActions('rooms', ['connectToRoom']),
       connect() {
-        const { room, connectPassword } = this;
+        const { room, connectPassword, companyName } = this;
         if (room.locked) {
           this.$v.connectPassword.$touch();
           if (this.$v.$error) {
@@ -87,7 +104,7 @@
         this.connectToRoom({
           id: room.id,
           password: connectPassword,
-          companyName: 'test123456', // TODO
+          companyName,
         })
           .then(() => {
             this.$router.push({
@@ -105,6 +122,10 @@
       connectPassword: {
         required,
         minLength: minLength(6),
+      },
+      companyName: {
+        required,
+        minLength: minLength(3),
       },
     },
   };

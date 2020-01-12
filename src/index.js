@@ -6,8 +6,10 @@ import {
   faFile,
   faLock,
   faSearch,
+  faSignOutAlt,
   faTimes,
   faTrophy,
+  faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -17,7 +19,15 @@ import store from './store';
 import '../index.html';
 import './axios';
 
-library.add(faSearch, faLock, faTrophy, faFile, faTimes);
+library.add(
+  faSearch,
+  faLock,
+  faTrophy,
+  faFile,
+  faTimes,
+  faSignOutAlt,
+  faUserPlus,
+);
 
 Vue.component('icon', FontAwesomeIcon);
 Vue.use(Router);

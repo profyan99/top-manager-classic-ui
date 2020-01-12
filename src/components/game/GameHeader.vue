@@ -1,8 +1,21 @@
 <template>
   <div class="game-header">
-    <span>Состояние: {{ currentState }}</span>
-    <span>Квартал: {{ gameData.currentRound }}</span>
-    <span>Время: {{ currentTime }}</span>
+    <div>
+      <span class="game-header-title">Состояние</span>
+      <span class="game-header-value">{{ currentState }}</span>
+    </div>
+    <div>
+      <span class="game-header-title">Квартал</span>
+      <span class="game-header-value">{{ gameData.currentRound }}</span>
+    </div>
+    <div>
+      <span class="game-header-title">Игроки</span>
+      <span class="game-header-value">{{ gameData.currentPlayers }}</span>
+    </div>
+    <div>
+      <span class="game-header-title">Время</span>
+      <span class="game-header-value">{{ currentTime }}</span>
+    </div>
   </div>
 </template>
 
@@ -41,4 +54,19 @@
     min-height: base-unit(40)
     padding: 0 base-unit(20)
     margin-top: base-unit(15)
+
+    &-title
+      margin-right: base-unit(5)
+      font-size: base-unit(16)
+      font-weight: bold
+      font-style: normal
+      color: $bg-main
+
+    &-value
+      padding: base-unit(5) base-unit(10)
+      background-color: $bg-main
+      color: $dark-fg-main
+      border-radius: $base-border-radius
+
+
 </style>

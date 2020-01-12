@@ -12,7 +12,7 @@ function websocketHandler(message) {
   switch (objectType) {
     case 'ERROR': {
       console.log('Error in Rooms in ws: ', body);
-      // TODO
+      // TODO notify
       break;
     }
     case 'ROOM_PREVIEW': {
@@ -66,6 +66,10 @@ function websocketHandler(message) {
           // TODO
           break;
         }
+        case 'UPDATE': {
+          store.dispatch('game/updatePlayer', body);
+          break;
+        }
       }
       break;
     }
@@ -79,7 +83,6 @@ async function socketConnect() {
     await store.dispatch('refreshToken');
   } */
   if (stompClient) {
-    console.log('STOPM EXISTS');
     return Promise.resolve();
   }
 

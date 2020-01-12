@@ -10,6 +10,9 @@ const actions = {
   addMessageWebsocket({ commit }, message) {
     commit('addMessage', message);
   },
+  clearMessages({ commit }) {
+    commit('clearMessages');
+  },
 };
 
 export default actions;

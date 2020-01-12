@@ -55,6 +55,29 @@ const actions = {
     commit('SetAccessToken', localStorage.getItem('accessToken'));
     commit('SetRefreshToken', localStorage.getItem('refreshToken'));
   },
+  refreshToken({ state: { refreshToken, authSecret }, commit }) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${ authSecret }`,
+        },
+        data: qs.stringify({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        }),
+        url: '/oauth/token',
+      };
+      axios(options)
+        .then(({ access_token, refresh_token }) => {
+          commit('SetAccessToken', access_token);
+          commit('SetRefreshToken', refresh_token);
+          resolve();
+        })
+        .catch(reject);
+    });
+  },
 };
 
 export default actions;

@@ -5,7 +5,7 @@
            :class="{ focused: focus }">
       <icon :icon="icon"
             v-if="icon"
-            class="icon" :style="{ color: color }"></icon>
+            class="icon" :style="{ color: color }"/>
       <input :type="type"
              v-model="inputData"
              :placeholder="placeholder"
@@ -24,7 +24,6 @@
     name: 'app-input',
     props: {
       value: {
-        type: String,
         required: true,
       },
       error: {

@@ -1,7 +1,8 @@
 <template>
   <button @click="$emit('click')"
           class="app-button">
-    {{ label }}
+    <icon v-if="icon" :icon="icon"/>
+    <span v-if="label">{{ label }}</span>
   </button>
 </template>
 
@@ -11,7 +12,11 @@
     props: {
       label: {
         type: String,
-        required: true,
+        default: null,
+      },
+      icon: {
+        type: String,
+        default: null,
       },
     },
   };
@@ -37,5 +42,4 @@
 
     &:hover
       opacity: 0.8
-
 </style>

@@ -94,6 +94,7 @@
     },
     methods: {
       ...mapActions('rooms', ['getRooms']),
+      ...mapActions('chat', ['clearMessages']),
       openRoomPreview(room) {
         this.connectRoomData = room;
       },
@@ -101,6 +102,7 @@
     created() {
       this.getRooms()
         .then(subscribeRoomList())
+        .then(this.clearMessages())
         .catch((_error) => {
           // TODO
         });
