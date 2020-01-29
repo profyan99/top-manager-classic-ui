@@ -1,5 +1,6 @@
 <template>
-  <modal @close="$emit('close')">
+  <modal @close="$emit('close')"
+         @submit="create">
     <template v-slot:header>
       <span>Создание игровой комнаты</span>
     </template>
@@ -79,7 +80,7 @@
       </div>
     </template>
     <template v-slot:actions>
-      <div class="confirm-button" @click="create()">
+      <div class="confirm-button" @click="create">
         Создать
       </div>
     </template>

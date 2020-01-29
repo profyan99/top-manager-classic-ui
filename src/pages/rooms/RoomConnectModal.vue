@@ -1,5 +1,6 @@
 <template>
-  <modal @close="$emit('close')">
+  <modal @close="$emit('close')"
+         @submit="connect">
     <template v-slot:header>
       <span>Комната {{ room.name }}</span>
     </template>
@@ -10,8 +11,8 @@
           <span>Игроки</span>
           <span>Состояние</span>
           <span>Тип</span>
-          <span v-if="!isUserAlreadyInRoom">Название компании</span>
           <span v-if="room.scenario">Сценарий</span>
+          <span v-if="!isUserAlreadyInRoom">Название компании</span>
           <span v-if="room.locked" class="password">Пароль</span>
         </div>
         <div class="field-values">
@@ -19,6 +20,7 @@
           <span>{{ room.currentPlayers }}</span>
           <span>{{ roomState }}</span>
           <span>{{ roomType }}</span>
+          <span v-if="room.scenario">{{ room.scenarioName }}</span>
           <span v-if="!isUserAlreadyInRoom">
                   <app-input v-model="companyName"
                              color="#555555"
@@ -27,7 +29,6 @@
                              error-message="Поле должно быть заполнено"
                              :error="$v.companyName.$error"/>
           </span>
-          <span v-if="room.scenario">{{ room.scenarioName }}</span>
           <span v-if="room.locked && !isUserAlreadyInRoom">
                   <app-input v-model="connectPassword"
                              color="#555555"
@@ -125,7 +126,7 @@
       },
       companyName: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(6),
       },
     },
   };

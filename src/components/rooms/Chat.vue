@@ -116,8 +116,7 @@
       flex-direction: column
       box-sizing: border-box
       margin-top: base-unit(15)
-      max-height: base-unit(550)
-      height: base-unit(550)
+      flex: 1
       overflow-y: auto
       scrollbar-width: none
       -ms-overflow-style: none
@@ -133,7 +132,6 @@
       justify-content: space-between
       margin-top: base-unit(40)
       width: 100%
-      margin-bottom: base-unit(40)
 
       .button
         margin-left: base-unit(10)

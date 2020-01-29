@@ -19,7 +19,7 @@
     },
     computed: {
       time() {
-        return new Date(this.data.date).toLocaleTimeString();
+        return new Date(this.data.time).toLocaleTimeString();
       },
     },
   };

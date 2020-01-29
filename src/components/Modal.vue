@@ -1,7 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="bg" @click="close"></div>
-    <div class="modal">
+    <div class="modal"
+         @keyup.enter="$emit('submit')">
       <div class="header">
         <div class="title">
           <slot name="header"></slot>

@@ -64,10 +64,8 @@
   .wrapper
     font-size: $base-font-size
     min-height: 100vh
-    background-color: $bg-main
     color: $fg-main
     +main-font()
-    max-width: $max-content-width
     margin: 0 auto
     display: flex
 

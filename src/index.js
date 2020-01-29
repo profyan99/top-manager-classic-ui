@@ -11,7 +11,10 @@ import {
   faTrophy,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle, faVk, } from '@fortawesome/free-brands-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import './styles/app.sass';
 
 import Layout from './components/Layout.vue';
 import routes from './routes';
@@ -27,6 +30,8 @@ library.add(
   faTimes,
   faSignOutAlt,
   faUserPlus,
+  faVk,
+  faGoogle,
 );
 
 Vue.component('icon', FontAwesomeIcon);

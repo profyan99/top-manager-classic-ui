@@ -1,6 +1,6 @@
 <template>
   <div class="content container--fluid row">
-    <div class="rooms col-sm-8 col-md-8 col-lg-7 col-xl-7">
+    <div class="rooms">
       <div class="header">
         <span class="title">Комнаты</span>
         <div class="search">
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <chat class="col-sm-3 col-md-3 col-lg-4 col-xl-4">
+    <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
       <template v-slot:chat-header-description>
         <span>Онлайн: {{ playersAmount }}</span>
       </template>
@@ -118,10 +118,13 @@
 
   .content
     justify-content: space-between
+    margin-bottom: base-unit(40)
 
   .rooms
     display: flex
     flex-direction: column
+    flex: 1
+    margin-right: base-unit(40)
 
     .header
       display: flex
@@ -136,8 +139,7 @@
     .table
       display: flex
       flex-direction: column
-      height: base-unit(550)
-      max-height: base-unit(550)
+      flex: 1
       margin-top: base-unit(15)
       border-bottom: base-unit(2) solid $grey
 

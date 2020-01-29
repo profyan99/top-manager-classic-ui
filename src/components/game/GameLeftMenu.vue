@@ -51,10 +51,11 @@
   .game-left-menu
     display: flex
     flex-direction: column
+    justify-content: space-between
     align-items: center
 
     .menu-item
-      width: base-unit(60)
+      width: 100%
       height: base-unit(60)
       background-color: $light-grey
       margin: base-unit(5) 0

@@ -21,10 +21,14 @@
         <span class="title">{{ title }}</span>
         <div class="social">
           <div class="social-ring google">
-            <a href="/api/auth/google">G</a>
+            <a href="/api/auth/google">
+              <icon :icon="['fab', 'google']"/>
+            </a>
           </div>
           <div class="social-ring vk">
-            <a href="/api/auth/vkontakte">Vk</a>
+            <a href="/api/auth/vkontakte">
+              <icon :icon="['fab', 'vk']"/>
+            </a>
           </div>
         </div>
         <span class="or">или</span>
@@ -337,6 +341,10 @@
           &:hover
             color: $light-grey
             border: base-unit(2) solid $red
+
+          a
+            color: inherit
+            text-decoration: none
 
       .or
         display: flex

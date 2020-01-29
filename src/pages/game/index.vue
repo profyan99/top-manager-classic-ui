@@ -18,8 +18,9 @@
       </div>
       <game-header/>
       <div class="game-content">
-        <game-left-menu class="game-content-left-menu"
-                        @selected-screen="currentScreen = $event"/>
+        <game-left-menu
+                class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
+                @selected-screen="currentScreen = $event"/>
         <component :is="currentScreen" class="game-content-screen">
         </component>
       </div>
@@ -158,6 +159,7 @@
     display: flex
     width: 100%
     justify-content: space-between
+    margin-bottom: base-unit(40)
 
     &-name
       display: flex
@@ -190,6 +192,7 @@
 
     &-content
       display: flex
+      flex: 1
       margin-top: base-unit(15)
 
       &-left-menu
