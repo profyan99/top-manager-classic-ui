@@ -33,6 +33,9 @@ const mutations = {
     Vue.delete(state.rooms, room.id);
     state.roomsIds = state.roomsIds.filter((id) => id !== room.id);
   },
+  setScenarios(state, scenarios) {
+    state.scenarios = scenarios;
+  },
 };
 
 export default mutations;

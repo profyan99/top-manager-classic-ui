@@ -66,11 +66,11 @@
 
         <div class="inputs-margin inner" v-if="form.scenario">
           <span class="label">Сценарий</span>
-          <app-input v-model="form.scenarioName"
-                     color="#555555"
-                     @blur="$v.form.scenarioName.$touch()"
-                     error-message="Поле должно быть заполнено"
-                     :error="$v.form.scenarioName.$error"/>
+          <v-select
+                  v-model="selectedScenario"
+                  :options="scenariosOptions">
+
+          </v-select>
         </div>
 
         <toggle v-model="form.tournament"
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import {
     maxValue,
     minLength,
@@ -109,6 +109,9 @@
     },
     data() {
       return {
+        selectedScenario: {
+          label: 'Выберите сценарий',
+        },
         form: {
           name: '',
           maxPlayers: '',
@@ -129,22 +132,37 @@
         },
       };
     },
+    computed: {
+      ...mapState('rooms', ['scenarios']),
+      scenariosOptions() {
+        return this.scenarios.map((scenario) => ({
+          ...scenario,
+          label: scenario.name,
+        }));
+      },
+    },
     methods: {
-      ...mapActions('rooms', ['createRoom']),
+      ...mapActions('rooms', ['createRoom', 'getScenarios']),
       create() {
         this.$v.form.$touch();
         if (this.$v.$error) {
           return;
         }
         this.createRoom(this.form)
-          .then((data) => {
+          .then((_data) => {
             // TODO auto connecting to the new room
             this.$emit('close');
           })
-          .catch((error) => {
+          .catch((_error) => {
             // TODO notify
           });
       },
+    },
+    mounted() {
+      this.getScenarios()
+        .catch((_error) => {
+
+        });
     },
     validations: {
       form: {

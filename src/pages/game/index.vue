@@ -24,18 +24,7 @@
         <component :is="currentScreen" class="game-content-screen">
         </component>
       </div>
-      <div class="game-solution">
-        <div class="game-solution-header">
-          <span class="subtitle">Управление</span>
-        </div>
-        <div class="game-solution-content">
-          <game-solution-input v-for="solutionInput in solutionInputs"
-                               :key="solutionInput.label"
-                               v-model="solutionForm[solutionInput.model]"
-                               v-bind="solutionInput">
-          </game-solution-input>
-        </div>
-      </div>
+      <GameSolutionPanel />
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.roomId">
@@ -58,12 +47,12 @@
   import GameScreenSummary from '~/components/game/screen/GameScreenSummary';
   import GameScreenWarehouse
     from '~/components/game/screen/GameScreenWarehouse';
-  import GameSolutionInput from '~/components/game/GameSolutionInput';
+  import GameSolutionPanel from "~/components/game/solution/GameSolutionPanel";
 
   export default {
     name: 'game',
     components: {
-      GameSolutionInput,
+      GameSolutionPanel,
       GameLeftMenu,
       GameHeader,
       Chat,
@@ -78,13 +67,6 @@
     data() {
       return {
         currentScreen: 'GameScreenSummary',
-        solutionForm: {
-          price: 0,
-          production: 0,
-          marketing: 0,
-          investments: 0,
-          nir: 0,
-        },
       };
     },
     computed: {
@@ -92,35 +74,6 @@
       ...mapGetters('game', ['currentPlayer']),
       screenToShow() {
         return () => import(`~/components/game/screen/${ this.currentScreen }`);
-      },
-      solutionInputs() {
-        return [
-          {
-            label: 'Цена',
-            additional: '100$',
-            model: 'price',
-          },
-          {
-            label: 'Производство',
-            additional: '1440',
-            model: 'production',
-          },
-          {
-            label: 'Маркетинг',
-            additional: '1000$',
-            model: 'marketing',
-          },
-          {
-            label: 'Инвестиции',
-            additional: '5500$',
-            model: 'investments',
-          },
-          {
-            label: 'НИОКР',
-            additional: '15000$',
-            model: 'nir',
-          },
-        ];
       },
     },
     methods: {
@@ -202,33 +155,8 @@
         display: flex
         flex: 1
 
-    &-solution
-      display: flex
-      flex-direction: column
-
-      &-header
-        display: flex
-        align-items: center
-        background-color: $red
-        border-radius: $base-border-radius
-        color: $bg-main
-        min-height: base-unit(40)
-        padding: 0 base-unit(20)
-        margin-top: base-unit(15)
-        margin-bottom: base-unit(20)
-
-      &-content
-        display: flex
-        align-items: center
-        justify-content: space-between
 
   .title
     +title
-
-  .subtitle
-    font-size: base-unit(16)
-    font-weight: bold
-    font-style: normal
-    color: $bg-main
 
 </style>

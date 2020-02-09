@@ -4,6 +4,13 @@ import actions from './actions';
 
 const state = {
   gameData: null,
+  currentSolutions: {
+    price: 0,
+    production: 0,
+    marketing: 0,
+    investments: 0,
+    nir: 0,
+  },
 };
 
 export default {

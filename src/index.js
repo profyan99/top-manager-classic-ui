@@ -11,9 +11,10 @@ import {
   faTrophy,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import { faGoogle, faVk, } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle, faVk } from '@fortawesome/free-brands-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import vSelect from 'vue-select';
 import './styles/app.sass';
 
 import Layout from './components/Layout.vue';
@@ -35,6 +36,7 @@ library.add(
 );
 
 Vue.component('icon', FontAwesomeIcon);
+Vue.component('v-select', vSelect);
 Vue.use(Router);
 Vue.use(Vuelidate);
 
