@@ -21,7 +21,7 @@
     <div class="profile"
          @click="modalActive = !modalActive">
       <div class="avatar">
-
+        <img class="avatar" :src="user.avatar" alt="avatar">
       </div>
       <span class="user-name">{{ user.userName }}</span>
       <div class="modal"

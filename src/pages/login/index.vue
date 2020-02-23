@@ -21,12 +21,12 @@
         <span class="title">{{ title }}</span>
         <div class="social">
           <div class="social-ring google">
-            <a href="/api/auth/google">
+            <a href="http://localhost:9000/auth/google">
               <icon :icon="['fab', 'google']"/>
             </a>
           </div>
           <div class="social-ring vk">
-            <a href="/api/auth/vkontakte">
+            <a href="http://localhost:9000/auth/vk">
               <icon :icon="['fab', 'vk']"/>
             </a>
           </div>
