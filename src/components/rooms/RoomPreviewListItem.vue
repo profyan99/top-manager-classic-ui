@@ -9,7 +9,7 @@
       {{ `${data.currentPlayers} / ${data.maxPlayers}` }}
     </div>
     <div class="round col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-      {{ `${data.currentRound} / ${data.maxRounds}` }}
+      {{ `${data.currentPeriod} / ${data.maxPeriods}` }}
     </div>
     <div class="mode hidden-md-down col-md-3 col-lg-3 col-xl-3">
       <icon v-for="icon in icons"

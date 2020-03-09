@@ -5,11 +5,8 @@ const actions = {
   updateGameDataWebsocket({ commit }, data) {
     commit('updateGameData', data);
   },
-  updateGameTickWebsocket({ commit, state: { gameData } }, data) {
-    commit('updateGameTick', {
-      type: gameData.state === 'PREPARE' ? 'prepareSecond' : 'currentSecond',
-      ...data,
-    });
+  updateGameTickWebsocket({ commit }, data) {
+    commit('updateGameTick', data);
   },
   updateSolutionsPrice({ commit }, price) {
     commit('updateSolutionsPrice', price);
@@ -25,6 +22,9 @@ const actions = {
   },
   updateSolutionsNir({ commit }, nir) {
     commit('updateSolutionsNir', nir);
+  },
+  updateCompanyWebsocket({ commit }, company) {
+    commit('updateCompany', company);
   },
 };
 

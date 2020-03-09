@@ -101,8 +101,8 @@
     },
     created() {
       this.getRooms()
-        .then(subscribeRoomList())
-        .then(this.clearMessages())
+        .then(() => subscribeRoomList())
+        .then(() => this.clearMessages())
         .catch((_error) => {
           // TODO
         });

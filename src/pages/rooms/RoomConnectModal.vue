@@ -16,11 +16,11 @@
           <span v-if="room.locked" class="password">Пароль</span>
         </div>
         <div class="field-values">
-          <span>{{ room.currentRound }}</span>
+          <span>{{ room.currentPeriod }}</span>
           <span>{{ room.currentPlayers }}</span>
           <span>{{ roomState }}</span>
           <span>{{ roomType }}</span>
-          <span v-if="room.scenario">{{ room.scenarioName }}</span>
+          <span v-if="room.scenario">{{ room.scenario.name }}</span>
           <span v-if="!isUserAlreadyInRoom">
                   <app-input v-model="companyName"
                              color="#555555"

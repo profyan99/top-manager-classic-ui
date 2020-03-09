@@ -28,29 +28,29 @@
 
         <div class="inputs-margin">
           <span class="label">Количество раундов</span>
-          <app-input v-model="form.maxRounds"
+          <app-input v-model="form.maxPeriods"
                      color="#555555"
                      type="number"
-                     @blur="$v.form.maxRounds.$touch()"
+                     @blur="$v.form.maxPeriods.$touch()"
                      error-message="Значение должно быть от 2 до 16"
-                     :error="$v.form.maxRounds.$error"/>
+                     :error="$v.form.maxPeriods.$error"/>
         </div>
 
         <div class="inputs-margin">
           <span class="label">Время раунда</span>
-          <app-input v-model="form.roomPeriodDelay"
+          <app-input v-model="form.periodDuration"
                      color="#555555"
                      type="number"
-                     @blur="$v.form.roomPeriodDelay.$touch()"
+                     @blur="$v.form.periodDuration.$touch()"
                      error-message="Значение должно быть от 1 до 10"
-                     :error="$v.form.roomPeriodDelay.$error"/>
+                     :error="$v.form.periodDuration.$error"/>
         </div>
 
-        <toggle v-model="form.locked"
+        <toggle v-model="isLocked"
                 class="inputs-margin"
                 label="Закрытая комната"/>
 
-        <div class="inputs-margin inner" v-if="form.locked">
+        <div class="inputs-margin inner" v-if="isLocked">
           <span class="label">Пароль</span>
           <app-input v-model="form.password"
                      color="#555555"
@@ -60,11 +60,11 @@
                      :error="$v.form.password.$error"/>
         </div>
 
-        <toggle v-model="form.scenario"
+        <toggle v-model="isScenario"
                 class="inputs-margin"
                 label="Сценарий"/>
 
-        <div class="inputs-margin inner" v-if="form.scenario">
+        <div class="inputs-margin inner" v-if="isScenario">
           <span class="label">Сценарий</span>
           <v-select
                   v-model="selectedScenario"
@@ -112,23 +112,16 @@
         selectedScenario: {
           label: 'Выберите сценарий',
         },
+        isLocked: false,
+        isScenario: false,
         form: {
           name: '',
-          maxPlayers: '',
-          maxRounds: '',
+          maxPlayers: null,
+          maxPeriods: null,
           tournament: false,
-          locked: false,
-          scenario: false,
-          scenarioName: '',
+          scenario: '',
           password: '',
-          roomPeriodDelay: '',
-          requirement: {
-            minHoursInGameAmount: 0,
-            requireAchievements: [],
-            requireRoles: [
-              'PLAYER',
-            ],
-          },
+          periodDuration: null,
         },
       };
     },
@@ -148,6 +141,7 @@
         if (this.$v.$error) {
           return;
         }
+        this.form.scenario = this.selectedScenario.name || '';
         this.createRoom(this.form)
           .then((_data) => {
             // TODO auto connecting to the new room
@@ -176,18 +170,16 @@
           minValue: minValue(2),
           maxValue: maxValue(8),
         },
-        maxRounds: {
+        maxPeriods: {
           required,
           numeric,
           minValue: minValue(2),
           maxValue: maxValue(16),
         },
         tournament: {},
-        locked: {},
         scenario: {},
-        scenarioName: {},
         password: {},
-        roomPeriodDelay: {
+        periodDuration: {
           required,
           numeric,
           minValue: minValue(1),

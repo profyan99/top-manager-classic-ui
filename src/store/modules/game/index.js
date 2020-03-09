@@ -11,6 +11,7 @@ const state = {
     investments: 0,
     nir: 0,
   },
+  company: {},
 };
 
 export default {

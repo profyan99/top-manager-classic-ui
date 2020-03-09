@@ -2,24 +2,24 @@ import axios from 'axios';
 
 const actions = {
   async connectToRoom({ commit }, data) {
-    return axios.post(`/room/${data.id}`, data)
+    return axios.post(`/games/${data.id}`, data)
       .then((roomData) => {
-        commit('game/setGameData', roomData.body, { root: true });
+        commit('game/setGameData', roomData, { root: true });
       });
   },
   async createRoom({}, form) {
-    return axios.post('/room', {
+    return axios.post('/games', {
       ...form,
-      roomPeriodDelay: form.roomPeriodDelay * 60,
+      periodDuration: form.periodDuration * 60,
     });
   },
   async getRooms({ commit }) {
-    return axios.get('/rooms')
-      .then((data) => commit('setRooms', data.body));
+    return axios.get('/games')
+      .then((data) => commit('setRooms', data));
   },
   async getScenarios({ commit }) {
     return axios.get('/scenarios')
-      .then((data) => commit('setScenarios', data.body));
+      .then((data) => commit('setScenarios', data));
   },
   addRoomWebsocket({ commit }, room) {
     commit('addRoom', room);

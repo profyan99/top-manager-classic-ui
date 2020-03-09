@@ -7,8 +7,8 @@ const mutations = {
       ...data,
     };
   },
-  updateGameTick(state, { type, amount }) {
-    state.gameData[type] = amount;
+  updateGameTick(state, amount) {
+    state.gameData.currentSecond = amount;
   },
   updateSolutionsPrice(state, price) {
     state.currentSolutions.price = price;
@@ -24,6 +24,9 @@ const mutations = {
   },
   updateSolutionsNir(state, nir) {
     state.currentSolutions.nir = nir;
+  },
+  updateCompany(state, company) {
+    state.company = company;
   },
 };
 

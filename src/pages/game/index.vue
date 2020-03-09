@@ -27,7 +27,7 @@
       <GameSolutionPanel />
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
-          :room-id="gameData.roomId">
+          :room-id="gameData.id">
     </chat>
   </div>
 </template>

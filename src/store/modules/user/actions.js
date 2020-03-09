@@ -1,5 +1,4 @@
 import axios from 'axios';
-import qs from 'qs';
 
 const actions = {
   async getCurrentUser({ commit }) {
@@ -12,25 +11,19 @@ const actions = {
         .catch(reject);
     });
   },
-  async signIn({ commit, state: { authSecret } }, form) {
+  async signIn({ commit }, form) {
     return new Promise((resolve, reject) => {
       const options = {
         method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${ authSecret }`,
+        data: {
+          ...form,
         },
-        data: qs.stringify({
-          username: form.userName,
-          password: form.password,
-          grant_type: 'password',
-        }),
-        url: '/oauth/token',
+        url: '/signin',
       };
       axios(options)
-        .then(({ access_token, refresh_token }) => {
-          commit('SetAccessToken', access_token);
-          commit('SetRefreshToken', refresh_token);
+        .then(({ accessToken, refreshToken }) => {
+          commit('SetAccessToken', accessToken);
+          commit('SetRefreshToken', refreshToken);
           resolve();
         })
         .catch(reject);
@@ -41,10 +34,8 @@ const actions = {
     commit('SetRefreshToken', refresh_token);
     return Promise.resolve();
   },
-  signUp({}, form) {
-    return axios.put('/signup', {
-      ...form,
-    });
+  signUp({}, { repeatedPassword, ...other }) {
+    return axios.post('/signup', other);
   },
   async logout({ commit }) {
     commit('setUser', null);

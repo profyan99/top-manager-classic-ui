@@ -6,7 +6,7 @@
     </div>
     <div>
       <span class="game-header-title">Квартал</span>
-      <span class="game-header-value">{{ gameData.currentRound }}</span>
+      <span class="game-header-value">{{ gameData.currentPeriod }}</span>
     </div>
     <div>
       <span class="game-header-title">Игроки</span>
@@ -31,10 +31,8 @@
         return convertRoomState(this.gameData.state);
       },
       currentTime() {
-        const { gameData: { currentSecond, prepareSecond, state } } = this;
-        return convertSecondsToMinutes(
-          state === 'PREPARE' ? prepareSecond : currentSecond
-        );
+        const { gameData: { currentSecond } } = this;
+        return convertSecondsToMinutes(currentSecond);
       },
     },
   };
