@@ -26,12 +26,15 @@
   export default {
     name: 'GameHeader',
     computed: {
-      ...mapState('game', ['gameData']),
+      ...mapState('game', [
+        'currentSecond',
+        'gameData',
+      ]),
       currentState() {
         return convertRoomState(this.gameData.state);
       },
       currentTime() {
-        const { gameData: { currentSecond } } = this;
+        const { currentSecond } = this;
         return convertSecondsToMinutes(currentSecond);
       },
     },

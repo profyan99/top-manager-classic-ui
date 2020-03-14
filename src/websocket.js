@@ -45,6 +45,10 @@ function websocketHandler(message, _flags) {
       store.dispatch('game/updateGameTickWebsocket', body);
       break;
     }
+    case 'REMOVE': {
+      // TODO
+      break;
+    }
     default:
       break;
     }
