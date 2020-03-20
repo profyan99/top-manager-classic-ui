@@ -7,8 +7,11 @@ const mutations = {
       ...data,
     };
   },
-  updateGameTick(state, { amount }) {
+  setGameTick(state, amount) {
     state.currentSecond = amount;
+  },
+  updateGameTick(state, amount) {
+    state.currentSecond += amount;
   },
   updateSolutionsPrice(state, price) {
     state.currentSolutions.price = price;

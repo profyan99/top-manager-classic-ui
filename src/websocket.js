@@ -41,10 +41,6 @@ function websocketHandler(message, _flags) {
       store.dispatch('game/updateGameDataWebsocket', body);
       break;
     }
-    case 'TICK': {
-      store.dispatch('game/updateGameTickWebsocket', body);
-      break;
-    }
     case 'REMOVE': {
       // TODO
       break;

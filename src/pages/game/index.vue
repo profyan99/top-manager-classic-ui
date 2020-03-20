@@ -48,6 +48,7 @@
   import GameScreenWarehouse
     from '~/components/game/screen/GameScreenWarehouse';
   import GameSolutionPanel from "~/components/game/solution/GameSolutionPanel";
+  import {startSchedule, stopSchedule} from "~/timeScheduler";
 
   export default {
     name: 'game',
@@ -94,12 +95,15 @@
       }
 
       connectRoom(this.$route.params.roomId)
-        .then(this.clearMessages())
+        .then(() => this.clearMessages())
+        .then(() => startSchedule(this.gameData.startCountDownTime))
         .catch((_error) => {
           // TODO
         });
+
     },
     beforeDestroy() {
+      stopSchedule();
       disconnectRoom();
     },
   };

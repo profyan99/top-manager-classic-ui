@@ -5,9 +5,6 @@ const actions = {
   updateGameDataWebsocket({ commit }, data) {
     commit('updateGameData', data);
   },
-  updateGameTickWebsocket({ commit }, data) {
-    commit('updateGameTick', data);
-  },
   updateSolutionsPrice({ commit }, price) {
     commit('updateSolutionsPrice', price);
   },
@@ -25,6 +22,13 @@ const actions = {
   },
   updateCompanyWebsocket({ commit }, company) {
     commit('updateCompany', company);
+  },
+
+  setTime({ commit }, time) {
+    commit('setGameTick', time);
+  },
+  updateTime({ commit }) {
+    commit('updateGameTick', 1);
   },
 };
 
