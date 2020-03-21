@@ -7,7 +7,7 @@ const actions = {
       message,
     });
   },
-  addMessageWebsocket({ commit }, message) {
+  addMessage({ commit }, message) {
     commit('addMessage', message);
   },
   clearMessages({ commit }) {

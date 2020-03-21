@@ -1,10 +1,42 @@
+const buildServerMessage = (message) => ({
+  message,
+  time: Date.now(),
+  player: {
+    id: -1,
+    userName: 'Игра',
+    avatar: null,
+  },
+});
+
+
 const actions = {
-  setGameDataWebsocket({ commit }, data) {
+  setGameData({ commit }, data) {
     commit('setGameData', data);
   },
-  updateGameDataWebsocket({ commit }, data) {
+  updateGameData({ commit, dispatch }, data) {
     commit('updateGameData', data);
+    dispatch('chat/addMessage', buildServerMessage(`Начался новый период [${data.currentPeriod}]`), { root: true });
   },
+  finishGame({ commit, dispatch }, data) {
+    commit('updateGameData', data);
+    dispatch('chat/addMessage', buildServerMessage('Игра завершена'), { root: true });
+  },
+
+  connectPlayer({ commit, dispatch }, data) {
+    commit('addPlayer', data);
+    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] подключился к игре`), { root: true });
+  },
+  reconnectPlayer({ dispatch }, data) {
+    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] переподключился к игре`), { root: true });
+  },
+  disconnectPlayer({ commit, dispatch }, data) {
+    commit('removePlayer', data);
+    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] вышел из игры`), { root: true });
+  },
+  updatePlayer({ commit }, data) {
+    commit('updatePlayer', data);
+  },
+
   updateSolutionsPrice({ commit }, price) {
     commit('updateSolutionsPrice', price);
   },
@@ -20,7 +52,8 @@ const actions = {
   updateSolutionsNir({ commit }, nir) {
     commit('updateSolutionsNir', nir);
   },
-  updateCompanyWebsocket({ commit }, company) {
+
+  updateCompany({ commit }, company) {
     commit('updateCompany', company);
   },
 

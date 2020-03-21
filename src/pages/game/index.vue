@@ -71,10 +71,18 @@
       };
     },
     computed: {
-      ...mapState('game', ['gameData']),
-      ...mapGetters('game', ['currentPlayer']),
+      ...mapState('game', ['gameData', 'currentPlayer']),
       screenToShow() {
         return () => import(`~/components/game/screen/${ this.currentScreen }`);
+      },
+    },
+    watch: {
+      gameData(newData, oldData) {
+        if(newData.currentPeriod >= newData.maxPeriods) {
+          stopSchedule();
+        } else {
+          startSchedule(newData.startCountDownTime);
+        }
       },
     },
     methods: {
@@ -101,6 +109,12 @@
           // TODO
         });
 
+
+    },
+    beforeRouteLeave (to, from, next) {
+      stopSchedule();
+      disconnectRoom(this.gameData.id);
+      next();
     },
     beforeDestroy() {
       stopSchedule();

@@ -33,16 +33,16 @@ function websocketHandler(message, _flags) {
   }
   case 'GAME': {
     switch (eventType) {
-    case 'ADD': {
-      store.dispatch('game/setGameDataWebsocket', body);
-      break;
-    }
     case 'UPDATE': {
-      store.dispatch('game/updateGameDataWebsocket', body);
+      store.dispatch('game/updateGameData', body);
       break;
     }
     case 'REMOVE': {
       // TODO
+      break;
+    }
+    case 'END': {
+      store.dispatch('game/finishGame', body);
       break;
     }
     default:
@@ -51,24 +51,28 @@ function websocketHandler(message, _flags) {
     break;
   }
   case 'MESSAGE': {
-    store.dispatch('chat/addMessageWebsocket', body);
+    store.dispatch('chat/addMessage', body);
     break;
   }
   case 'PLAYER': {
     switch (eventType) {
     case 'CONNECT': {
-      store.dispatch('game/addPlayer', body);
+      store.dispatch('game/connectPlayer', body);
+      break;
+    }
+    case 'RECONNECT': {
+      store.dispatch('game/reconnectPlayer', body);
       break;
     }
     case 'DISCONNECT': {
       if (body.force) {
-        store.dispatch('game/removePlayer', body);
+        store.dispatch('game/disconnectPlayer', body);
       }
       // TODO
       break;
     }
     case 'UPDATE': {
-      store.dispatch('game/updateCompanyWebsocket', body);
+      store.dispatch('game/updatePlayer', body);
       break;
     }
     default:
@@ -79,7 +83,7 @@ function websocketHandler(message, _flags) {
   case 'COMPANY': {
     switch (eventType) {
     case 'UPDATE': {
-      store.dispatch('game/updateCompanyWebsocket', body);
+      store.dispatch('game/updateCompany', body);
       break;
     }
     default:
@@ -102,10 +106,17 @@ export async function connect() {
 }
 
 export function disconnectRoom(roomId) {
+  console.log('Disconnect from game: ', roomId);
+  if (!client) {
+    return;
+  }
   client.unsubscribe(`/games/${roomId}`, null);
 }
 
 export function unsubscribeRoomList() {
+  if (!client) {
+    return;
+  }
   client.unsubscribe('/games', null);
 }
 

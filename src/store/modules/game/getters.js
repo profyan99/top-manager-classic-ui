@@ -3,7 +3,8 @@ const getters = {
     return players.find((player) => player.userName === user.user.userName);
   },
   currentSolutions: ({ currentSolutions }) => currentSolutions,
-  oldSolutions: ({ solutions }) => solutions,
+  oldSolutions: ({ currentPlayer }) => currentPlayer.solutions,
+  players: ({ players, playersList }) => playersList.map((playerId) => players[playerId]),
 };
 
 export default getters;

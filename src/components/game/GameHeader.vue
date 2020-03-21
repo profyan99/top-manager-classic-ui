@@ -34,8 +34,9 @@
         return convertRoomState(this.gameData.state);
       },
       currentTime() {
-        const { currentSecond } = this;
-        return convertSecondsToMinutes(currentSecond);
+        const { currentSecond, gameData } = this;
+        const timeLeft = gameData.periodDuration - currentSecond;
+        return convertSecondsToMinutes(timeLeft < 0 ? 0 : timeLeft);
       },
     },
   };
