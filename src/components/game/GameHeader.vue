@@ -36,6 +36,7 @@
       currentTime() {
         const { currentSecond, gameData } = this;
         const timeLeft = gameData.periodDuration - currentSecond;
+        console.log('TIME: ', timeLeft, gameData.periodDuration, currentSecond);
         return convertSecondsToMinutes(timeLeft < 0 ? 0 : timeLeft);
       },
     },

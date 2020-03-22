@@ -4,7 +4,7 @@
          v-for="item in menuItems"
          :key="item.name"
          @click="$emit('selected-screen', item.component)">
-      {{ item.name }}
+
     </div>
   </div>
 </template>

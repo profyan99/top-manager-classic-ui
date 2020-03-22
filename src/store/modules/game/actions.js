@@ -15,7 +15,10 @@ const actions = {
   },
   updateGameData({ commit, dispatch }, data) {
     commit('updateGameData', data);
-    dispatch('chat/addMessage', buildServerMessage(`Начался новый период [${data.currentPeriod}]`), { root: true });
+    const msg = data.currentPeriod === 1
+      ? 'Началась игра'
+      : `Начался ${data.currentPeriod} период`;
+    dispatch('chat/addMessage', buildServerMessage(msg), { root: true });
   },
   finishGame({ commit, dispatch }, data) {
     commit('updateGameData', data);

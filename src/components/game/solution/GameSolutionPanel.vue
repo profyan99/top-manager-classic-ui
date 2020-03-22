@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import {mapGetters, mapActions} from 'vuex';
   import GameSolutionInput from './GameSolutionInput';
 
   export default {
@@ -135,14 +135,15 @@
             margin-top: base-unit(15)
             margin-bottom: base-unit(20)
 
+            &.subtitle
+                font-size: base-unit(16)
+                font-weight: bold
+                font-style: normal
+                color: $bg-main
+
         &-content
             display: flex
             align-items: center
             justify-content: space-between
 
-        &-subtitle
-            font-size: base-unit(16)
-            font-weight: bold
-            font-style: normal
-            color: $bg-main
 </style>

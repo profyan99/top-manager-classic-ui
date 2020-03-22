@@ -19,12 +19,13 @@
       <game-header/>
       <div class="game-content">
         <game-left-menu
-                class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
-                @selected-screen="currentScreen = $event"/>
-        <component :is="currentScreen" class="game-content-screen">
+            class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
+            @selected-screen="currentScreen = $event"/>
+        <component :is="currentScreen" class="game-content-screen"
+                   :company="currentPlayer.company">
         </component>
       </div>
-      <GameSolutionPanel />
+      <GameSolutionPanel/>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.id">
@@ -47,8 +48,8 @@
   import GameScreenSummary from '~/components/game/screen/GameScreenSummary';
   import GameScreenWarehouse
     from '~/components/game/screen/GameScreenWarehouse';
-  import GameSolutionPanel from "~/components/game/solution/GameSolutionPanel";
-  import {startSchedule, stopSchedule} from "~/timeScheduler";
+  import GameSolutionPanel from '~/components/game/solution/GameSolutionPanel';
+  import { startSchedule, stopSchedule } from '~/timeScheduler';
 
   export default {
     name: 'game',
@@ -73,12 +74,12 @@
     computed: {
       ...mapState('game', ['gameData', 'currentPlayer']),
       screenToShow() {
-        return () => import(`~/components/game/screen/${ this.currentScreen }`);
+        return () => import(`~/components/game/screen/${this.currentScreen}`);
       },
     },
     watch: {
       gameData(newData, oldData) {
-        if(newData.currentPeriod >= newData.maxPeriods) {
+        if (newData.currentPeriod === oldData.currentPeriod) {
           stopSchedule();
         } else {
           startSchedule(newData.startCountDownTime);
@@ -90,7 +91,7 @@
       ...mapActions('chat', ['clearMessages']),
       exitFromRoom() {
         disconnectRoom();
-        this.$router.push({ name: 'rooms' });
+        this.$router.push({name: 'rooms'});
       },
       invitePlayer() {
 
@@ -98,7 +99,7 @@
     },
     created() {
       if (!this.gameData) {
-        this.$router.push({ name: 'rooms' });
+        this.$router.push({name: 'rooms'});
         return;
       }
 
@@ -111,7 +112,7 @@
 
 
     },
-    beforeRouteLeave (to, from, next) {
+    beforeRouteLeave(to, from, next) {
       stopSchedule();
       disconnectRoom(this.gameData.id);
       next();
