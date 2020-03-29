@@ -10,6 +10,8 @@ import {
   faTimes,
   faTrophy,
   faUserPlus,
+  faChevronDown,
+  faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faVk } from '@fortawesome/free-brands-svg-icons';
 
@@ -33,6 +35,8 @@ library.add(
   faUserPlus,
   faVk,
   faGoogle,
+  faChevronDown,
+  faChevronUp,
 );
 
 Vue.component('icon', FontAwesomeIcon);

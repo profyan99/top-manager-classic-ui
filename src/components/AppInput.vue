@@ -13,6 +13,9 @@
              @keyup.enter="$emit('submit')"
              @blur="blur">
     </label>
+    <span class="caption" v-show="caption">
+      {{ caption }}
+    </span>
     <span class="error" v-show="error">
       {{ errorMessage }}
     </span>
@@ -31,6 +34,10 @@
         default: false,
       },
       errorMessage: {
+        type: String,
+        default: null,
+      },
+      caption: {
         type: String,
         default: null,
       },
@@ -106,5 +113,11 @@
     color: $red
     font-size: base-unit(12)
     font-weight: 300
+    margin-top: base-unit(2)
+
+  .caption
+    color: $light-grey
+    font-size: base-unit(14)
+    font-weight: normal
     margin-top: base-unit(2)
 </style>

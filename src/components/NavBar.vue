@@ -144,12 +144,6 @@
     cursor: pointer
     position: relative
 
-    .avatar
-      border-radius: 100%
-      height: base-unit(32)
-      width: base-unit(32)
-      background-color: $red
-
     .user-name
       font-weight: 500
       font-size: $nav-font-size

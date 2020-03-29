@@ -1,31 +1,32 @@
 <template>
-  <div class="game">
-    <div class="game-body">
-      <div class="game-name">
-        <div class="left-part">
-          <span class="title">{{ gameData.name }}</span>
-          <span class="company-name">
+  <span v-if="!gameData">Loading...</span>
+  <div class="game" v-else>
+    <div class="game-body col-sm-8 col-md-8 col-lg-8 col-xl-8">
+        <div class="game-name">
+          <div class="left-part">
+            <span class="title">{{ gameData.name }}</span>
+            <span class="company-name">
           Компания {{ currentPlayer.companyName }}
         </span>
+          </div>
+          <div class="spacer"></div>
+          <app-button icon="user-plus"
+                      @click="invitePlayer"
+                      class="header-button"/>
+          <app-button icon="sign-out-alt"
+                      @click="exitFromRoom"
+                      class="header-button"/>
         </div>
-        <div class="spacer"></div>
-        <app-button icon="user-plus"
-                    @click="invitePlayer"
-                    class="header-button"/>
-        <app-button icon="sign-out-alt"
-                    @click="exitFromRoom"
-                    class="header-button"/>
-      </div>
-      <game-header/>
-      <div class="game-content">
-        <game-left-menu
-            class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
-            @selected-screen="currentScreen = $event"/>
-        <component :is="currentScreen" class="game-content-screen"
-                   :company="currentPlayer.company">
-        </component>
-      </div>
-      <GameSolutionPanel/>
+        <game-header/>
+        <div class="game-content">
+          <game-left-menu
+              class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
+              @selected-screen="currentScreen = $event"/>
+          <component :is="currentScreen" class="game-content-screen"
+                     :company="currentPlayer.company">
+          </component>
+        </div>
+        <GameRatingPanel/>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.id">
@@ -34,52 +35,46 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters, mapState } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
+
   import Chat from '~/components/rooms/Chat';
   import AppButton from '~/components/AppButton.vue';
   import GameHeader from '~/components/game/GameHeader';
   import GameLeftMenu from '~/components/game/GameLeftMenu';
   import { connectRoom, disconnectRoom } from '~/websocket.js';
-  import GameScreenBank from '~/components/game/screen/GameScreenBank';
-  import GameScreenIndustry from '~/components/game/screen/GameScreenIndustry';
-  import GameScreenManaging from '~/components/game/screen/GameScreenManaging';
-  import GameScreenProduction
-    from '~/components/game/screen/GameScreenProduction';
-  import GameScreenSummary from '~/components/game/screen/GameScreenSummary';
-  import GameScreenWarehouse
-    from '~/components/game/screen/GameScreenWarehouse';
-  import GameSolutionPanel from '~/components/game/solution/GameSolutionPanel';
+  import {
+    GameScreenBank,
+    GameScreenIndustry,
+    GameScreenManaging,
+    GameScreenWarehouse,
+  } from '~/components/game/screen';
+  import GameRatingPanel from '~/components/game/rating';
   import { startSchedule, stopSchedule } from '~/timeScheduler';
 
   export default {
     name: 'game',
     components: {
-      GameSolutionPanel,
+      GameRatingPanel,
       GameLeftMenu,
       GameHeader,
       Chat,
       AppButton,
       GameScreenBank,
-      GameScreenSummary,
       GameScreenWarehouse,
-      GameScreenProduction,
       GameScreenManaging,
       GameScreenIndustry,
     },
     data() {
       return {
-        currentScreen: 'GameScreenSummary',
+        currentScreen: 'GameScreenIndustry',
       };
     },
     computed: {
       ...mapState('game', ['gameData', 'currentPlayer']),
-      screenToShow() {
-        return () => import(`~/components/game/screen/${this.currentScreen}`);
-      },
     },
     watch: {
       gameData(newData, oldData) {
-        if (newData.currentPeriod === oldData.currentPeriod) {
+        if (oldData && newData && newData.currentPeriod === oldData.currentPeriod) {
           stopSchedule();
         } else {
           startSchedule(newData.startCountDownTime);
@@ -89,18 +84,25 @@
     methods: {
       ...mapActions('game', ['tryConnectRoom']),
       ...mapActions('chat', ['clearMessages']),
+      ...mapActions('rooms', ['connectToRoom']),
       exitFromRoom() {
         disconnectRoom();
-        this.$router.push({name: 'rooms'});
+        this.$router.push({ name: 'rooms' });
       },
       invitePlayer() {
 
       },
     },
-    created() {
+    async created() {
       if (!this.gameData) {
-        this.$router.push({name: 'rooms'});
-        return;
+        await this.connectToRoom({
+          id: this.$route.params.roomId,
+          password: '',
+          companyName: '',
+        }).catch((_error) => {
+          // TODO notify
+          this.$router.push({ name: 'rooms' });
+        });
       }
 
       connectRoom(this.$route.params.roomId)
@@ -109,17 +111,19 @@
         .catch((_error) => {
           // TODO
         });
-
-
     },
     beforeRouteLeave(to, from, next) {
       stopSchedule();
-      disconnectRoom(this.gameData.id);
+      if (this.gameData) {
+        disconnectRoom(this.gameData.id);
+      }
       next();
     },
     beforeDestroy() {
       stopSchedule();
-      disconnectRoom();
+      if (this.gameData) {
+        disconnectRoom(this.gameData.id);
+      }
     },
   };
 </script>

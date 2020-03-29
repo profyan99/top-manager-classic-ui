@@ -100,7 +100,6 @@
       align-items: baseline
       justify-content: space-between
       flex: 0 0 auto
-      min-height: base-unit(40)
 
       .main
         +title

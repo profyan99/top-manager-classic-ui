@@ -16,20 +16,12 @@
       return {
         menuItems: [
           {
-            name: 'Сводка',
-            component: 'GameScreenSummary',
-          },
-          {
-            name: 'Банк',
+            name: 'Доходы',
             component: 'GameScreenBank',
           },
           {
-            name: 'Склад',
+            name: 'Отчет',
             component: 'GameScreenWarehouse',
-          },
-          {
-            name: 'Производство',
-            component: 'GameScreenProduction',
           },
           {
             name: 'Индустрия',

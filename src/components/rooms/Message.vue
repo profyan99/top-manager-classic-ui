@@ -1,10 +1,19 @@
 <template>
   <div class="message">
-    <div class="header">
-      <span class="author">{{ data.player.userName }}</span>
-      <span>{{ time }}</span>
+    <div class="avatar">
+      <img v-if="data.player.avatar"
+           class="avatar"
+           :src="data.player.avatar"
+           alt="avatar"
+      >
     </div>
-    <span class="content">{{ data.message }}</span>
+    <div class="right">
+      <div class="header">
+        <span class="author">{{ data.player.userName }}</span>
+        <span>{{ time }}</span>
+      </div>
+      <span class="content">{{ data.message }}</span>
+    </div>
   </div>
 </template>
 
@@ -31,7 +40,6 @@
 
   .message
     display: flex
-    flex-direction: column
     background-color: $grey
     border-radius: base-unit(10)
     width: 100%
@@ -39,20 +47,28 @@
     padding: base-unit(10)
     margin-bottom: base-unit(10)
 
-    .header
-      font-style: normal
-      font-weight: 300
-      font-size: base-unit(12)
-      color: $light-grey
-      display: flex
-      justify-content: space-between
-      align-items: center
+    .avatar
+      margin-right: base-unit(10)
 
-      .author
-        font-weight: 500
-        font-size: base-unit(14)
-        margin-right: base-unit(10)
-        color: $fg-main
+    .right
+      display: flex
+      flex-direction: column
+      width: 100%
+
+      .header
+        font-style: normal
+        font-weight: 300
+        font-size: base-unit(12)
+        color: $light-grey
+        display: flex
+        justify-content: space-between
+        align-items: center
+
+        .author
+          font-weight: 500
+          font-size: base-unit(14)
+          margin-right: base-unit(10)
+          color: $fg-main
 
     .content
       font-style: normal

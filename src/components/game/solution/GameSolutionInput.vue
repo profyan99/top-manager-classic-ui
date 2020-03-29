@@ -1,11 +1,10 @@
 <template>
   <div class="game-solution-input">
     <span class="label">{{ label }}</span>
-    <span class="additional">Было: {{ additional }}</span>
     <app-input v-model="inputModel"
                color="#555555"
-               class="input"
                type="number"
+               :caption="`Было: ${additional}`"
                :placeholder="label"/>
   </div>
 </template>
@@ -46,19 +45,12 @@
 
   .game-solution-input
     display: flex
-    flex-direction: column
+    align-items: center
 
     .label
       color: $fg-main
       font-size: base-unit(16)
       font-weight: bold
-
-    .additional
-      color: $light-grey
-      font-size: base-unit(14)
-      font-weight: normal
-
-    .input
-      margin-top: base-unit(5)
+      margin-right: base-unit(15)
 
 </style>
