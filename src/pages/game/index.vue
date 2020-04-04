@@ -2,31 +2,31 @@
   <span v-if="!gameData">Loading...</span>
   <div class="game" v-else>
     <div class="game-body col-sm-8 col-md-8 col-lg-8 col-xl-8">
-        <div class="game-name">
-          <div class="left-part">
-            <span class="title">{{ gameData.name }}</span>
-            <span class="company-name">
+      <div class="game-name">
+        <div class="left-part">
+          <span class="title">{{ gameData.name }}</span>
+          <span class="company-name">
           Компания {{ currentPlayer.companyName }}
         </span>
-          </div>
-          <div class="spacer"></div>
-          <app-button icon="user-plus"
-                      @click="invitePlayer"
-                      class="header-button"/>
-          <app-button icon="sign-out-alt"
-                      @click="exitFromRoom"
-                      class="header-button"/>
         </div>
-        <game-header/>
-        <div class="game-content">
-          <game-left-menu
-              class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
-              @selected-screen="currentScreen = $event"/>
-          <component :is="currentScreen" class="game-content-screen"
-                     :company="currentPlayer.company">
-          </component>
-        </div>
-        <GameRatingPanel/>
+        <div class="spacer"></div>
+        <app-button icon="user-plus"
+                    @click="invitePlayer"
+                    class="header-button"/>
+        <app-button icon="sign-out-alt"
+                    @click="exitFromRoom"
+                    class="header-button"/>
+      </div>
+      <game-header/>
+      <div class="game-content">
+        <game-left-menu
+            class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
+            @selected-screen="currentScreen = $event"/>
+        <component :is="currentScreen" class="game-content-screen"
+                   :company="currentPlayer.company">
+        </component>
+      </div>
+      <GameRatingPanel/>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.id">
@@ -45,7 +45,7 @@
   import {
     GameScreenBank,
     GameScreenIndustry,
-    GameScreenManaging,
+    GameScreenManage,
     GameScreenWarehouse,
   } from '~/components/game/screen';
   import GameRatingPanel from '~/components/game/rating';
@@ -61,7 +61,7 @@
       AppButton,
       GameScreenBank,
       GameScreenWarehouse,
-      GameScreenManaging,
+      GameScreenManage,
       GameScreenIndustry,
     },
     data() {
@@ -82,11 +82,10 @@
       },
     },
     methods: {
-      ...mapActions('game', ['tryConnectRoom']),
+      ...mapActions('game', ['tryConnectRoom', 'disconnectFromGame']),
       ...mapActions('chat', ['clearMessages']),
       ...mapActions('rooms', ['connectToRoom']),
       exitFromRoom() {
-        disconnectRoom();
         this.$router.push({ name: 'rooms' });
       },
       invitePlayer() {
@@ -113,17 +112,11 @@
         });
     },
     beforeRouteLeave(to, from, next) {
-      stopSchedule();
-      if (this.gameData) {
-        disconnectRoom(this.gameData.id);
+      if (confirm('Хотите покинуть игру?') && this.gameData) {
+        this.disconnectFromGame()
+          .then(() => disconnectRoom(this.gameData.id));
       }
       next();
-    },
-    beforeDestroy() {
-      stopSchedule();
-      if (this.gameData) {
-        disconnectRoom(this.gameData.id);
-      }
     },
   };
 </script>
@@ -169,7 +162,6 @@
     &-content
       display: flex
       flex: 1
-      margin-top: base-unit(15)
 
       &-left-menu
         margin-right: base-unit(15)
@@ -177,7 +169,7 @@
       &-screen
         display: flex
         flex: 1
-
+        padding: base-unit(10)
 
   .title
     +title

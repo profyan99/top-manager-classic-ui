@@ -2,7 +2,6 @@
   <div class="content">
     <div class="logo">
       <span class="main">Top Manager</span>
-      <span class="sub">oil tycoon</span>
     </div>
     <div class="modal">
       <div class="toggle">

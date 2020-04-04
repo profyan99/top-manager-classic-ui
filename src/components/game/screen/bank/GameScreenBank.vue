@@ -1,11 +1,6 @@
 <template>
   <div class="">
-    <div v-for="companyItem in Object.keys(company)" :key="companyItem">
-      <span>{{ companyItem }}:</span>
-    </div>
-    <div v-for="companyItem in Object.keys(company)" :key="companyItem">
-      <span>{{ company[companyItem] }}</span>
-    </div>
+    Bank
   </div>
 </template>
 

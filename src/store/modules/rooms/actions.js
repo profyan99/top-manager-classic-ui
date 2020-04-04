@@ -4,7 +4,8 @@ const actions = {
   async connectToRoom({ commit }, data) {
     return axios.post(`/games/${data.id}`, data)
       .then((roomData) => {
-        commit('game/setGameData', roomData, { root: true });
+        commit('game/setGameData', roomData.game, { root: true });
+        commit('game/updateCompany', roomData.player, { root: true });
       });
   },
   async createRoom({}, form) {

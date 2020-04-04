@@ -1,13 +1,7 @@
 <template>
   <div class="nav-bar">
-    <!--<div class="modal-wrapper"
-         v-if="modalActive"
-         @click="modalActive = false">
-
-    </div>-->
     <div class="logo">
       <span class="main">Top Manager</span>
-      <span class="sub">oil tycoon</span>
     </div>
     <div class="links">
       <div class="link-item"

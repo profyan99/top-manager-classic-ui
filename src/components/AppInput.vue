@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="app-input">
     <label class="input-wrapper"
            :style="{ 'border-bottom-color': color }"
            :class="{ focused: focus }">
@@ -85,6 +85,10 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
+  .app-input
+    display: flex
+    flex-direction: column
+
   .input-wrapper
     display: flex
     align-items: center
@@ -106,7 +110,7 @@
     +sub-font
     color: $fg-main
     padding-top: base-unit(6)
-    padding-bottom: base-unit(10)
+    padding-bottom: base-unit(6)
     width: 100%
 
   .error

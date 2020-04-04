@@ -42,9 +42,7 @@
       </div>
     </template>
     <template v-slot:actions>
-      <div class="confirm-button" @click="connect">
-        Присоединиться
-      </div>
+      <app-button label="Присоединиться" @click="connect"/>
     </template>
   </modal>
 </template>
@@ -52,6 +50,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import { minLength, required, } from 'vuelidate/lib/validators';
+  import AppButton from '~/components/AppButton';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
   import { convertRoomState } from '~/helpers/room';
@@ -59,6 +58,7 @@
   export default {
     name: 'RoomConnectModal',
     components: {
+      AppButton,
       Modal,
       AppInput,
     },

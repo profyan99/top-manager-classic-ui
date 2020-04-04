@@ -1,6 +1,6 @@
 <template>
-  <div class="message">
-    <div class="avatar">
+  <div class="message" :class="{ server: data.isServer }">
+    <div class="avatar" v-if="data.player">
       <img v-if="data.player.avatar"
            class="avatar"
            :src="data.player.avatar"
@@ -9,8 +9,12 @@
     </div>
     <div class="right">
       <div class="header">
-        <span class="author">{{ data.player.userName }}</span>
-        <span>{{ time }}</span>
+        <span class="author"
+              v-if="data.player"
+        >
+          {{ data.player.userName }}
+        </span>
+        <span :class="{ server: data.isServer }">{{ time }}</span>
       </div>
       <span class="content">{{ data.message }}</span>
     </div>
@@ -47,6 +51,9 @@
     padding: base-unit(10)
     margin-bottom: base-unit(10)
 
+    &.server
+      background-color: $blue
+
     .avatar
       margin-right: base-unit(10)
 
@@ -78,5 +85,7 @@
       color: #a5a5a5
       margin-top: base-unit(2)
 
+  .server
+    color: #a5a5a5
 
 </style>

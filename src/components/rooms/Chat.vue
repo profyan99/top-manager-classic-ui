@@ -14,26 +14,24 @@
     </div>
     <div class="chat-input">
       <app-input v-model="newMessage"
-                 class="col-sm-7 col-md-8 col-lg-8 col-xl-8"
+                 class="chat-input-field"
                  @submit="send"
                  color="#555555"
                  placeholder="Напишите сообщение"/>
-      <div class="button col-sm-4 col-md-3 col-lg-3 col-xl-3"
-           @click="send">
-        Отправить
-      </div>
+      <app-button label="Отправить" @click="send" />
     </div>
   </div>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex';
+  import AppButton from '~/components/AppButton';
   import Message from '~/components/rooms/Message';
   import AppInput from '~/components/AppInput';
 
   export default {
     name: 'chat',
-    components: { Message, AppInput },
+    components: { AppButton, Message, AppInput },
     data() {
       return {
         newMessage: '',
@@ -128,26 +126,15 @@
     .chat-input
       display: flex
       flex: 0 0 auto
+      flex-wrap: wrap
       justify-content: space-between
       margin-top: base-unit(40)
       width: 100%
 
-      .button
-        margin-left: base-unit(10)
-        background-color: $red
-        cursor: pointer
-        text-align: center
-        color: $fg-main
-        font-size: base-unit(14)
-        border-radius: $base-border-radius
-        padding: base-unit(10)
-        box-sizing: border-box
-        display: flex
-        align-items: center
-        justify-content: center
-
-        &:hover
-          opacity: 0.8
+      &-field
+        flex: 1
+        min-width: base-unit(100)
+        margin-right: base-unit(10)
 
 
 </style>

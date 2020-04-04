@@ -1,4 +1,4 @@
-export { default as GameScreenBank } from './GameScreenBank';
-export { default as GameScreenIndustry } from './GameScreenIndustry';
-export { default as GameScreenManaging } from './GameScreenManaging';
-export { default as GameScreenWarehouse } from './GameScreenWarehouse';
+export { default as GameScreenBank } from './bank';
+export { default as GameScreenIndustry } from './industry';
+export { default as GameScreenManage } from './manage';
+export { default as GameScreenWarehouse } from './warehouse';

@@ -29,7 +29,7 @@
           },
           {
             name: 'Управление',
-            component: 'GameScreenManaging',
+            component: 'GameScreenManage',
           },
         ],
       };
@@ -43,8 +43,8 @@
   .game-left-menu
     display: flex
     flex-direction: column
-    justify-content: space-between
     align-items: center
+    margin: base-unit(5) 0
 
     .menu-item
       width: 100%

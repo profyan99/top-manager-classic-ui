@@ -1,6 +1,8 @@
 <template>
   <button @click="$emit('click')"
-          class="app-button">
+          class="app-button"
+          :class="{ disabled: disabled }"
+  >
     <icon v-if="icon" :icon="icon"/>
     <span v-if="label">{{ label }}</span>
   </button>
@@ -18,6 +20,10 @@
         type: String,
         default: null,
       },
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
     },
   };
 </script>
@@ -26,11 +32,11 @@
   @import "~/styles/styleguide.sass"
 
   .app-button
-    background-color: $red
+    background-color: $blue
     cursor: pointer
     text-align: center
     color: $fg-main
-    font-size: base-unit(14)
+    font-size: base-unit(12)
     border-radius: $base-border-radius
     padding: base-unit(10)
     box-sizing: border-box
@@ -39,6 +45,13 @@
     outline: 0
     border: none
     justify-content: center
+    text-transform: uppercase
+
+    .disabled
+      background-color: $light-grey
+
+      &:hover
+        opacity: 1
 
     &:hover
       opacity: 0.8

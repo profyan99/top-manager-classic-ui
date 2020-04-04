@@ -80,9 +80,7 @@
       </div>
     </template>
     <template v-slot:actions>
-      <div class="confirm-button" @click="create">
-        Создать
-      </div>
+      <app-button label="Создать" @click="create"/>
     </template>
   </modal>
 </template>
@@ -96,6 +94,7 @@
     numeric,
     required,
   } from 'vuelidate/lib/validators';
+  import AppButton from '~/components/AppButton';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
   import Toggle from '~/components/Toggle';
@@ -103,6 +102,7 @@
   export default {
     name: 'RoomCreateModal',
     components: {
+      AppButton,
       Toggle,
       Modal,
       AppInput,

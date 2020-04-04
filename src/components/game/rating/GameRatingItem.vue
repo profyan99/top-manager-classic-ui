@@ -1,6 +1,9 @@
 <template>
   <div class="game-rating-item" :class="{ bankrupt: company.isBankrupt }">
-    <span class="company-name" :class="{ bankrupt: company.isBankrupt }">
+    <span class="company-name" :class="{
+      bankrupt: company.isBankrupt,
+      'think-state' : company.state === 'THINK' && !company.isBankrupt,
+    }">
       {{ company.companyName }}
     </span>
     <span>
@@ -76,6 +79,9 @@
 
       &.bankrupt
         color: $light-grey
+
+      &.think-state
+        color: $red
 
   .bankrupt
     color: $light-grey

@@ -1,11 +1,9 @@
+import axios from 'axios';
+
 const buildServerMessage = (message) => ({
   message,
   time: Date.now(),
-  player: {
-    id: -1,
-    userName: 'Игра',
-    avatar: null,
-  },
+  isServer: true,
 });
 
 
@@ -22,38 +20,35 @@ const actions = {
   },
   finishGame({ commit, dispatch }, data) {
     commit('updateGameData', data);
+    commit('setGameTick', 0);
     dispatch('chat/addMessage', buildServerMessage('Игра завершена'), { root: true });
   },
 
   connectPlayer({ commit, dispatch }, data) {
     commit('addPlayer', data);
-    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] подключился к игре`), { root: true });
+    dispatch(
+      'chat/addMessage',
+      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} подключился к игре`),
+      { root: true },
+    );
   },
   reconnectPlayer({ dispatch }, data) {
-    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] переподключился к игре`), { root: true });
+    dispatch(
+      'chat/addMessage',
+      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} переподключился к игре`),
+      { root: true },
+    );
   },
   disconnectPlayer({ commit, dispatch }, data) {
     commit('removePlayer', data);
-    dispatch('chat/addMessage', buildServerMessage(`Игрок ${data.userName} [${data.companyName}] вышел из игры`), { root: true });
+    dispatch(
+      'chat/addMessage',
+      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} вышел из игры`),
+      { root: true },
+    );
   },
   updatePlayer({ commit }, data) {
     commit('updatePlayer', data);
-  },
-
-  updateSolutionsPrice({ commit }, price) {
-    commit('updateSolutionsPrice', price);
-  },
-  updateSolutionsProduction({ commit }, production) {
-    commit('updateSolutionsProduction', production);
-  },
-  updateSolutionsMarketing({ commit }, marketing) {
-    commit('updateSolutionsMarketing', marketing);
-  },
-  updateSolutionsInvestments({ commit }, investments) {
-    commit('updateSolutionsInvestments', investments);
-  },
-  updateSolutionsNir({ commit }, nir) {
-    commit('updateSolutionsNir', nir);
   },
 
   updateCompany({ commit }, company) {
@@ -65,6 +60,13 @@ const actions = {
   },
   updateTime({ commit }) {
     commit('updateGameTick', 1);
+  },
+
+  sendSolutions({ state }, solutions) {
+    return axios.post(`/games/${state.gameData.id}/solutions`, solutions);
+  },
+  disconnectFromGame({ state }) {
+    return axios.delete(`/games/${state.gameData.id}`);
   },
 };
 

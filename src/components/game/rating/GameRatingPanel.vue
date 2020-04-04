@@ -43,129 +43,7 @@
       ...mapGetters('game', ['players']),
       companies() {
         const { players } = this;
-        return [
-          {
-            id: 0,
-            state: 'WAIT',
-            userName: 'Zero',
-            companyName: 'Zero',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 1,
-            state: 'WAIT',
-            userName: 'First',
-            companyName: 'First',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 2,
-            state: 'WAIT',
-            userName: 'Second',
-            companyName: 'Second',
-            isBankrupt: true,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 1840000,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 3,
-            state: 'WAIT',
-            userName: 'Third',
-            companyName: 'Third',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 860000,
-              netProfit: 3600,
-              accumulatedProfit: 1840000,
-              marketingPart: 10.3223,
-            },
-          },
-          {
-            id: 4,
-            state: 'WAIT',
-            userName: 'Fouth',
-            companyName: 'Fouth',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 860000,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 5,
-            state: 'WAIT',
-            userName: 'Fiths',
-            companyName: 'Fiths',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 6,
-            state: 'WAIT',
-            userName: 'Very large name',
-            companyName: 'Very large name',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-          {
-            id: 7,
-            state: 'WAIT',
-            userName: 'Naming',
-            companyName: 'Company',
-            isBankrupt: false,
-            stats: {
-              rating: 100,
-              price: 30,
-              revenue: 8600,
-              netProfit: 3600,
-              accumulatedProfit: 18400,
-              marketingPart: 10,
-            },
-          },
-        ];
-        /* return players.sort((player1, player2) => {
+        return players.sort((player1, player2) => {
           if (player1.isBankrupt) {
             return 1;
           }
@@ -173,7 +51,7 @@
             return -1;
           }
           return player2.stats.rating - player1.stats.rating;
-        }); */
+        });
       },
     },
   };
@@ -194,7 +72,6 @@
       border-radius: $base-border-radius
       min-height: base-unit(40)
       padding: 0 base-unit(20)
-      margin-top: base-unit(10)
 
       .title
         font-size: base-unit(16)

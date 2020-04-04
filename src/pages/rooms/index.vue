@@ -32,10 +32,7 @@
       </div>
       <div class="actions">
         <span>Всего комнат: {{ roomsAmount }}</span>
-        <div class="button-create-room"
-             @click="isModalCreateRoomShowing = true">
-          Создать
-        </div>
+        <app-button label="Создать" @click="isModalCreateRoomShowing = true"/>
       </div>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -53,6 +50,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
+  import AppButton from '~/components/AppButton';
   import Chat from '~/components/rooms/Chat';
   import AppInput from '~/components/AppInput';
   import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
@@ -63,6 +61,7 @@
   export default {
     name: 'rooms',
     components: {
+      AppButton,
       RoomConnectModal,
       RoomCreateModal,
       Chat,
@@ -179,23 +178,6 @@
       font-weight: normal
       font-style: normal
       color: $light-grey
-
-    .button-create-room
-      margin-left: base-unit(10)
-      background-color: $red
-      cursor: pointer
-      text-align: center
-      color: $fg-main
-      font-size: base-unit(14)
-      border-radius: $base-border-radius
-      padding: base-unit(10)
-      box-sizing: border-box
-      display: flex
-      align-items: center
-      justify-content: center
-
-      &:hover
-        opacity: 0.8
 
   .title
     +title
