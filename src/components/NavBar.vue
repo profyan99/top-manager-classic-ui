@@ -20,7 +20,8 @@
       <span class="user-name">{{ user.userName }}</span>
       <div class="modal"
            v-if="modalActive"
-           @focusout="modalActive = false">
+           @focusout="modalActive = false"
+      >
         <span @click="logout">Выход</span>
       </div>
     </div>
@@ -34,11 +35,11 @@
     name: 'navbar',
     data() {
       return {
-        activePage: 'Комнаты',
+        activePage: 'Игры',
         modalActive: false,
         links: [
           {
-            title: 'Комнаты',
+            title: 'Игры',
             route: 'rooms',
           },
           {
@@ -46,21 +47,17 @@
             route: 'support',
           },
           {
-            title: 'Обратная связь',
+            title: 'Оставить отзыв',
             route: 'feedback',
           },
         ],
       };
     },
     computed: {
-      ...mapState('user', [
-        'user',
-      ]),
+      ...mapState('user', ['user']),
     },
     methods: {
-      ...mapActions('user', [
-        'logout',
-      ]),
+      ...mapActions('user', ['logout']),
       performLinkAction({ title, route }) {
         this.activePage = title;
         this.$router.push({ name: route });

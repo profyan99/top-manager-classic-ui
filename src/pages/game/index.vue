@@ -37,18 +37,18 @@
 <script>
   import { mapActions, mapState } from 'vuex';
 
-  import Chat from '~/components/rooms/Chat';
+  import Chat from '~/components/chat/Chat';
   import AppButton from '~/components/AppButton.vue';
-  import GameHeader from '~/components/game/GameHeader';
-  import GameLeftMenu from '~/components/game/GameLeftMenu';
+  import GameHeader from './GameHeader';
+  import GameLeftMenu from './GameLeftMenu';
   import { connectRoom, disconnectRoom } from '~/websocket.js';
   import {
     GameScreenBank,
     GameScreenIndustry,
     GameScreenManage,
     GameScreenWarehouse,
-  } from '~/components/game/screen';
-  import GameRatingPanel from '~/components/game/rating';
+  } from './screen';
+  import GameRatingPanel from './rating';
   import { startSchedule, stopSchedule } from '~/timeScheduler';
 
   export default {
@@ -108,7 +108,7 @@
         .then(() => this.clearMessages())
         .then(() => startSchedule(this.gameData.startCountDownTime))
         .catch((_error) => {
-          // TODO
+          // TODO notify
         });
     },
     beforeRouteLeave(to, from, next) {

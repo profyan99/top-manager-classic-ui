@@ -1,5 +1,6 @@
 import Nes from '@hapi/nes/lib/client';
 import axios from 'axios';
+
 import store from './store';
 
 let client = null;
@@ -102,11 +103,10 @@ export async function connect() {
   }
   client = new Nes.Client(`ws://${window.location.host}/wsapp/`);
   await axios.get('/nes/auth', { withCredentials: true });
-  return client.connect({ reconnect: false });
+  return client.connect({ reconnect: true });
 }
 
 export function disconnectRoom(roomId) {
-  console.log('Disconnect from game: ', roomId);
   if (!client) {
     return;
   }
@@ -121,9 +121,11 @@ export function unsubscribeRoomList() {
 }
 
 export function subscribeRoomList() {
-  return connect().then(() => client.subscribe('/games', websocketHandler));
+  return connect()
+    .then(() => client.subscribe('/games', websocketHandler));
 }
 
 export function connectRoom(roomId) {
-  return connect().then(() => client.subscribe(`/games/${roomId}`, websocketHandler));
+  return connect()
+    .then(() => client.subscribe(`/games/${roomId}`, websocketHandler));
 }

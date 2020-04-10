@@ -108,7 +108,7 @@
     font-weight: lighter
     font-size: base-unit(14)
     +sub-font
-    color: $fg-main
+    color: $dark-fg-main
     padding-top: base-unit(6)
     padding-bottom: base-unit(6)
     width: 100%

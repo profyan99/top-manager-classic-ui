@@ -2,7 +2,7 @@
   <modal @close="$emit('close')"
          @submit="connect">
     <template v-slot:header>
-      <span>Комната {{ room.name }}</span>
+      <span>Игра {{ room.name }}</span>
     </template>
     <template v-slot:content>
       <div class="room-information">
@@ -75,9 +75,7 @@
       };
     },
     computed: {
-      ...mapState('user', [
-        'user',
-      ]),
+      ...mapState('user', ['user']),
       roomState() {
         return convertRoomState(this.room.state);
       },

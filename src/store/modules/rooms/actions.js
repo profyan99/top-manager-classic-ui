@@ -8,7 +8,7 @@ const actions = {
         commit('game/updateCompany', roomData.player, { root: true });
       });
   },
-  async createRoom({}, form) {
+  async createRoom(_store, form) {
     return axios.post('/games', {
       ...form,
       periodDuration: form.periodDuration * 60,
@@ -22,6 +22,7 @@ const actions = {
     return axios.get('/scenarios')
       .then((data) => commit('setScenarios', data));
   },
+
   addRoomWebsocket({ commit }, room) {
     commit('addRoom', room);
   },

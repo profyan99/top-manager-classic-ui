@@ -2,12 +2,12 @@
   <modal @close="$emit('close')"
          @submit="create">
     <template v-slot:header>
-      <span>Создание игровой комнаты</span>
+      <span>Создание игры</span>
     </template>
     <template v-slot:content>
       <div class="inputs">
         <div class="">
-          <span class="label">Название комнаты</span>
+          <span class="label">Название</span>
           <app-input v-model="form.name"
                      class="input"
                      color="#555555"
@@ -48,7 +48,7 @@
 
         <toggle v-model="isLocked"
                 class="inputs-margin"
-                label="Закрытая комната"/>
+                label="Закрытая игра"/>
 
         <div class="inputs-margin inner" v-if="isLocked">
           <span class="label">Пароль</span>
@@ -65,12 +65,10 @@
                 label="Сценарий"/>
 
         <div class="inputs-margin inner" v-if="isScenario">
-          <span class="label">Сценарий</span>
-          <v-select
-                  v-model="selectedScenario"
-                  :options="scenariosOptions">
-
-          </v-select>
+          <scenario-select
+              :options="scenariosOptions"
+              v-model="selectedScenario"
+          />
         </div>
 
         <toggle v-model="form.tournament"
@@ -98,10 +96,12 @@
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
   import Toggle from '~/components/Toggle';
+  import ScenarioSelect from './ScenarioSelect';
 
   export default {
     name: 'RoomCreateModal',
     components: {
+      ScenarioSelect,
       AppButton,
       Toggle,
       Modal,
@@ -109,9 +109,7 @@
     },
     data() {
       return {
-        selectedScenario: {
-          label: 'Выберите сценарий',
-        },
+        selectedScenario: {},
         isLocked: false,
         isScenario: false,
         form: {
@@ -129,8 +127,7 @@
       ...mapState('rooms', ['scenarios']),
       scenariosOptions() {
         return this.scenarios.map((scenario) => ({
-          ...scenario,
-          label: scenario.name,
+          name: scenario.name,
         }));
       },
     },

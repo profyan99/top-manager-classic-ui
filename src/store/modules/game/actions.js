@@ -1,11 +1,13 @@
 import axios from 'axios';
 
-const buildServerMessage = (message) => ({
-  message,
-  time: Date.now(),
-  isServer: true,
-});
-
+const sendServerMessage = (dispatch, message) => {
+  const payload = {
+    message,
+    time: Date.now(),
+    isServer: true,
+  };
+  dispatch('chat/addMessage', payload, { root: true });
+};
 
 const actions = {
   setGameData({ commit }, data) {
@@ -13,38 +15,32 @@ const actions = {
   },
   updateGameData({ commit, dispatch }, data) {
     commit('updateGameData', data);
-    const msg = data.currentPeriod === 1
-      ? 'Началась игра'
-      : `Начался ${data.currentPeriod} период`;
-    dispatch('chat/addMessage', buildServerMessage(msg), { root: true });
+    sendServerMessage(dispatch, `Начался ${data.currentPeriod} квартал`);
   },
   finishGame({ commit, dispatch }, data) {
     commit('updateGameData', data);
     commit('setGameTick', 0);
-    dispatch('chat/addMessage', buildServerMessage('Игра завершена'), { root: true });
+    sendServerMessage(dispatch, 'Игра завершена');
   },
 
   connectPlayer({ commit, dispatch }, data) {
     commit('addPlayer', data);
-    dispatch(
-      'chat/addMessage',
-      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} подключился к игре`),
-      { root: true },
+    sendServerMessage(
+      dispatch,
+      `${data.userName} владелец ${data.companyName.toUpperCase()} подключился к игре`,
     );
   },
   reconnectPlayer({ dispatch }, data) {
-    dispatch(
-      'chat/addMessage',
-      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} переподключился к игре`),
-      { root: true },
+    sendServerMessage(
+      dispatch,
+      `${data.userName} владелец ${data.companyName.toUpperCase()} переподключился к игре`,
     );
   },
   disconnectPlayer({ commit, dispatch }, data) {
     commit('removePlayer', data);
-    dispatch(
-      'chat/addMessage',
-      buildServerMessage(`Игрок ${data.userName} - ${data.companyName} вышел из игры`),
-      { root: true },
+    sendServerMessage(
+      dispatch,
+      `${data.userName} владелец ${data.companyName.toUpperCase()} вышел из игры`,
     );
   },
   updatePlayer({ commit }, data) {

@@ -1,8 +1,8 @@
 <template>
-  <div class="content container--fluid row">
+  <div class="rooms-wrapper container--fluid row">
     <div class="rooms">
       <div class="header">
-        <span class="title">Комнаты</span>
+        <span class="title">Игры</span>
         <div class="search">
           <app-input v-model="roomSearchWord"
                      placeholder="Поиск"
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="actions">
-        <span>Всего комнат: {{ roomsAmount }}</span>
+        <span>Всего игр: {{ roomsAmount }}</span>
         <app-button label="Создать" @click="isModalCreateRoomShowing = true"/>
       </div>
     </div>
@@ -51,11 +51,11 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import AppButton from '~/components/AppButton';
-  import Chat from '~/components/rooms/Chat';
+  import Chat from '~/components/chat';
   import AppInput from '~/components/AppInput';
-  import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
-  import RoomCreateModal from '~/pages/rooms/RoomCreateModal';
-  import RoomConnectModal from '~/pages/rooms/RoomConnectModal';
+  import RoomPreviewListItem from './RoomPreviewListItem';
+  import RoomCreateModal from './createModal';
+  import RoomConnectModal from './RoomConnectModal';
   import { subscribeRoomList, unsubscribeRoomList } from '~/websocket';
 
   export default {
@@ -103,7 +103,7 @@
         .then(() => subscribeRoomList())
         .then(() => this.clearMessages())
         .catch((_error) => {
-          // TODO
+          // TODO notify
         });
     },
     beforeDestroy() {
@@ -115,7 +115,7 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
-  .content
+  .rooms-wrapper
     justify-content: space-between
     margin-bottom: base-unit(40)
 
@@ -160,12 +160,15 @@
         box-sizing: border-box
         margin-top: base-unit(10)
         overflow-y: auto
-        scrollbar-width: none
-        -ms-overflow-style: none
+        max-height: calc(100vh - #{base-unit(300)})
 
         &::-webkit-scrollbar
-          width: 0
           background: transparent
+          width: base-unit(5)
+
+        &::-webkit-scrollbar-thumb
+          border-radius: $base-border-radius
+          background-color: $light-grey
 
   .actions
     margin-top: base-unit(40)

@@ -26,7 +26,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import AppButton from '~/components/AppButton';
-  import Message from '~/components/rooms/Message';
+  import Message from './Message';
   import AppInput from '~/components/AppInput';
 
   export default {
