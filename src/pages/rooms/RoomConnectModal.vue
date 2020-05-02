@@ -2,7 +2,7 @@
   <modal @close="$emit('close')"
          @submit="connect">
     <template v-slot:header>
-      <span>Комната {{ room.name }}</span>
+      <span>Игра {{ room.name }}</span>
     </template>
     <template v-slot:content>
       <div class="room-information">
@@ -16,11 +16,11 @@
           <span v-if="room.locked" class="password">Пароль</span>
         </div>
         <div class="field-values">
-          <span>{{ room.currentRound }}</span>
+          <span>{{ room.currentPeriod }}</span>
           <span>{{ room.currentPlayers }}</span>
           <span>{{ roomState }}</span>
           <span>{{ roomType }}</span>
-          <span v-if="room.scenario">{{ room.scenarioName }}</span>
+          <span v-if="room.scenario">{{ room.scenario.name }}</span>
           <span v-if="!isUserAlreadyInRoom">
                   <app-input v-model="companyName"
                              color="#555555"
@@ -42,9 +42,7 @@
       </div>
     </template>
     <template v-slot:actions>
-      <div class="confirm-button" @click="connect">
-        Присоединиться
-      </div>
+      <app-button label="Присоединиться" @click="connect"/>
     </template>
   </modal>
 </template>
@@ -52,6 +50,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import { minLength, required, } from 'vuelidate/lib/validators';
+  import AppButton from '~/components/AppButton';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
   import { convertRoomState } from '~/helpers/room';
@@ -59,6 +58,7 @@
   export default {
     name: 'RoomConnectModal',
     components: {
+      AppButton,
       Modal,
       AppInput,
     },
@@ -75,9 +75,7 @@
       };
     },
     computed: {
-      ...mapState('user', [
-        'user',
-      ]),
+      ...mapState('user', ['user']),
       roomState() {
         return convertRoomState(this.room.state);
       },

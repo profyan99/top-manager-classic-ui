@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="app-input">
     <label class="input-wrapper"
            :style="{ 'border-bottom-color': color }"
            :class="{ focused: focus }">
@@ -13,6 +13,9 @@
              @keyup.enter="$emit('submit')"
              @blur="blur">
     </label>
+    <span class="caption" v-show="caption">
+      {{ caption }}
+    </span>
     <span class="error" v-show="error">
       {{ errorMessage }}
     </span>
@@ -31,6 +34,10 @@
         default: false,
       },
       errorMessage: {
+        type: String,
+        default: null,
+      },
+      caption: {
         type: String,
         default: null,
       },
@@ -78,6 +85,10 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
+  .app-input
+    display: flex
+    flex-direction: column
+
   .input-wrapper
     display: flex
     align-items: center
@@ -97,14 +108,20 @@
     font-weight: lighter
     font-size: base-unit(14)
     +sub-font
-    color: $fg-main
+    color: $dark-fg-main
     padding-top: base-unit(6)
-    padding-bottom: base-unit(10)
+    padding-bottom: base-unit(6)
     width: 100%
 
   .error
     color: $red
     font-size: base-unit(12)
     font-weight: 300
+    margin-top: base-unit(2)
+
+  .caption
+    color: $light-grey
+    font-size: base-unit(14)
+    font-weight: normal
     margin-top: base-unit(2)
 </style>

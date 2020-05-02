@@ -6,7 +6,7 @@
     </div>
     <div>
       <span class="game-header-title">Квартал</span>
-      <span class="game-header-value">{{ gameData.currentRound }}</span>
+      <span class="game-header-value">{{ gameData.currentPeriod }}</span>
     </div>
     <div>
       <span class="game-header-title">Игроки</span>
@@ -26,15 +26,18 @@
   export default {
     name: 'GameHeader',
     computed: {
-      ...mapState('game', ['gameData']),
+      ...mapState('game', [
+        'currentSecond',
+        'gameData',
+        'currentPlayer',
+      ]),
       currentState() {
-        return convertRoomState(this.gameData.state);
+        return convertRoomState(this.gameData.state, this.currentPlayer.state);
       },
       currentTime() {
-        const { gameData: { currentSecond, prepareSecond, state } } = this;
-        return convertSecondsToMinutes(
-          state === 'PREPARE' ? prepareSecond : currentSecond
-        );
+        const { currentSecond, gameData } = this;
+        const timeLeft = gameData.periodDuration - currentSecond;
+        return convertSecondsToMinutes(timeLeft < 0 ? 0 : timeLeft);
       },
     },
   };
@@ -53,7 +56,7 @@
     color: $bg-main
     min-height: base-unit(40)
     padding: 0 base-unit(20)
-    margin-top: base-unit(15)
+    margin-top: base-unit(10)
 
     &-title
       margin-right: base-unit(5)
@@ -63,10 +66,6 @@
       color: $bg-main
 
     &-value
-      padding: base-unit(5) base-unit(10)
-      background-color: $bg-main
-      color: $dark-fg-main
-      border-radius: $base-border-radius
-
+      +black-frame
 
 </style>

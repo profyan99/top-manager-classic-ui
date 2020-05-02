@@ -5,6 +5,7 @@ import actions from './actions';
 const state = {
   rooms: {},
   roomsIds: [],
+  scenarios: [],
 };
 
 export default {

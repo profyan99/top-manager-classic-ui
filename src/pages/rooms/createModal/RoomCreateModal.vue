@@ -2,12 +2,12 @@
   <modal @close="$emit('close')"
          @submit="create">
     <template v-slot:header>
-      <span>Создание игровой комнаты</span>
+      <span>Создание игры</span>
     </template>
     <template v-slot:content>
       <div class="inputs">
         <div class="">
-          <span class="label">Название комнаты</span>
+          <span class="label">Название</span>
           <app-input v-model="form.name"
                      class="input"
                      color="#555555"
@@ -28,29 +28,29 @@
 
         <div class="inputs-margin">
           <span class="label">Количество раундов</span>
-          <app-input v-model="form.maxRounds"
+          <app-input v-model="form.maxPeriods"
                      color="#555555"
                      type="number"
-                     @blur="$v.form.maxRounds.$touch()"
+                     @blur="$v.form.maxPeriods.$touch()"
                      error-message="Значение должно быть от 2 до 16"
-                     :error="$v.form.maxRounds.$error"/>
+                     :error="$v.form.maxPeriods.$error"/>
         </div>
 
         <div class="inputs-margin">
           <span class="label">Время раунда</span>
-          <app-input v-model="form.roomPeriodDelay"
+          <app-input v-model="form.periodDuration"
                      color="#555555"
                      type="number"
-                     @blur="$v.form.roomPeriodDelay.$touch()"
+                     @blur="$v.form.periodDuration.$touch()"
                      error-message="Значение должно быть от 1 до 10"
-                     :error="$v.form.roomPeriodDelay.$error"/>
+                     :error="$v.form.periodDuration.$error"/>
         </div>
 
-        <toggle v-model="form.locked"
+        <toggle v-model="isLocked"
                 class="inputs-margin"
-                label="Закрытая комната"/>
+                label="Закрытая игра"/>
 
-        <div class="inputs-margin inner" v-if="form.locked">
+        <div class="inputs-margin inner" v-if="isLocked">
           <span class="label">Пароль</span>
           <app-input v-model="form.password"
                      color="#555555"
@@ -60,17 +60,15 @@
                      :error="$v.form.password.$error"/>
         </div>
 
-        <toggle v-model="form.scenario"
+        <toggle v-model="isScenario"
                 class="inputs-margin"
                 label="Сценарий"/>
 
-        <div class="inputs-margin inner" v-if="form.scenario">
-          <span class="label">Сценарий</span>
-          <app-input v-model="form.scenarioName"
-                     color="#555555"
-                     @blur="$v.form.scenarioName.$touch()"
-                     error-message="Поле должно быть заполнено"
-                     :error="$v.form.scenarioName.$error"/>
+        <div class="inputs-margin inner" v-if="isScenario">
+          <scenario-select
+              :options="scenariosOptions"
+              v-model="selectedScenario"
+          />
         </div>
 
         <toggle v-model="form.tournament"
@@ -80,15 +78,13 @@
       </div>
     </template>
     <template v-slot:actions>
-      <div class="confirm-button" @click="create">
-        Создать
-      </div>
+      <app-button label="Создать" @click="create"/>
     </template>
   </modal>
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import {
     maxValue,
     minLength,
@@ -96,55 +92,68 @@
     numeric,
     required,
   } from 'vuelidate/lib/validators';
+  import AppButton from '~/components/AppButton';
   import Modal from '~/components/Modal';
   import AppInput from '~/components/AppInput';
   import Toggle from '~/components/Toggle';
+  import ScenarioSelect from './ScenarioSelect';
 
   export default {
     name: 'RoomCreateModal',
     components: {
+      ScenarioSelect,
+      AppButton,
       Toggle,
       Modal,
       AppInput,
     },
     data() {
       return {
+        selectedScenario: {},
+        isLocked: false,
+        isScenario: false,
         form: {
           name: '',
-          maxPlayers: '',
-          maxRounds: '',
+          maxPlayers: null,
+          maxPeriods: null,
           tournament: false,
-          locked: false,
-          scenario: false,
-          scenarioName: '',
+          scenario: '',
           password: '',
-          roomPeriodDelay: '',
-          requirement: {
-            minHoursInGameAmount: 0,
-            requireAchievements: [],
-            requireRoles: [
-              'PLAYER',
-            ],
-          },
+          periodDuration: null,
         },
       };
     },
+    computed: {
+      ...mapState('rooms', ['scenarios']),
+      scenariosOptions() {
+        return this.scenarios.map((scenario) => ({
+          name: scenario.name,
+        }));
+      },
+    },
     methods: {
-      ...mapActions('rooms', ['createRoom']),
+      ...mapActions('rooms', ['createRoom', 'getScenarios']),
       create() {
         this.$v.form.$touch();
         if (this.$v.$error) {
           return;
         }
+        this.form.scenario = this.selectedScenario.name || '';
         this.createRoom(this.form)
-          .then((data) => {
+          .then((_data) => {
             // TODO auto connecting to the new room
             this.$emit('close');
           })
-          .catch((error) => {
+          .catch((_error) => {
             // TODO notify
           });
       },
+    },
+    mounted() {
+      this.getScenarios()
+        .catch((_error) => {
+
+        });
     },
     validations: {
       form: {
@@ -158,18 +167,16 @@
           minValue: minValue(2),
           maxValue: maxValue(8),
         },
-        maxRounds: {
+        maxPeriods: {
           required,
           numeric,
           minValue: minValue(2),
           maxValue: maxValue(16),
         },
         tournament: {},
-        locked: {},
         scenario: {},
-        scenarioName: {},
         password: {},
-        roomPeriodDelay: {
+        periodDuration: {
           required,
           numeric,
           minValue: minValue(1),

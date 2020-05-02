@@ -1,6 +1,7 @@
 <template>
-  <div class="game">
-    <div class="game-body">
+  <span v-if="!gameData">Loading...</span>
+  <div class="game" v-else>
+    <div class="game-body col-sm-8 col-md-8 col-lg-8 col-xl-8">
       <div class="game-name">
         <div class="left-part">
           <span class="title">{{ gameData.name }}</span>
@@ -19,135 +20,103 @@
       <game-header/>
       <div class="game-content">
         <game-left-menu
-                class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
-                @selected-screen="currentScreen = $event"/>
-        <component :is="currentScreen" class="game-content-screen">
+            class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
+            @selected-screen="currentScreen = $event"/>
+        <component :is="currentScreen" class="game-content-screen"
+                   :company="currentPlayer.company">
         </component>
       </div>
-      <div class="game-solution">
-        <div class="game-solution-header">
-          <span class="subtitle">Управление</span>
-        </div>
-        <div class="game-solution-content">
-          <game-solution-input v-for="solutionInput in solutionInputs"
-                               :key="solutionInput.label"
-                               v-model="solutionForm[solutionInput.model]"
-                               v-bind="solutionInput">
-          </game-solution-input>
-        </div>
-      </div>
+      <GameRatingPanel/>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
-          :room-id="gameData.roomId">
+          :room-id="gameData.id">
     </chat>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapGetters, mapState } from 'vuex';
-  import Chat from '~/components/rooms/Chat';
+  import { mapActions, mapState } from 'vuex';
+
+  import Chat from '~/components/chat/Chat';
   import AppButton from '~/components/AppButton.vue';
-  import GameHeader from '~/components/game/GameHeader';
-  import GameLeftMenu from '~/components/game/GameLeftMenu';
+  import GameHeader from './GameHeader';
+  import GameLeftMenu from './GameLeftMenu';
   import { connectRoom, disconnectRoom } from '~/websocket.js';
-  import GameScreenBank from '~/components/game/screen/GameScreenBank';
-  import GameScreenIndustry from '~/components/game/screen/GameScreenIndustry';
-  import GameScreenManaging from '~/components/game/screen/GameScreenManaging';
-  import GameScreenProduction
-    from '~/components/game/screen/GameScreenProduction';
-  import GameScreenSummary from '~/components/game/screen/GameScreenSummary';
-  import GameScreenWarehouse
-    from '~/components/game/screen/GameScreenWarehouse';
-  import GameSolutionInput from '~/components/game/GameSolutionInput';
+  import {
+    GameScreenBank,
+    GameScreenIndustry,
+    GameScreenManage,
+    GameScreenWarehouse,
+  } from './screen';
+  import GameRatingPanel from './rating';
+  import { startSchedule, stopSchedule } from '~/timeScheduler';
 
   export default {
     name: 'game',
     components: {
-      GameSolutionInput,
+      GameRatingPanel,
       GameLeftMenu,
       GameHeader,
       Chat,
       AppButton,
       GameScreenBank,
-      GameScreenSummary,
       GameScreenWarehouse,
-      GameScreenProduction,
-      GameScreenManaging,
+      GameScreenManage,
       GameScreenIndustry,
     },
     data() {
       return {
-        currentScreen: 'GameScreenSummary',
-        solutionForm: {
-          price: 0,
-          production: 0,
-          marketing: 0,
-          investments: 0,
-          nir: 0,
-        },
+        currentScreen: 'GameScreenIndustry',
       };
     },
     computed: {
-      ...mapState('game', ['gameData']),
-      ...mapGetters('game', ['currentPlayer']),
-      screenToShow() {
-        return () => import(`~/components/game/screen/${ this.currentScreen }`);
-      },
-      solutionInputs() {
-        return [
-          {
-            label: 'Цена',
-            additional: '100$',
-            model: 'price',
-          },
-          {
-            label: 'Производство',
-            additional: '1440',
-            model: 'production',
-          },
-          {
-            label: 'Маркетинг',
-            additional: '1000$',
-            model: 'marketing',
-          },
-          {
-            label: 'Инвестиции',
-            additional: '5500$',
-            model: 'investments',
-          },
-          {
-            label: 'НИОКР',
-            additional: '15000$',
-            model: 'nir',
-          },
-        ];
+      ...mapState('game', ['gameData', 'currentPlayer']),
+    },
+    watch: {
+      gameData(newData, oldData) {
+        if (oldData && newData && newData.currentPeriod === oldData.currentPeriod) {
+          stopSchedule();
+        } else {
+          startSchedule(newData.startCountDownTime);
+        }
       },
     },
     methods: {
-      ...mapActions('game', ['tryConnectRoom']),
+      ...mapActions('game', ['tryConnectRoom', 'disconnectFromGame']),
       ...mapActions('chat', ['clearMessages']),
+      ...mapActions('rooms', ['connectToRoom']),
       exitFromRoom() {
-        disconnectRoom();
         this.$router.push({ name: 'rooms' });
       },
       invitePlayer() {
 
       },
     },
-    created() {
+    async created() {
       if (!this.gameData) {
-        this.$router.push({ name: 'rooms' });
-        return;
+        await this.connectToRoom({
+          id: this.$route.params.roomId,
+          password: '',
+          companyName: '',
+        }).catch((_error) => {
+          // TODO notify
+          this.$router.push({ name: 'rooms' });
+        });
       }
 
       connectRoom(this.$route.params.roomId)
-        .then(this.clearMessages())
+        .then(() => this.clearMessages())
+        .then(() => startSchedule(this.gameData.startCountDownTime))
         .catch((_error) => {
-          // TODO
+          // TODO notify
         });
     },
-    beforeDestroy() {
-      disconnectRoom();
+    beforeRouteLeave(to, from, next) {
+      if (confirm('Хотите покинуть игру?') && this.gameData) {
+        this.disconnectFromGame()
+          .then(() => disconnectRoom(this.gameData.id));
+      }
+      next();
     },
   };
 </script>
@@ -193,7 +162,6 @@
     &-content
       display: flex
       flex: 1
-      margin-top: base-unit(15)
 
       &-left-menu
         margin-right: base-unit(15)
@@ -201,34 +169,9 @@
       &-screen
         display: flex
         flex: 1
-
-    &-solution
-      display: flex
-      flex-direction: column
-
-      &-header
-        display: flex
-        align-items: center
-        background-color: $red
-        border-radius: $base-border-radius
-        color: $bg-main
-        min-height: base-unit(40)
-        padding: 0 base-unit(20)
-        margin-top: base-unit(15)
-        margin-bottom: base-unit(20)
-
-      &-content
-        display: flex
-        align-items: center
-        justify-content: space-between
+        padding: base-unit(10)
 
   .title
     +title
-
-  .subtitle
-    font-size: base-unit(16)
-    font-weight: bold
-    font-style: normal
-    color: $bg-main
 
 </style>

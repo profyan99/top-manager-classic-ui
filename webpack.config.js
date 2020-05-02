@@ -28,6 +28,15 @@ module.exports = {
         ],
       },
       {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          {
+            loader: 'css-loader',
+          },
+        ],
+      },
+      {
         test: /\.sass$/,
         use: [
           'vue-style-loader',
@@ -50,7 +59,7 @@ module.exports = {
   resolve: {
     alias: {
       vue: 'vue/dist/vue.js',
-      '~': path.resolve(`${ __dirname }/src`),
+      '~': path.resolve(`${__dirname}/src`),
     },
     extensions: ['.js', '.vue'],
   },

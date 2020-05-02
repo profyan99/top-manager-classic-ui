@@ -3,14 +3,13 @@ import store from './store';
 
 axios.interceptors.response.use((response) => response.data, (error) => {
   if (error.response.status === 401) {
-    if (error.response.data.errors[0].errorCode === 'ACCESS_TOKEN_EXPIRED') {
-      return Promise
-        .resolve(store.dispatch('user/refreshToken')
-          .then(() => {
-            error.config.headers.Authorization = `Bearer ${ store.state.user.accessToken }`;
-            error.config.baseURL = '';
-            return axios.request(error.config);
-          }));
+    if (error.response.data.message === 'Expired token') {
+      return store.dispatch('user/refreshToken')
+        .then(() => {
+          error.config.headers.Authorization = `Bearer ${store.state.user.accessToken}`;
+          error.config.baseURL = '';
+          return axios.request(error.config);
+        });
     }
     return store.dispatch('user/logout');
   }
@@ -20,14 +19,11 @@ axios.interceptors.response.use((response) => response.data, (error) => {
 axios.interceptors.request.use(
   (config) => {
     if (store.state.user.accessToken && !config.url.includes('oauth')) {
-      config.headers.Authorization = `Bearer ${ store.state.user.accessToken }`;
+      config.headers.Authorization = `Bearer ${store.state.user.accessToken}`;
     }
 
     return config;
   },
-  (error) => {
-    console.log('ERROR IN REQ: ', error);
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
-axios.defaults.baseURL = '/api';
+axios.defaults.baseURL = 'http://localhost:9000/api'; // TODO from env

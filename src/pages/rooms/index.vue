@@ -1,8 +1,8 @@
 <template>
-  <div class="content container--fluid row">
+  <div class="rooms-wrapper container--fluid row">
     <div class="rooms">
       <div class="header">
-        <span class="title">Комнаты</span>
+        <span class="title">Игры</span>
         <div class="search">
           <app-input v-model="roomSearchWord"
                      placeholder="Поиск"
@@ -31,11 +31,8 @@
         </div>
       </div>
       <div class="actions">
-        <span>Всего комнат: {{ roomsAmount }}</span>
-        <div class="button-create-room"
-             @click="isModalCreateRoomShowing = true">
-          Создать
-        </div>
+        <span>Всего игр: {{ roomsAmount }}</span>
+        <app-button label="Создать" @click="isModalCreateRoomShowing = true"/>
       </div>
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -53,16 +50,18 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
-  import Chat from '~/components/rooms/Chat';
+  import AppButton from '~/components/AppButton';
+  import Chat from '~/components/chat';
   import AppInput from '~/components/AppInput';
-  import RoomPreviewListItem from '~/components/rooms/RoomPreviewListItem';
-  import RoomCreateModal from '~/pages/rooms/RoomCreateModal';
-  import RoomConnectModal from '~/pages/rooms/RoomConnectModal';
+  import RoomPreviewListItem from './RoomPreviewListItem';
+  import RoomCreateModal from './createModal';
+  import RoomConnectModal from './RoomConnectModal';
   import { subscribeRoomList, unsubscribeRoomList } from '~/websocket';
 
   export default {
     name: 'rooms',
     components: {
+      AppButton,
       RoomConnectModal,
       RoomCreateModal,
       Chat,
@@ -101,10 +100,10 @@
     },
     created() {
       this.getRooms()
-        .then(subscribeRoomList())
-        .then(this.clearMessages())
+        .then(() => subscribeRoomList())
+        .then(() => this.clearMessages())
         .catch((_error) => {
-          // TODO
+          // TODO notify
         });
     },
     beforeDestroy() {
@@ -116,7 +115,7 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
-  .content
+  .rooms-wrapper
     justify-content: space-between
     margin-bottom: base-unit(40)
 
@@ -161,12 +160,15 @@
         box-sizing: border-box
         margin-top: base-unit(10)
         overflow-y: auto
-        scrollbar-width: none
-        -ms-overflow-style: none
+        max-height: calc(100vh - #{base-unit(300)})
 
         &::-webkit-scrollbar
-          width: 0
           background: transparent
+          width: base-unit(5)
+
+        &::-webkit-scrollbar-thumb
+          border-radius: $base-border-radius
+          background-color: $light-grey
 
   .actions
     margin-top: base-unit(40)
@@ -179,23 +181,6 @@
       font-weight: normal
       font-style: normal
       color: $light-grey
-
-    .button-create-room
-      margin-left: base-unit(10)
-      background-color: $red
-      cursor: pointer
-      text-align: center
-      color: $fg-main
-      font-size: base-unit(14)
-      border-radius: $base-border-radius
-      padding: base-unit(10)
-      box-sizing: border-box
-      display: flex
-      align-items: center
-      justify-content: center
-
-      &:hover
-        opacity: 0.8
 
   .title
     +title

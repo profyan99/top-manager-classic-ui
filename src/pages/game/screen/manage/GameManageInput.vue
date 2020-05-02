@@ -1,12 +1,14 @@
 <template>
-  <div class="game-solution-input">
+  <div class="game-manage-input">
     <span class="label">{{ label }}</span>
-    <span class="additional">Было: {{ additional }}</span>
     <app-input v-model="inputModel"
                color="#555555"
-               class="input"
                type="number"
-               :placeholder="label"/>
+               :caption="`Было: ${additional}`"
+               @blur="$emit('blur')"
+               error-message="Значение должно быть больше 0"
+               :error="error"
+    />
   </div>
 </template>
 
@@ -25,8 +27,11 @@
         required: true,
       },
       additional: {
-        type: String,
         required: true,
+      },
+      error: {
+        type: Boolean,
+        default: false,
       },
     },
     computed: {
@@ -35,7 +40,7 @@
           return this.value;
         },
         set(value) {
-          this.$emit('input', value);
+          this.$emit('input', parseFloat(value));
         },
       },
     },
@@ -45,21 +50,15 @@
 <style scoped lang="sass">
   @import "~/styles/styleguide.sass"
 
-  .game-solution-input
+  .game-manage-input
     display: flex
-    flex-direction: column
+    align-items: baseline
 
     .label
-      color: $fg-main
-      font-size: base-unit(16)
-      font-weight: bold
-
-    .additional
-      color: $light-grey
+      color: $dark-fg-main
       font-size: base-unit(14)
       font-weight: normal
-
-    .input
-      margin-top: base-unit(5)
+      width: base-unit(100)
+      margin-right: base-unit(10)
 
 </style>

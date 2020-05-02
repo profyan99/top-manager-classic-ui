@@ -1,12 +1,22 @@
 <template>
   <div class="">
-    SUMMARY
+    Bank
   </div>
 </template>
 
 <script>
   export default {
-    name: 'GameScreenSummary',
+    name: 'GameScreenBank',
+    data() {
+      return {
+
+      };
+    },
+    props: {
+      company: {
+        required: true,
+      },
+    },
   };
 </script>
 

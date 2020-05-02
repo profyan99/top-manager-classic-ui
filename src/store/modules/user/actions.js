@@ -1,50 +1,25 @@
 import axios from 'axios';
-import qs from 'qs';
 
 const actions = {
   async getCurrentUser({ commit }) {
-    return new Promise((resolve, reject) => {
-      axios.get('/profile')
-        .then((user) => {
-          commit('setUser', user);
-          resolve();
-        })
-        .catch(reject);
-    });
+    return axios.get('/profile')
+      .then((user) => {
+        commit('setUser', user);
+      });
   },
-  async signIn({ commit, state: { authSecret } }, form) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${ authSecret }`,
-        },
-        data: qs.stringify({
-          username: form.userName,
-          password: form.password,
-          grant_type: 'password',
-        }),
-        url: '/oauth/token',
-      };
-      axios(options)
-        .then(({ access_token, refresh_token }) => {
-          commit('SetAccessToken', access_token);
-          commit('SetRefreshToken', refresh_token);
-          resolve();
-        })
-        .catch(reject);
-    });
+  async signIn({ commit }, form) {
+    return axios.post('/signin', form)
+      .then(({ accessToken, refreshToken }) => {
+        commit('SetAccessToken', accessToken);
+        commit('SetRefreshToken', refreshToken);
+      });
   },
   signInThrowSocial({ commit }, { access_token, refresh_token }) {
     commit('SetAccessToken', access_token);
     commit('SetRefreshToken', refresh_token);
-    return Promise.resolve();
   },
-  signUp({}, form) {
-    return axios.put('/signup', {
-      ...form,
-    });
+  signUp(_store, { _repeatedPassword, ...other }) {
+    return axios.post('/signup', other);
   },
   async logout({ commit }) {
     commit('setUser', null);
@@ -55,28 +30,14 @@ const actions = {
     commit('SetAccessToken', localStorage.getItem('accessToken'));
     commit('SetRefreshToken', localStorage.getItem('refreshToken'));
   },
-  refreshToken({ state: { refreshToken, authSecret }, commit }) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${ authSecret }`,
-        },
-        data: qs.stringify({
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken,
-        }),
-        url: '/oauth/token',
-      };
-      axios(options)
-        .then(({ access_token, refresh_token }) => {
-          commit('SetAccessToken', access_token);
-          commit('SetRefreshToken', refresh_token);
-          resolve();
-        })
-        .catch(reject);
-    });
+  refreshToken({ state: { refreshToken: oldRefreshToken }, commit }) {
+    return axios.post('/auth/token', {
+      refreshToken: oldRefreshToken,
+    })
+      .then(({ accessToken, refreshToken }) => {
+        commit('SetAccessToken', accessToken);
+        commit('SetRefreshToken', refreshToken);
+      });
   },
 };
 

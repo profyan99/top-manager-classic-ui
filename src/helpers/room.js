@@ -1,9 +1,12 @@
-export function convertRoomState(roomState) {
+export function convertRoomState(roomState, playerState) {
   switch (roomState) {
   case 'PREPARE':
-    return 'Ожидание игроков';
+    return 'Ожидание';
   case 'PLAY':
-    return 'Идет игра';
+    if (playerState === 'WAIT') {
+      return 'Ожидание игроков';
+    }
+    return 'Принятие решений';
   case 'END':
     return 'Игра закончилась';
   default:

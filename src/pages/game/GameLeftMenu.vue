@@ -4,7 +4,7 @@
          v-for="item in menuItems"
          :key="item.name"
          @click="$emit('selected-screen', item.component)">
-      {{ item.name }}
+
     </div>
   </div>
 </template>
@@ -16,20 +16,12 @@
       return {
         menuItems: [
           {
-            name: 'Сводка',
-            component: 'GameScreenSummary',
-          },
-          {
-            name: 'Банк',
+            name: 'Доходы',
             component: 'GameScreenBank',
           },
           {
-            name: 'Склад',
+            name: 'Отчет',
             component: 'GameScreenWarehouse',
-          },
-          {
-            name: 'Производство',
-            component: 'GameScreenProduction',
           },
           {
             name: 'Индустрия',
@@ -37,7 +29,7 @@
           },
           {
             name: 'Управление',
-            component: 'GameScreenManaging',
+            component: 'GameScreenManage',
           },
         ],
       };
@@ -51,8 +43,8 @@
   .game-left-menu
     display: flex
     flex-direction: column
-    justify-content: space-between
     align-items: center
+    margin: base-unit(5) 0
 
     .menu-item
       width: 100%

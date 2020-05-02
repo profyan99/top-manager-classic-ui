@@ -1,7 +1,6 @@
 const getters = {
-  currentPlayer: ({ gameData: { players } }, getters, { user }) => {
-    return players.find((player) => player.userName === user.user.userName);
-  },
+  oldSolutions: ({ currentPlayer }) => currentPlayer.solutions,
+  players: ({ players, playersList }) => playersList.map((playerId) => players[playerId]),
 };
 
 export default getters;

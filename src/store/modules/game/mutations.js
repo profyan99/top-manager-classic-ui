@@ -1,29 +1,58 @@
+import Vue from 'vue';
+
+const addPlayerCommon = (state, data) => {
+  Vue.set(state.players, data.id, data);
+  state.playersList.push(data.id);
+};
+
+const updatePlayerCommon = (state, data) => {
+  state.players[data.id] = {
+    ...data,
+  };
+};
+
 const mutations = {
   setGameData(state, data) {
-    state.gameData = data;
-  },
-  updateGameData(state, data) {
-    /*state.gameData.name = data.name;
-    state.gameData.maxPlayers = data.maxPlayers;
-    state.gameData.currentPlayers = data.currentPlayers;
-    state.gameData.locked = data.locked;
-    state.gameData.tournament = data.tournament;
-    state.gameData.scenario = data.scenario;
-    state.gameData.scenarioName = data.scenarioName;
-    state.gameData.players = data.players;
-    state.gameData.requirement = data.requirement;
-    state.gameData.state = data.state;
-    state.gameData.maxRounds = data.maxRounds;
-    state.gameData.currentRound = data.currentRound;
-    state.gameData.currentSecond = data.currentSecond;
-    state.gameData.prepareSecond = data.prepareSecond;
-    state.gameData.players = [...data.players];*/
     state.gameData = {
       ...data,
     };
+    state.players = {};
+    state.playersList = [];
+    data.players.forEach((player) => {
+      addPlayerCommon(state, player);
+    });
   },
-  updateGameTick(state, { type, amount }) {
-    state.gameData[type] = amount;
+  updateGameData(state, data) {
+    state.gameData = {
+      ...data,
+    };
+    data.players.forEach((player) => {
+      updatePlayerCommon(state, player);
+    });
+  },
+
+  updateCompany(state, company) {
+    state.currentPlayer = {
+      ...company,
+    };
+  },
+
+  addPlayer(state, data) {
+    addPlayerCommon(state, data);
+  },
+  updatePlayer(state, data) {
+    updatePlayerCommon(state, data);
+  },
+  removePlayer(state, data) {
+    Vue.delete(state.players, data.id);
+    Vue.delete(state.playersList, state.playersList.indexOf(data.id));
+  },
+
+  setGameTick(state, amount) {
+    state.currentSecond = amount;
+  },
+  updateGameTick(state, amount) {
+    state.currentSecond += amount;
   },
 };
 
