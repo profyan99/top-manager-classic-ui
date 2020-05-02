@@ -1,5 +1,5 @@
 <template>
-  <button @click="$emit('click')"
+  <button @click="handleClick"
           class="app-button"
           :class="{ disabled: disabled }"
   >
@@ -25,6 +25,15 @@
         default: false,
       },
     },
+    methods: {
+      handleClick() {
+        if (this.disabled) {
+          return;
+        }
+
+        this.$emit('click');
+      },
+    },
   };
 </script>
 
@@ -47,8 +56,10 @@
     justify-content: center
     text-transform: uppercase
 
-    .disabled
+    &.disabled
       background-color: $light-grey
+      color: $grey
+      cursor: auto
 
       &:hover
         opacity: 1

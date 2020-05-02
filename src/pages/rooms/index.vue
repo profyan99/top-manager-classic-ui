@@ -161,6 +161,7 @@
         margin-top: base-unit(10)
         overflow-y: auto
         max-height: calc(100vh - #{base-unit(300)})
+        padding-right: base-unit(15) // for scroll
 
         &::-webkit-scrollbar
           background: transparent

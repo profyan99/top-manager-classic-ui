@@ -74,17 +74,21 @@
     display: flex
     flex-direction: column
     min-height: 100vh
+    max-height: 100vh
     width: 100%
     padding: 0 base-unit(40)
     box-sizing: border-box
 
   .header-wrapper
+    height: base-unit(60)
     flex-direction: column
     flex: 0 0 auto
 
   .content-wrapper
     flex: 1 0 auto
     display: flex
+    min-height: 0
+    max-height: calc(100vh - #{base-unit(60)})
 
   .footer-wrapper
     flex: 0 0 auto

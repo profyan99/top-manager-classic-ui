@@ -7,7 +7,7 @@
       <div class="link-item"
            v-for="link in links"
            @click="performLinkAction(link)"
-           :class="{ 'link-selected': link.title === activePage }"
+           :class="{ 'link-selected': link.route === activePage }"
            :key="link.title">
         <span>{{ link.title }}</span>
       </div>
@@ -35,7 +35,6 @@
     name: 'navbar',
     data() {
       return {
-        activePage: 'Игры',
         modalActive: false,
         links: [
           {
@@ -55,11 +54,13 @@
     },
     computed: {
       ...mapState('user', ['user']),
+      activePage() {
+        return this.$route.name;
+      },
     },
     methods: {
       ...mapActions('user', ['logout']),
-      performLinkAction({ title, route }) {
-        this.activePage = title;
+      performLinkAction({ route }) {
         this.$router.push({ name: route });
       },
     },

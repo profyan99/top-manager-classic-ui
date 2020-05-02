@@ -92,7 +92,7 @@
         margin-left: base-unit(5)
         margin-right: base-unit(5)
         overflow-x: auto
-        padding-bottom: base-unit(10) //for scroll
+        padding-bottom: base-unit(15) //for scroll
 
         &::-webkit-scrollbar
           background: transparent

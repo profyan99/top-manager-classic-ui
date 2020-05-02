@@ -1,23 +1,33 @@
 <template>
   <div class="game-manage">
-    <span class="game-manage-title">Управление</span>
-    <div class="game-manage-content">
-      <game-manage-input
-          class="game-manage-content-input"
-          v-for="solutionInput in solutionInputs"
-          :key="solutionInput.label"
-          v-model="solutionForm[solutionInput.model]"
-          v-bind="solutionInput"
-          @blur="$v.solutionForm[solutionInput.model].$touch()"
-          :error="$v.solutionForm[solutionInput.model].$error"
-      >
-      </game-manage-input>
-      <app-button
-          label="Отправить"
-          :disabled="this.$v.$error"
-          class="game-manage-button-send"
-          @click="send"
-      />
+    <span class="game-manage-title">
+      Управление
+    </span>
+    <div class="game-manage-form">
+      <div class="game-manage-content col-sm-8 col-md-6 col-lg-6 col-xl-6">
+        <game-manage-input
+            class="game-manage-content-input"
+            v-for="solutionInput in solutionInputs"
+            :key="solutionInput.label"
+            v-model="solutionForm[solutionInput.model]"
+            v-bind="solutionInput"
+            @blur="$v.solutionForm[solutionInput.model].$touch()"
+            :error="$v.solutionForm[solutionInput.model].$error"
+        >
+        </game-manage-input>
+      </div>
+      <div class="right-side col-sm-2 col-md-4 col-lg-4 col-xl-4">
+        <app-button
+            label="Отправить"
+            :disabled="isSubmitDisabled"
+            class="right-side-button-send"
+            @click="send"
+        />
+        <span class="right-side-caption">
+          * отправлять результаты можно только 1 раз в квартал
+        </span>
+      </div>
+
     </div>
   </div>
 </template>
@@ -72,12 +82,15 @@
       };
     },
     computed: {
-      ...mapGetters('game', ['oldSolutions']),
+      ...mapGetters('game', ['oldSolutions', 'playerState']),
       solutionInputs() {
         return this.solutionOptions.map((solution) => ({
           ...solution,
           additional: this.oldSolutions[solution.model],
         }));
+      },
+      isSubmitDisabled() {
+        return this.playerState !== 'THINK' || this.$v.$error;
       },
     },
     methods: {
@@ -134,15 +147,20 @@
   .game-manage
     display: flex
     flex-direction: column
-    align-items: center
 
     &-title
+      margin-bottom: base-unit(15)
       font-size: base-unit(16)
       font-weight: bold
       font-style: normal
       color: $fg-main
       text-transform: uppercase
-      margin-bottom: base-unit(15)
+
+    &-form
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      height: 100%
 
     &-content
       display: flex
@@ -153,8 +171,14 @@
       &-input
         margin-bottom: base-unit(5)
 
-    &-button-send
+  .right-side
+    display: flex
+    flex-direction: column
+
+    &-caption
       margin-top: base-unit(10)
-      width: fit-content
-      margin-left: auto
+      font-size: base-unit(12)
+      font-weight: normal
+      font-style: normal
+      color: $light-grey
 </style>

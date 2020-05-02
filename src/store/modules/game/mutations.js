@@ -41,6 +41,12 @@ const mutations = {
     addPlayerCommon(state, data);
   },
   updatePlayer(state, data) {
+    if (data.id === state.currentPlayer.id) {
+      state.currentPlayer = {
+        ...state.currentPlayer,
+        ...data,
+      };
+    }
     updatePlayerCommon(state, data);
   },
   removePlayer(state, data) {

@@ -87,6 +87,7 @@
 
   .app-input
     display: flex
+    flex: 1
     flex-direction: column
 
   .input-wrapper

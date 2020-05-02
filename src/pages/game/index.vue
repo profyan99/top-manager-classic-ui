@@ -112,11 +112,12 @@
         });
     },
     beforeRouteLeave(to, from, next) {
-      if (confirm('Хотите покинуть игру?') && this.gameData) {
+      const result = confirm('Хотите покинуть игру?');
+      if (result && this.gameData) {
         this.disconnectFromGame()
           .then(() => disconnectRoom(this.gameData.id));
+        next();
       }
-      next();
     },
   };
 </script>
@@ -163,13 +164,10 @@
       display: flex
       flex: 1
 
-      &-left-menu
-        margin-right: base-unit(15)
-
       &-screen
         display: flex
         flex: 1
-        padding: base-unit(10)
+        padding: base-unit(25) 0 base-unit(25) base-unit(25)
 
   .title
     +title

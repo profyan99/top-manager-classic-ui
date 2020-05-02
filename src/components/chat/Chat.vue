@@ -92,6 +92,7 @@
   .chat
     display: flex
     flex-direction: column
+    height: 100%
 
     .title
       display: flex
@@ -115,12 +116,15 @@
       margin-top: base-unit(15)
       flex: 1
       overflow-y: auto
-      scrollbar-width: none
-      -ms-overflow-style: none
+      padding-right: base-unit(15) //for scroll
 
       &::-webkit-scrollbar
-        width: 0
         background: transparent
+        width: base-unit(5)
+
+      &::-webkit-scrollbar-thumb
+        border-radius: $base-border-radius
+        background-color: $light-grey
 
 
     .chat-input
