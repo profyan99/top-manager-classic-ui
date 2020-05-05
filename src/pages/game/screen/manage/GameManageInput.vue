@@ -2,7 +2,7 @@
   <div class="game-manage-input">
     <span class="label">{{ label }}</span>
     <app-input v-model="inputModel"
-               color="#555555"
+               color="grey"
                type="number"
                :caption="`Было: ${additional}`"
                @blur="$emit('blur')"

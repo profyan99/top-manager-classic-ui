@@ -64,6 +64,9 @@ const actions = {
   disconnectFromGame({ state }) {
     return axios.delete(`/games/${state.gameData.id}`);
   },
+  setCompanyName({ state }, companyName) {
+    return axios.post(`/games/${state.gameData.id}/company`, { companyName });
+  },
 };
 
 export default actions;

@@ -6,8 +6,8 @@
         <div class="left-part">
           <span class="title">{{ gameData.name }}</span>
           <span class="company-name">
-          Компания {{ currentPlayer.companyName }}
-        </span>
+            Компания {{ currentPlayer.companyName }}
+          </span>
         </div>
         <div class="spacer"></div>
         <app-button icon="user-plus"
@@ -31,14 +31,17 @@
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.id">
     </chat>
+    <game-company-name-modal v-if="isModalActive"
+                             @close="isModalActive = false"/>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  import { mapActions, mapGetters, mapState } from 'vuex';
 
   import Chat from '~/components/chat/Chat';
   import AppButton from '~/components/AppButton.vue';
+  import GameCompanyNameModal from '~/pages/game/GameCompanyNameModal';
   import GameHeader from './GameHeader';
   import GameLeftMenu from './GameLeftMenu';
   import { connectRoom, disconnectRoom } from '~/websocket.js';
@@ -54,6 +57,7 @@
   export default {
     name: 'game',
     components: {
+      GameCompanyNameModal,
       GameRatingPanel,
       GameLeftMenu,
       GameHeader,
@@ -66,11 +70,18 @@
     },
     data() {
       return {
+        isModalActive: true,
         currentScreen: 'GameScreenIndustry',
       };
     },
     computed: {
       ...mapState('game', ['gameData', 'currentPlayer']),
+      ...mapGetters('game', ['players']),
+      isUserAlreadyInGame() {
+        const { players, currentPlayer } = this;
+        return players && currentPlayer &&
+          players.some((player) => player.userName === currentPlayer.userName);
+      },
     },
     watch: {
       gameData(newData, oldData) {
@@ -110,6 +121,10 @@
         .catch((_error) => {
           // TODO notify
         });
+
+      if (this.isUserAlreadyInGame) {
+        this.modalActive = false;
+      }
     },
     beforeRouteLeave(to, from, next) {
       const result = confirm('Хотите покинуть игру?');

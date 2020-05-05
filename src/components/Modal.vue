@@ -7,7 +7,7 @@
         <div class="title">
           <slot name="header"></slot>
         </div>
-        <div class="exit" @click="close">
+        <div v-if="closable" class="exit" @click="close">
           <icon icon="times"></icon>
         </div>
       </div>
@@ -24,6 +24,12 @@
 <script>
   export default {
     name: 'modal',
+    props: {
+      closable: {
+        type: Boolean,
+        default: true,
+      },
+    },
     methods: {
       close() {
         this.$emit('close');

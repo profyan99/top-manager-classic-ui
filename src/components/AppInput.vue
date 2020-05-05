@@ -1,8 +1,7 @@
 <template>
   <div class="app-input">
     <label class="input-wrapper"
-           :style="{ 'border-bottom-color': color }"
-           :class="{ focused: focus }">
+           :class="textInputClasses">
       <icon :icon="icon"
             v-if="icon"
             class="icon" :style="{ color: color }"/>
@@ -49,13 +48,13 @@
         type: String,
         default: 'text',
       },
-      color: {
-        type: String,
-        default: '#D8D8D8',
-      },
       icon: {
         type: String,
         default: null,
+      },
+      color: {
+        type: String,
+        default: '',
       },
     },
     data() {
@@ -64,6 +63,12 @@
       };
     },
     computed: {
+      textInputClasses() {
+        return {
+          [this.color]: Boolean(this.color),
+          focused: this.focus,
+        };
+      },
       inputData: {
         get() {
           return this.value;
@@ -88,16 +93,21 @@
   .app-input
     display: flex
     flex: 1
+    width: 100%
     flex-direction: column
 
   .input-wrapper
     display: flex
     align-items: center
+    border-bottom-color: $dark-fg-main
     border-bottom-style: solid
     border-bottom-width: base-unit(2)
 
-  .focused
-    border-bottom-color: $red !important
+    &.grey
+      border-bottom-color: $light-grey
+
+    &.focused
+      border-bottom-color: $red
 
   .icon
     margin-right: base-unit(5)

@@ -1,5 +1,5 @@
 <template>
-  <div class="message" :class="{ server: data.isServer, own: isOwnMessage }">
+  <div class="message" :class="{ server: data.isServer }">
     <div class="avatar" v-if="data.player">
       <img v-if="data.player.avatar"
            class="avatar"
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-
   export default {
     name: 'Message',
     props: {
@@ -33,13 +31,8 @@
       },
     },
     computed: {
-      ...mapState('user', ['user']),
       time() {
         return new Date(this.data.time).toLocaleTimeString();
-      },
-      isOwnMessage() {
-        return this.data.player
-          && this.user.userName === this.data.player.userName;
       },
     },
   };
@@ -60,9 +53,6 @@
 
     &.server
       background-color: $blue
-
-    &.own
-      background-color: #343442
 
     .avatar
       margin-right: base-unit(10)
@@ -94,6 +84,7 @@
       +sub-font
       color: #a5a5a5
       margin-top: base-unit(2)
+      word-break: break-word
 
   .server
     color: #a5a5a5

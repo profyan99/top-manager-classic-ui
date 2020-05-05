@@ -13,12 +13,12 @@
       </message>
     </div>
     <div class="chat-input">
-      <app-input v-model="newMessage"
-                 class="chat-input-field"
-                 @submit="send"
-                 color="#555555"
-                 placeholder="Напишите сообщение"/>
-      <app-button label="Отправить" @click="send" />
+      <app-text-area v-model="newMessage"
+                     class="chat-input-field"
+                     color="grey"
+                     @submit="send"
+                     placeholder="Напишите сообщение"/>
+      <app-button label="Отправить" @click="send"/>
     </div>
   </div>
 </template>
@@ -26,12 +26,16 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import AppButton from '~/components/AppButton';
+  import AppTextArea from '~/components/AppTextArea';
   import Message from './Message';
-  import AppInput from '~/components/AppInput';
 
   export default {
     name: 'chat',
-    components: { AppButton, Message, AppInput },
+    components: {
+      AppTextArea,
+      AppButton,
+      Message,
+    },
     data() {
       return {
         newMessage: '',
@@ -58,12 +62,15 @@
       send() {
         const { sendMessage, newMessage, roomId } = this;
 
-        if (!newMessage) {
+        if (!newMessage || !newMessage.length || !newMessage.trim().length) {
+          this.newMessage = '';
           return;
         }
 
+        const formattedMessage = newMessage.trim();
+
         sendMessage({
-          message: newMessage,
+          message: formattedMessage,
           roomId,
         })
           .then(() => {
@@ -116,7 +123,8 @@
       margin-top: base-unit(15)
       flex: 1
       overflow-y: auto
-      padding-right: base-unit(15) //for scroll
+      padding-right: base-unit(15)
+      //for scroll
 
       &::-webkit-scrollbar
         background: transparent
@@ -132,6 +140,7 @@
       flex: 0 0 auto
       flex-wrap: wrap
       justify-content: space-between
+      align-items: flex-end
       margin-top: base-unit(40)
       width: 100%
 

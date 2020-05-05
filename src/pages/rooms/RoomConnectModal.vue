@@ -12,7 +12,6 @@
           <span>Состояние</span>
           <span>Тип</span>
           <span v-if="room.scenario">Сценарий</span>
-          <span v-if="!isUserAlreadyInRoom">Название компании</span>
           <span v-if="room.locked" class="password">Пароль</span>
         </div>
         <div class="field-values">
@@ -21,17 +20,9 @@
           <span>{{ roomState }}</span>
           <span>{{ roomType }}</span>
           <span v-if="room.scenario">{{ room.scenario.name }}</span>
-          <span v-if="!isUserAlreadyInRoom">
-                  <app-input v-model="companyName"
-                             color="#555555"
-                             placeholder="Введите название"
-                             @blur="$v.companyName.$touch()"
-                             error-message="Поле должно быть заполнено"
-                             :error="$v.companyName.$error"/>
-          </span>
           <span v-if="room.locked && !isUserAlreadyInRoom">
                   <app-input v-model="connectPassword"
-                             color="#555555"
+                             color="grey"
                              type="password"
                              placeholder="Введите пароль"
                              @blur="$v.connectPassword.$touch()"
@@ -71,7 +62,6 @@
     data() {
       return {
         connectPassword: '',
-        companyName: '',
       };
     },
     computed: {
@@ -93,7 +83,7 @@
     methods: {
       ...mapActions('rooms', ['connectToRoom']),
       connect() {
-        const { room, connectPassword, companyName } = this;
+        const { room, connectPassword } = this;
         if (room.locked) {
           this.$v.connectPassword.$touch();
           if (this.$v.$error) {
@@ -103,7 +93,6 @@
         this.connectToRoom({
           id: room.id,
           password: connectPassword,
-          companyName,
         })
           .then(() => {
             this.$router.push({
@@ -119,10 +108,6 @@
     },
     validations: {
       connectPassword: {
-        required,
-        minLength: minLength(6),
-      },
-      companyName: {
         required,
         minLength: minLength(6),
       },

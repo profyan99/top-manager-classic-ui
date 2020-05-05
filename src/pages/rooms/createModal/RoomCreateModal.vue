@@ -10,7 +10,7 @@
           <span class="label">Название</span>
           <app-input v-model="form.name"
                      class="input"
-                     color="#555555"
+                     color="grey"
                      @blur="$v.form.name.$touch()"
                      error-message="Поле должно быть заполнено"
                      :error="$v.form.name.$error"/>
@@ -19,7 +19,7 @@
         <div class="inputs-margin">
           <span class="label">Количество игроков</span>
           <app-input v-model="form.maxPlayers"
-                     color="#555555"
+                     color="grey"
                      type="number"
                      @blur="$v.form.maxPlayers.$touch()"
                      error-message="Значение должно быть от 2 до 8"
@@ -29,7 +29,7 @@
         <div class="inputs-margin">
           <span class="label">Количество раундов</span>
           <app-input v-model="form.maxPeriods"
-                     color="#555555"
+                     color="grey"
                      type="number"
                      @blur="$v.form.maxPeriods.$touch()"
                      error-message="Значение должно быть от 2 до 16"
@@ -39,7 +39,7 @@
         <div class="inputs-margin">
           <span class="label">Время раунда</span>
           <app-input v-model="form.periodDuration"
-                     color="#555555"
+                     color="grey"
                      type="number"
                      @blur="$v.form.periodDuration.$touch()"
                      error-message="Значение должно быть от 1 до 10"
@@ -53,7 +53,7 @@
         <div class="inputs-margin inner" v-if="isLocked">
           <span class="label">Пароль</span>
           <app-input v-model="form.password"
-                     color="#555555"
+                     color="grey"
                      type="password"
                      @blur="$v.form.password.$touch()"
                      error-message="Поле должно быть заполнено"

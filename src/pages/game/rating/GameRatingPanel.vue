@@ -43,15 +43,17 @@
       ...mapGetters('game', ['players']),
       companies() {
         const { players } = this;
-        return players.sort((player1, player2) => {
-          if (player1.isBankrupt) {
-            return 1;
-          }
-          if (player2.isBankrupt) {
-            return -1;
-          }
-          return player2.stats.rating - player1.stats.rating;
-        });
+        return players
+          .filter((company) => company.companyName.length)
+          .sort((player1, player2) => {
+            if (player1.isBankrupt) {
+              return 1;
+            }
+            if (player2.isBankrupt) {
+              return -1;
+            }
+            return player2.stats.rating - player1.stats.rating;
+          });
       },
     },
   };
