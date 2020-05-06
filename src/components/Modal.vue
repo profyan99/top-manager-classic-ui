@@ -98,6 +98,11 @@
       padding: base-unit(16)
       box-sizing: border-box
 
+      .text
+        color: $fg-main
+        font-size: base-unit(14)
+        font-weight: normal
+
     .actions
       display: flex
       padding: base-unit(16)

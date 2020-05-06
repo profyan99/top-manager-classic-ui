@@ -64,6 +64,14 @@ const mutations = {
   updateGameTick(state, amount) {
     state.currentSecond += amount;
   },
+  setNewGame(state, game) {
+    state.newGame = game;
+  },
+  clearNewGame(state) {
+    state.newGame = {
+      id: 0,
+    };
+  },
 };
 
 export default mutations;

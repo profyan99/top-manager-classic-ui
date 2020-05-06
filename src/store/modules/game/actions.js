@@ -57,6 +57,18 @@ const actions = {
   updateTime({ commit }) {
     commit('updateGameTick', 1);
   },
+  setNewGame({ commit }, game) {
+    commit('setNewGame', game);
+  },
+  clearNewGame({ commit }) {
+    commit('clearNewGame');
+  },
+  playerRejectsRestart({ dispatch }, data) {
+    sendServerMessage(
+      dispatch,
+      `${data.userName} отказался принять участие в новой игре`,
+    );
+  },
 
   sendSolutions({ state }, solutions) {
     return axios.post(`/games/${state.gameData.id}/solutions`, solutions);
@@ -66,6 +78,12 @@ const actions = {
   },
   setCompanyName({ state }, companyName) {
     return axios.post(`/games/${state.gameData.id}/company`, { companyName });
+  },
+  restartGame({ state }) {
+    return axios.post(`/games/${state.gameData.id}/restart`);
+  },
+  rejectRestartGame({ state }) {
+    return axios.delete(`/games/${state.newGame.id}/restart`);
   },
 };
 

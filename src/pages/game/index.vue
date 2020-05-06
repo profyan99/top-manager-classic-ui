@@ -2,22 +2,8 @@
   <span v-if="!gameData">Loading...</span>
   <div class="game" v-else>
     <div class="game-body col-sm-8 col-md-8 col-lg-8 col-xl-8">
-      <div class="game-name">
-        <div class="left-part">
-          <span class="title">{{ gameData.name }}</span>
-          <span class="company-name">
-            Компания {{ currentPlayer.companyName }}
-          </span>
-        </div>
-        <div class="spacer"></div>
-        <app-button icon="user-plus"
-                    @click="invitePlayer"
-                    class="header-button"/>
-        <app-button icon="sign-out-alt"
-                    @click="exitFromRoom"
-                    class="header-button"/>
-      </div>
       <game-header/>
+      <game-top-bar/>
       <div class="game-content">
         <game-left-menu
             class="game-content-left-menu col-sm-1 col-md-1 col-lg-1 col-xl-1"
@@ -31,8 +17,11 @@
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
           :room-id="gameData.id">
     </chat>
-    <game-company-name-modal v-if="isModalActive"
+    <ask-company-name-modal v-if="isModalActive"
                              @close="isModalActive = false"/>
+    <ask-restart-game-modal v-if="newGame.id"
+                            :new-game-id="newGame.id"
+                            @close="clearNewGame"/>
   </div>
 </template>
 
@@ -41,8 +30,10 @@
 
   import Chat from '~/components/chat/Chat';
   import AppButton from '~/components/AppButton.vue';
-  import GameCompanyNameModal from '~/pages/game/GameCompanyNameModal';
-  import GameHeader from './GameHeader';
+  import AskCompanyNameModal from '~/pages/game/modal/AskCompanyNameModal';
+  import GameHeader from '~/pages/game/GameHeader';
+  import AskRestartGameModal from '~/pages/game/modal/AskRestartGameModal';
+  import GameTopBar from './GameTopBar';
   import GameLeftMenu from './GameLeftMenu';
   import { connectRoom, disconnectRoom } from '~/websocket.js';
   import {
@@ -57,10 +48,12 @@
   export default {
     name: 'game',
     components: {
-      GameCompanyNameModal,
+      AskRestartGameModal,
+      GameHeader,
+      AskCompanyNameModal,
       GameRatingPanel,
       GameLeftMenu,
-      GameHeader,
+      GameTopBar,
       Chat,
       AppButton,
       GameScreenBank,
@@ -75,7 +68,7 @@
       };
     },
     computed: {
-      ...mapState('game', ['gameData', 'currentPlayer']),
+      ...mapState('game', ['gameData', 'currentPlayer', 'newGame']),
       ...mapGetters('game', ['players']),
       isUserAlreadyInGame() {
         const { players, currentPlayer } = this;
@@ -85,7 +78,8 @@
     },
     watch: {
       gameData(newData, oldData) {
-        if (oldData && newData && newData.currentPeriod === oldData.currentPeriod) {
+        if (oldData && newData
+          && newData.currentPeriod === oldData.currentPeriod) {
           stopSchedule();
         } else {
           startSchedule(newData.startCountDownTime);
@@ -93,15 +87,9 @@
       },
     },
     methods: {
-      ...mapActions('game', ['tryConnectRoom', 'disconnectFromGame']),
+      ...mapActions('game', ['disconnectFromGame', 'clearNewGame']),
       ...mapActions('chat', ['clearMessages']),
       ...mapActions('rooms', ['connectToRoom']),
-      exitFromRoom() {
-        this.$router.push({ name: 'rooms' });
-      },
-      invitePlayer() {
-
-      },
     },
     async created() {
       if (!this.gameData) {
@@ -145,29 +133,6 @@
     width: 100%
     justify-content: space-between
     margin-bottom: base-unit(40)
-
-    &-name
-      display: flex
-      flex-direction: row
-      align-items: flex-end
-      min-height: base-unit(40)
-
-      .spacer
-        flex: 1
-
-      .left-part
-        display: flex
-        align-items: baseline
-
-        .company-name
-          font-size: base-unit(20)
-          font-weight: normal
-          font-style: normal
-          color: $dark-fg-main
-          margin-left: base-unit(15)
-
-      .header-button
-        margin-left: base-unit(15)
 
     &-body
       display: flex

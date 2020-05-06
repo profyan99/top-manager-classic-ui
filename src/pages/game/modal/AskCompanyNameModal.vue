@@ -32,7 +32,7 @@
   import AppInput from '~/components/AppInput';
 
   export default {
-    name: 'GameCompanyNameModal',
+    name: 'AskCompanyNameModal',
     components: {
       AppButton,
       Modal,

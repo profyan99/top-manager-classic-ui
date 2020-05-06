@@ -1,43 +1,63 @@
 <template>
   <div class="game-header">
-    <div>
-      <span class="game-header-title">Состояние</span>
-      <span class="game-header-value">{{ currentState }}</span>
+    <div class="left-part">
+      <span class="title">{{ gameData.name }}</span>
+      <span class="company-name">
+            Компания {{ currentPlayer.companyName }}
+          </span>
     </div>
-    <div>
-      <span class="game-header-title">Квартал</span>
-      <span class="game-header-value">{{ gameData.currentPeriod }}</span>
-    </div>
-    <div>
-      <span class="game-header-title">Игроки</span>
-      <span class="game-header-value">{{ gameData.currentPlayers }}</span>
-    </div>
-    <div>
-      <span class="game-header-title">Время</span>
-      <span class="game-header-value">{{ currentTime }}</span>
-    </div>
+    <div class="spacer"></div>
+    <app-button v-if="isRestartButtonShowing"
+                label="Рестарт"
+                @click="restartGame"
+                class="header-button"/>
+    <app-button icon="user-plus"
+                @click="invitePlayer"
+                class="header-button"/>
+    <app-button icon="sign-out-alt"
+                @click="exitFromRoom"
+                class="header-button"/>
+    <confirm-restart-game-modal v-if="isModalActive"
+                                @close="isModalActive = false"/>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex';
-  import { convertRoomState, convertSecondsToMinutes } from '~/helpers/room';
+  import ConfirmRestartGameModal
+    from '~/pages/game/modal/ConfirmRestartGameModal';
+
+  import { GameState } from '~/utils';
+  import AppButton from '~/components/AppButton';
 
   export default {
     name: 'GameHeader',
+    components: {
+      ConfirmRestartGameModal,
+      AppButton,
+    },
+    data() {
+      return {
+        isModalActive: false,
+      };
+    },
     computed: {
-      ...mapState('game', [
-        'currentSecond',
-        'gameData',
-        'currentPlayer',
-      ]),
-      currentState() {
-        return convertRoomState(this.gameData.state, this.currentPlayer.state);
+      ...mapState('game', ['gameData', 'currentPlayer']),
+      isRestartButtonShowing() {
+        const { gameData, currentPlayer } = this;
+        return gameData.state === GameState.END &&
+          gameData.owner.userName === currentPlayer.userName;
       },
-      currentTime() {
-        const { currentSecond, gameData } = this;
-        const timeLeft = gameData.periodDuration - currentSecond;
-        return convertSecondsToMinutes(timeLeft < 0 ? 0 : timeLeft);
+    },
+    methods: {
+      exitFromRoom() {
+        this.$router.push({ name: 'rooms' });
+      },
+      invitePlayer() {
+
+      },
+      restartGame() {
+        this.isModalActive = true;
       },
     },
   };
@@ -49,23 +69,26 @@
   .game-header
     display: flex
     flex-direction: row
-    justify-content: space-between
-    align-items: center
-    background-color: $red
-    border-radius: $base-border-radius
-    color: $bg-main
+    align-items: flex-end
     min-height: base-unit(40)
-    padding: 0 base-unit(20)
-    margin-top: base-unit(10)
 
-    &-title
-      margin-right: base-unit(5)
-      font-size: base-unit(16)
-      font-weight: bold
-      font-style: normal
-      color: $bg-main
+    .spacer
+      flex: 1
 
-    &-value
-      +black-frame
+    .left-part
+      display: flex
+      align-items: baseline
 
+      .company-name
+        font-size: base-unit(20)
+        font-weight: normal
+        font-style: normal
+        color: $dark-fg-main
+        margin-left: base-unit(15)
+
+    .header-button
+      margin-left: base-unit(15)
+
+  .title
+    +title
 </style>

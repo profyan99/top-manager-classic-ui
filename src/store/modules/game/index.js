@@ -28,6 +28,9 @@ const state = {
     nir: 0,
   },
   currentSecond: 0,
+  newGame: {
+    id: 0,
+  },
 };
 
 export default {
