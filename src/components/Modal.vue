@@ -108,6 +108,9 @@
       padding: base-unit(16)
       justify-content: flex-end
 
+      button
+        margin-left: base-unit(15)
+
       .confirm-button
         background-color: $red
         cursor: pointer

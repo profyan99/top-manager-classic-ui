@@ -37,7 +37,7 @@
     </div>
     <chat class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
       <template v-slot:chat-header-description>
-        <span>Онлайн: {{ playersAmount }}</span>
+        <span>Онлайн: {{ roomsMeta.playersAmount }}</span>
       </template>
     </chat>
     <room-connect-modal v-if="!!connectRoomData"
@@ -76,7 +76,7 @@
       };
     },
     computed: {
-      ...mapGetters('rooms', ['roomList']),
+      ...mapGetters('rooms', ['roomList', 'roomsMeta']),
       filteredRooms() {
         return this.roomList
           .filter((room) => room.name.toLowerCase()
@@ -84,11 +84,6 @@
       },
       roomsAmount() {
         return this.roomList.length;
-      },
-      playersAmount() {
-        return this.roomList
-          .map((room) => room.currentPlayers)
-          .reduce((sum, next) => sum + next, 0);
       },
     },
     methods: {

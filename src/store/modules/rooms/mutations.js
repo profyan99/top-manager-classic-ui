@@ -23,6 +23,11 @@ const mutations = {
   setScenarios(state, scenarios) {
     state.scenarios = scenarios;
   },
+  setMeta(state, meta) {
+    state.meta = {
+      ...meta,
+    };
+  },
 };
 
 export default mutations;

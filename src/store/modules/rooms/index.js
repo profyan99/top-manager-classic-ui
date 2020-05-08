@@ -6,6 +6,9 @@ const state = {
   rooms: {},
   roomsIds: [],
   scenarios: [],
+  meta: {
+    playersAmount: 0,
+  },
 };
 
 export default {

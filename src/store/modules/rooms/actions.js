@@ -32,6 +32,9 @@ const actions = {
   removeRoomWebsocket({ commit }, room) {
     commit('removeRoom', room);
   },
+  updateMeta({ commit }, meta) {
+    commit('setMeta', meta);
+  },
 };
 
 export default actions;

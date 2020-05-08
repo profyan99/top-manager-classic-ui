@@ -44,8 +44,9 @@
       ...mapState('game', ['gameData']),
     },
     methods: {
-      ...mapActions('game', ['rejectRestartGame']),
+      ...mapActions('game', ['rejectRestartGame', 'clearGame']),
       onConfirm() {
+        this.clearGame();
         this.$router.push({
           name: 'game',
           params: { roomId: this.newGameId },

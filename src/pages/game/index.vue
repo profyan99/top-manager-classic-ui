@@ -63,17 +63,16 @@
     },
     data() {
       return {
-        isModalActive: true,
+        isModalActive: false,
         currentScreen: 'GameScreenIndustry',
       };
     },
     computed: {
       ...mapState('game', ['gameData', 'currentPlayer', 'newGame']),
       ...mapGetters('game', ['players']),
-      isUserAlreadyInGame() {
-        const { players, currentPlayer } = this;
-        return players && currentPlayer &&
-          players.some((player) => player.userName === currentPlayer.userName);
+      isCompanyNameAlreadyInit() {
+        const { currentPlayer } = this;
+        return currentPlayer && currentPlayer.companyName;
       },
     },
     watch: {
@@ -110,9 +109,7 @@
           // TODO notify
         });
 
-      if (this.isUserAlreadyInGame) {
-        this.modalActive = false;
-      }
+      this.isModalActive = !this.isCompanyNameAlreadyInit;
     },
     beforeRouteLeave(to, from, next) {
       const result = confirm('Хотите покинуть игру?');

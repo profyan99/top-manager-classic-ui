@@ -35,10 +35,11 @@
       AppButton,
     },
     methods: {
-      ...mapActions('game', ['restartGame']),
+      ...mapActions('game', ['restartGame', 'clearGame']),
       onConfirm() {
         this.restartGame()
           .then((gameId) => {
+            this.clearGame();
             this.$router.push({
               name: 'game',
               params: { roomId: gameId },

@@ -85,6 +85,9 @@ const actions = {
   rejectRestartGame({ state }) {
     return axios.delete(`/games/${state.newGame.id}/restart`);
   },
+  clearGame({ commit }) {
+    commit('clearGame');
+  },
 };
 
 export default actions;
