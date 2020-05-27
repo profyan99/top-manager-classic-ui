@@ -1,6 +1,5 @@
 <template>
-  <modal :closable="false"
-         @submit="onConfirm">
+  <modal :closable="false" @submit="onConfirm">
     <template v-slot:header>
       Новая игра
     </template>
@@ -11,60 +10,53 @@
       </span>
     </template>
     <template v-slot:actions>
-      <app-button
-          class="confirm-button"
-          label="Принять"
-          @click="onConfirm"/>
-      <app-button
-          label="Отмена"
-          @click="onReject"/>
+      <app-button class="confirm-button" label="Принять" @click="onConfirm" />
+      <app-button label="Отмена" @click="onReject" />
     </template>
   </modal>
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
-  import Modal from '~/components/Modal';
-  import AppButton from '~/components/AppButton';
+import Modal from '~/components/Modal';
+import AppButton from '~/components/AppButton';
 
-  export default {
-    name: 'AskRestartGameModal',
-    components: {
-      Modal,
-      AppButton,
+export default {
+  name: 'AskRestartGameModal',
+  components: {
+    Modal,
+    AppButton,
+  },
+  props: {
+    newGameId: {
+      type: Number,
+      required: true,
     },
-    props: {
-      newGameId: {
-        type: Number,
-        required: true,
-      },
+  },
+  computed: {
+    ...mapState('game', ['gameData']),
+  },
+  methods: {
+    ...mapActions('game', ['rejectRestartGame', 'clearGame']),
+    onConfirm() {
+      this.$router.push({
+        name: 'game',
+        params: { gameId: this.newGameId },
+      });
+      this.close();
     },
-    computed: {
-      ...mapState('game', ['gameData']),
+    async onReject() {
+      await this.rejectRestartGame();
+      this.close();
     },
-    methods: {
-      ...mapActions('game', ['rejectRestartGame', 'clearGame']),
-      onConfirm() {
-        this.clearGame();
-        this.$router.push({
-          name: 'game',
-          params: { roomId: this.newGameId },
-        });
-        this.close();
-      },
-      async onReject() {
-        await this.rejectRestartGame();
-        this.close();
-      },
-      close() {
-        this.$emit('close');
-      },
+    close() {
+      this.$emit('close');
     },
-  };
+  },
+};
 </script>
 
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
-
+@import "~/styles/styleguide.sass"
 </style>

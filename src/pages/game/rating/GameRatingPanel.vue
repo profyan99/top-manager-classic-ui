@@ -94,13 +94,15 @@
         margin-left: base-unit(5)
         margin-right: base-unit(5)
         overflow-x: auto
-        padding-bottom: base-unit(15) //for scroll
 
         &::-webkit-scrollbar
           background: transparent
-          height: base-unit(5)
+          height: base-unit(20)
 
         &::-webkit-scrollbar-thumb
+          border: base-unit(7.5) solid rgba(0, 0, 0, 0)
+          background-clip: padding-box
+          height: base-unit(5)
           border-radius: $base-border-radius
           background-color: $light-grey
 

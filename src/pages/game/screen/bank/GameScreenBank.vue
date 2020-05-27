@@ -5,22 +5,19 @@
 </template>
 
 <script>
-  export default {
-    name: 'GameScreenBank',
-    data() {
-      return {
-
-      };
+export default {
+  name: 'GameScreenBank',
+  data() {
+    return {};
+  },
+  props: {
+    company: {
+      required: true,
     },
-    props: {
-      company: {
-        required: true,
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
-
+@import "~/styles/styleguide.sass"
 </style>

@@ -3,11 +3,14 @@ import mutations from './mutations';
 import actions from './actions';
 
 const state = {
-  rooms: {},
-  roomsIds: [],
+  games: {},
+  gamesIds: [],
   scenarios: [],
   meta: {
     playersAmount: 0,
+  },
+  connectData: {
+    password: '',
   },
 };
 

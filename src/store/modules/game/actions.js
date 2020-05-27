@@ -27,20 +27,26 @@ const actions = {
     commit('addPlayer', data);
     sendServerMessage(
       dispatch,
-      `${data.userName} владелец ${data.companyName.toUpperCase()} подключился к игре`,
+      `${
+        data.userName
+      } владелец ${data.companyName.toUpperCase()} подключился к игре`,
     );
   },
   reconnectPlayer({ dispatch }, data) {
     sendServerMessage(
       dispatch,
-      `${data.userName} владелец ${data.companyName.toUpperCase()} переподключился к игре`,
+      `${
+        data.userName
+      } владелец ${data.companyName.toUpperCase()} переподключился к игре`,
     );
   },
   disconnectPlayer({ commit, dispatch }, data) {
     commit('removePlayer', data);
     sendServerMessage(
       dispatch,
-      `${data.userName} владелец ${data.companyName.toUpperCase()} вышел из игры`,
+      `${
+        data.userName
+      } владелец ${data.companyName.toUpperCase()} вышел из игры`,
     );
   },
   updatePlayer({ commit }, data) {

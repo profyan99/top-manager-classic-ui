@@ -1,6 +1,7 @@
 const getters = {
   oldSolutions: ({ currentPlayer }) => currentPlayer.solutions,
-  players: ({ players, playersList }) => playersList.map((playerId) => players[playerId]),
+  players: ({ players, playersList }) =>
+    playersList.map((playerId) => players[playerId]),
   playerState: ({ currentPlayer }) => currentPlayer.state,
 };
 

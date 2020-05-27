@@ -1,7 +1,5 @@
 import Vue from 'vue';
 
-import initial from './initial';
-
 const addPlayerCommon = (state, data) => {
   Vue.set(state.players, data.id, data);
   state.playersList.push(data.id);
@@ -75,9 +73,37 @@ const mutations = {
     };
   },
   clearGame(state) {
-    Object.keys(initial).forEach((key) => {
+    state.gameData = null;
+    state.players = {};
+    state.playersList = [];
+    state.currentPlayer = {
+      id: -1,
+      state: '',
+      userName: '',
+      companyName: '',
+      company: {},
+      solutions: {
+        price: 0,
+        production: 0,
+        marketing: 0,
+        investments: 0,
+        nir: 0,
+      },
+    };
+    state.currentSolutions = {
+      price: 0,
+      production: 0,
+      marketing: 0,
+      investments: 0,
+      nir: 0,
+    };
+    state.currentSecond = 0;
+    state.newGame = {
+      id: 0,
+    };
+    /* Object.keys(initial).forEach((key) => {
       Object.assign(state[key], initial[key]);
-    });
+    }); */
   },
 };
 

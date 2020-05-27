@@ -3,92 +3,95 @@
     <div class="left-part">
       <span class="title">{{ gameData.name }}</span>
       <span class="company-name">
-            Компания {{ currentPlayer.companyName }}
-          </span>
+        Компания {{ currentPlayer.companyName }}
+      </span>
     </div>
     <div class="spacer"></div>
-    <app-button v-if="isRestartButtonShowing"
-                label="Рестарт"
-                @click="restartGame"
-                class="header-button"/>
-    <app-button icon="user-plus"
-                @click="invitePlayer"
-                class="header-button"/>
-    <app-button icon="sign-out-alt"
-                @click="exitFromRoom"
-                class="header-button"/>
-    <confirm-restart-game-modal v-if="isModalActive"
-                                @close="isModalActive = false"/>
+    <app-button
+      v-if="isRestartButtonShowing"
+      label="Рестарт"
+      @click="restartGame"
+      class="header-button"
+    />
+    <app-button icon="user-plus" @click="invitePlayer" class="header-button" />
+    <app-button
+      icon="sign-out-alt"
+      @click="exitFromGame"
+      class="header-button"
+    />
+    <confirm-restart-game-modal
+      v-if="isModalActive"
+      @close="isModalActive = false"
+    />
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import ConfirmRestartGameModal
-    from '~/pages/game/modal/ConfirmRestartGameModal';
+import { mapState } from 'vuex';
+import ConfirmRestartGameModal from './modal/ConfirmRestartGameModal';
 
-  import { GameState } from '~/utils';
-  import AppButton from '~/components/AppButton';
+import { GameState } from '~/utils';
+import AppButton from '~/components/AppButton';
 
-  export default {
-    name: 'GameHeader',
-    components: {
-      ConfirmRestartGameModal,
-      AppButton,
+export default {
+  name: 'GameHeader',
+  components: {
+    ConfirmRestartGameModal,
+    AppButton,
+  },
+  data() {
+    return {
+      isModalActive: false,
+    };
+  },
+  computed: {
+    ...mapState('game', ['gameData', 'currentPlayer']),
+    isRestartButtonShowing() {
+      const { gameData, currentPlayer } = this;
+      return (
+        gameData.state === GameState.END &&
+        gameData.owner.userName === currentPlayer.userName
+      );
     },
-    data() {
-      return {
-        isModalActive: false,
-      };
+  },
+  methods: {
+    exitFromGame() {
+      this.$router.push({ name: 'games' });
     },
-    computed: {
-      ...mapState('game', ['gameData', 'currentPlayer']),
-      isRestartButtonShowing() {
-        const { gameData, currentPlayer } = this;
-        return gameData.state === GameState.END &&
-          gameData.owner.userName === currentPlayer.userName;
-      },
+    invitePlayer() {},
+    restartGame() {
+      this.isModalActive = true;
     },
-    methods: {
-      exitFromRoom() {
-        this.$router.push({ name: 'rooms' });
-      },
-      invitePlayer() {
-
-      },
-      restartGame() {
-        this.isModalActive = true;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
+@import "~/styles/styleguide.sass"
 
-  .game-header
+.game-header
+  display: flex
+  flex-direction: row
+  align-items: flex-end
+  height: base-unit(32)
+
+  .spacer
+    flex: 1
+
+  .left-part
     display: flex
-    flex-direction: row
-    align-items: flex-end
-    min-height: base-unit(40)
+    align-items: baseline
 
-    .spacer
-      flex: 1
-
-    .left-part
-      display: flex
-      align-items: baseline
-
-      .company-name
-        font-size: base-unit(20)
-        font-weight: normal
-        font-style: normal
-        color: $dark-fg-main
-        margin-left: base-unit(15)
-
-    .header-button
+    .company-name
+      font-size: $title-font-size
+      font-weight: normal
+      font-style: normal
+      color: $dark-fg-main
       margin-left: base-unit(15)
 
-  .title
-    +title
+  .header-button
+    margin-left: base-unit(15)
+
+.title
+  +title
 </style>

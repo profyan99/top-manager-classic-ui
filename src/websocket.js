@@ -9,22 +9,22 @@ function websocketHandler(message, _flags) {
   const { objectType, eventType, body } = message;
   switch (objectType) {
   case 'ERROR': {
-    console.log('Error in Rooms in ws: ', body);
+    console.log('Error in Games in ws: ', body);
     // TODO notify
     break;
   }
   case 'GAME_PREVIEW': {
     switch (eventType) {
     case 'ADD': {
-      store.dispatch('rooms/addRoomWebsocket', body);
+      store.dispatch('gameList/addGame', body);
       break;
     }
     case 'UPDATE': {
-      store.dispatch('rooms/updateRoomWebsocket', body);
+      store.dispatch('gameList/updateGame', body);
       break;
     }
     case 'REMOVE': {
-      store.dispatch('rooms/removeRoomWebsocket', body);
+      store.dispatch('gameList/removeGame', body);
       break;
     }
     default:
@@ -35,7 +35,7 @@ function websocketHandler(message, _flags) {
   case 'GAME_PREVIEW_META': {
     switch (eventType) {
     case 'UPDATE': {
-      store.dispatch('rooms/updateMeta', body);
+      store.dispatch('gameList/updateMeta', body);
       break;
     }
     default:
@@ -58,10 +58,6 @@ function websocketHandler(message, _flags) {
       break;
     }
     case 'RESTART': {
-      store.dispatch('game/setNewGame', body);
-      break;
-    }
-    case 'RESTART_REJECT': {
       store.dispatch('game/setNewGame', body);
       break;
     }
@@ -129,26 +125,26 @@ export async function connect() {
   return client.connect({ reconnect: true });
 }
 
-export function disconnectRoom(roomId) {
+export function disconnectGame(gameId) {
   if (!client) {
     return;
   }
-  client.unsubscribe(`/games/${roomId}`, null);
+  client.unsubscribe(`/games/${gameId}`, null);
 }
 
-export function unsubscribeRoomList() {
+export function unsubscribeGameList() {
   if (!client) {
     return;
   }
   client.unsubscribe('/games', null);
 }
 
-export function subscribeRoomList() {
-  return connect()
-    .then(() => client.subscribe('/games', websocketHandler));
+export function subscribeGameList() {
+  return connect().then(() => client.subscribe('/games', websocketHandler));
 }
 
-export function connectRoom(roomId) {
-  return connect()
-    .then(() => client.subscribe(`/games/${roomId}`, websocketHandler));
+export function connectGame(gameId) {
+  return connect().then(() =>
+    client.subscribe(`/games/${gameId}`, websocketHandler),
+  );
 }

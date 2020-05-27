@@ -1,5 +1,5 @@
 const getters = {
-  isLoggedIn: ({ user }) => !!user,
+  isLoggedIn: ({ user }) => Boolean(user),
 };
 
 export default getters;
