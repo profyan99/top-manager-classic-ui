@@ -6,6 +6,7 @@ import vSelect from 'vue-select';
 import Layout from './components/Layout.vue';
 import routes from './routes';
 import store from './store';
+import { confirm, notification } from '~/plugins';
 
 import './styles/app.sass';
 import '../index.html';
@@ -15,6 +16,8 @@ import './icons';
 Vue.component('v-select', vSelect);
 Vue.use(Router);
 Vue.use(Vuelidate);
+Vue.use(confirm);
+Vue.use(notification);
 
 Vue.config.productionTip = false;
 
@@ -29,4 +32,6 @@ new Vue({
   components: { Layout },
   router,
   store,
+  confirm,
+  notification,
 });

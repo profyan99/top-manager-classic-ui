@@ -109,6 +109,14 @@ export default {
 
       this.disconnectFromGame().then(() => disconnectGame(gameId));
     },
+    async confirmDisconnect() {
+      const message =
+        this.gameData.state === 'PLAY'
+          ? `Вы действительно хотите выйти? Вы больше не сможете зайти в
+            эту игру, и количество покинутых игр увеличится.`
+          : 'Вы действительно хотите выйти?';
+      return this.$confirm(message);
+    },
   },
   async created() {
     try {
@@ -119,8 +127,8 @@ export default {
       this.clearMessages();
       await startSchedule(this.gameData.startCountDownTime);
       this.isModalActive = !this.isCompanyNameAlreadyInit;
-    } catch (_error) {
-      // TODO notify
+    } catch (error) {
+      this.$notification.error(error);
       this.disconnectForced = true;
       await this.$router.push({
         name: 'games',
@@ -132,8 +140,8 @@ export default {
     this.disconnect();
     next();
   },
-  beforeRouteLeave(to, from, next) {
-    const result = this.disconnectForced || confirm('Хотите покинуть игру?');
+  async beforeRouteLeave(to, from, next) {
+    const result = this.disconnectForced || (await this.confirmDisconnect());
 
     if (!result) {
       return;

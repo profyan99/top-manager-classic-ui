@@ -11,6 +11,8 @@ import {
   faUserPlus,
   faChevronDown,
   faChevronUp,
+  faInfo,
+  faExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faVk } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -27,6 +29,8 @@ library.add(
   faGoogle,
   faChevronDown,
   faChevronUp,
+  faInfo,
+  faExclamation,
 );
 
 Vue.component('icon', FontAwesomeIcon);

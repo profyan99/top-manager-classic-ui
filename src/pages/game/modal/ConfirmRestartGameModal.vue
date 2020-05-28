@@ -39,9 +39,7 @@ export default {
           });
           this.close();
         })
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
     close() {
       this.$emit('close');

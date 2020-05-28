@@ -80,9 +80,7 @@ export default {
         .then(() => {
           this.newMessage = '';
         })
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
   },
   mounted() {

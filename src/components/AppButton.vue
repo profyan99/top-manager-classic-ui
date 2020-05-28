@@ -42,20 +42,19 @@ export default {
 @import "~/styles/styleguide.sass"
 
 .app-button
-  background-color: $blue
+  background-color: $light-grey
   cursor: pointer
   text-align: center
   color: $fg-main
-  font-size: base-unit(12)
+  font-size: base-unit(14)
   border-radius: $base-border-radius
-  padding: base-unit(10)
+  padding: base-unit(8)
   box-sizing: border-box
   display: flex
   align-items: center
   outline: 0
   border: none
   justify-content: center
-  text-transform: uppercase
 
   &.disabled
     background-color: $light-grey

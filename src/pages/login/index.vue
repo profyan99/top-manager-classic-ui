@@ -174,9 +174,7 @@ export default {
 
       signInAction(signIn)
         .then(() => getCurrentUser())
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
     performSignUp() {
       const {
@@ -200,9 +198,7 @@ export default {
           // TODO notify
           toggleType('signIn');
         })
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
   },
   validations: {

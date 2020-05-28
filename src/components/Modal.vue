@@ -100,7 +100,8 @@ export default {
     .text
       color: $fg-main
       font-size: base-unit(14)
-      font-weight: normal
+      font-weight: 400
+      +sub-font
 
   .actions
     display: flex

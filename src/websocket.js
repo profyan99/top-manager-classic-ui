@@ -10,7 +10,6 @@ function websocketHandler(message, _flags) {
   switch (objectType) {
   case 'ERROR': {
     console.log('Error in Games in ws: ', body);
-    // TODO notify
     break;
   }
   case 'GAME_PREVIEW': {

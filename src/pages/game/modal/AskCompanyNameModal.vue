@@ -61,9 +61,7 @@ export default {
 
       this.setCompanyName(this.companyName)
         .then(() => this.$emit('close'))
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
   },
 };

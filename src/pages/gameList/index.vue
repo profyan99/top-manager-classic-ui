@@ -1,5 +1,5 @@
 <template>
-  <div class="games-wrapper container--fluid row">
+  <div class="games-wrapper row">
     <div class="games">
       <div class="header">
         <span class="title">Игры</span>
@@ -123,8 +123,8 @@ export default {
           (game) => game.id === gamePreviewId,
         );
       }
-    } catch (_error) {
-      // TODO notify
+    } catch (error) {
+      this.$notification.error(error);
     }
   },
   beforeRouteLeave(to, from, next) {

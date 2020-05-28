@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <notification-container />
     <div class="layout-container" v-if="isLoggedIn">
       <div class="header-wrapper">
         <nav-bar />
@@ -15,12 +16,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import NotificationContainer from './notification/NotificationContainer';
 import Login from '~/pages/login';
 import NavBar from '~/components/NavBar';
 
 export default {
   name: 'layout',
   components: {
+    NotificationContainer,
     Login,
     NavBar,
   },

@@ -1,9 +1,11 @@
 <template>
   <div class="game-header">
     <div class="left-part">
-      <span class="title">{{ gameData.name }}</span>
+      <span>
+        Игра <span class="title"> {{ gameData.name }}</span>
+      </span>
       <span class="company-name">
-        Компания {{ currentPlayer.companyName }}
+        Компания <span class="title">{{ currentPlayer.companyName }}</span>
       </span>
     </div>
     <div class="spacer"></div>
@@ -81,12 +83,12 @@ export default {
   .left-part
     display: flex
     align-items: baseline
+    font-size: $title-font-size
+    font-weight: normal
+    font-style: normal
+    color: $dark-fg-main
 
     .company-name
-      font-size: $title-font-size
-      font-weight: normal
-      font-style: normal
-      color: $dark-fg-main
       margin-left: base-unit(15)
 
   .header-button

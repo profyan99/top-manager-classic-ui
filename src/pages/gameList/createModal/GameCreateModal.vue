@@ -166,9 +166,7 @@ export default {
             params: { gameId: id },
           });
         })
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
   },
   mounted() {

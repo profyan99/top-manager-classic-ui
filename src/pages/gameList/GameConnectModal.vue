@@ -40,82 +40,80 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
-  import { minLength, required } from 'vuelidate/lib/validators';
-  import AppButton from '~/components/AppButton';
-  import Modal from '~/components/Modal';
-  import AppInput from '~/components/AppInput';
-  import { convertGameState } from '~/utils/game';
+import { mapActions, mapState } from 'vuex';
+import { minLength, required } from 'vuelidate/lib/validators';
+import AppButton from '~/components/AppButton';
+import Modal from '~/components/Modal';
+import AppInput from '~/components/AppInput';
+import { convertGameState } from '~/utils/game';
 
-  export default {
-    name: 'GameConnectModal',
-    components: {
-      AppButton,
-      Modal,
-      AppInput,
+export default {
+  name: 'GameConnectModal',
+  components: {
+    AppButton,
+    Modal,
+    AppInput,
+  },
+  props: {
+    game: {
+      type: Object,
+      required: true,
     },
-    props: {
-      game: {
-        type: Object,
-        required: true,
-      },
+  },
+  data() {
+    return {
+      connectPassword: '',
+    };
+  },
+  computed: {
+    ...mapState('user', ['user']),
+    gameState() {
+      return convertGameState(this.game.state);
     },
-    data() {
-      return {
-        connectPassword: '',
-      };
+    gameType() {
+      if (this.game.tournament) {
+        return 'Турнир';
+      }
+      return 'Обычный';
     },
-    computed: {
-      ...mapState('user', ['user']),
-      gameState() {
-        return convertGameState(this.game.state);
-      },
-      gameType() {
-        if (this.game.tournament) {
-          return 'Турнир';
+    isUserAlreadyInGame() {
+      const {
+        game,
+        user: { userName },
+      } = this;
+      return game.players.some((player) => player === userName);
+    },
+  },
+  methods: {
+    ...mapActions('gameList', ['setGameConnectionData']),
+    connect() {
+      const { game, connectPassword } = this;
+      if (game.locked) {
+        this.$v.connectPassword.$touch();
+        if (this.$v.$error) {
+          return;
         }
-        return 'Обычный';
-      },
-      isUserAlreadyInGame() {
-        const {
-          game,
-          user: { userName },
-        } = this;
-        return game.players.some((player) => player === userName);
-      },
-    },
-    methods: {
-      ...mapActions('gameList', ['setGameConnectionData']),
-      connect() {
-        const { game, connectPassword } = this;
-        if (game.locked) {
-          this.$v.connectPassword.$touch();
-          if (this.$v.$error) {
-            return;
-          }
-        }
-        this.setGameConnectionData({
-          password: connectPassword,
-        })
-          .then(() => {
-            this.$router.push({
-              name: 'game',
-              params: { gameId: game.id },
-            });
-            this.$emit('close');
-          })
-          .catch((_error) => {
-          // TODO notify
+      }
+      this.setGameConnectionData({
+        password: connectPassword,
+      })
+        .then(() => {
+          this.$router.push({
+            name: 'game',
+            params: { gameId: game.id },
           });
-      },
+          this.$emit('close');
+        })
+        .catch(this.$notification.error);
     },
-    validations: {
-      connectPassword: {
-        required,
-        minLength: minLength(6),
-      },
+  },
+  validations: {
+    connectPassword: {
+      required,
+      minLength: minLength(6),
     },
-  };
+  },
+};
 </script>
 
 <style scoped lang="sass">

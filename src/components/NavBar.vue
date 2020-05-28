@@ -8,10 +8,10 @@
         class="link-item"
         v-for="link in links"
         @click="performLinkAction(link)"
-        :class="{ 'link-selected': link.route === activePage }"
-        :key="link.title"
+        :class="{ 'link-selected': link.name === activePage }"
+        :key="link.label"
       >
-        <span>{{ link.title }}</span>
+        <span>{{ link.label }}</span>
       </div>
     </div>
     <div class="profile" @click="modalActive = !modalActive">
@@ -33,26 +33,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import routes from '~/routes';
 
 export default {
   name: 'navbar',
   data() {
     return {
       modalActive: false,
-      links: [
-        {
-          title: 'Игры',
-          route: 'games',
-        },
-        {
-          title: 'Поддержка',
-          route: 'support',
-        },
-        {
-          title: 'Оставить отзыв',
-          route: 'feedback',
-        },
-      ],
     };
   },
   computed: {
@@ -60,11 +47,14 @@ export default {
     activePage() {
       return this.$route.name;
     },
+    links() {
+      return routes.filter((route) => route.label);
+    },
   },
   methods: {
     ...mapActions('user', ['logout']),
-    performLinkAction({ route }) {
-      this.$router.push({ name: route });
+    performLinkAction({ name }) {
+      this.$router.push({ name });
     },
   },
 };

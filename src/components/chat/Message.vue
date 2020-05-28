@@ -50,7 +50,7 @@ export default {
   margin-bottom: base-unit(10)
 
   &.server
-    background-color: $blue
+    background-color: $light-grey
 
   .avatar
     margin-right: base-unit(10)

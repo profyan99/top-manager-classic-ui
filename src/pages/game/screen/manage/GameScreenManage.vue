@@ -99,9 +99,7 @@ export default {
         .then((_data) => {
           // TODO notify
         })
-        .catch((_error) => {
-          // TODO notify
-        });
+        .catch(this.$notification.error);
     },
   },
   validations: {
