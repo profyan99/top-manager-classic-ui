@@ -11,7 +11,9 @@
           <span>Состояние</span>
           <span>Тип</span>
           <span v-if="game.scenario">Сценарий</span>
-          <span v-if="game.locked" class="password">Пароль</span>
+          <span v-if="game.locked && !isUserAlreadyInGame" class="password">
+            Пароль
+          </span>
         </div>
         <div class="field-values">
           <span>{{ game.currentPeriod }}</span>
@@ -87,8 +89,8 @@ export default {
   methods: {
     ...mapActions('gameList', ['setGameConnectionData']),
     connect() {
-      const { game, connectPassword } = this;
-      if (game.locked) {
+      const { game, connectPassword, isUserAlreadyInGame } = this;
+      if (game.locked && !isUserAlreadyInGame) {
         this.$v.connectPassword.$touch();
         if (this.$v.$error) {
           return;

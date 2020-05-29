@@ -1,25 +1,41 @@
 <template>
   <div class="notifications-wrapper">
-    <transition-group appear name="slide-right">
-      <app-notification
-        class="notification"
-        v-for="notification in notifications"
-        :key="notification.id"
-        v-bind="notification"
-      />
-    </transition-group>
+    <div class="app">
+      <transition-group appear name="slide-right">
+        <app-notification
+          class="notification"
+          v-for="notification in appNotifications"
+          :key="notification.id"
+          v-bind="notification"
+        />
+      </transition-group>
+    </div>
+    <div class="game">
+      <transition appear name="slide-top">
+        <game-notification
+          class="notification"
+          :key="currentGameNotification.id"
+          v-bind="currentGameNotification"
+          v-if="currentGameNotification"
+        />
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import AppNotification from '~/components/notification/AppNotification';
+import { mapGetters } from 'vuex';
+import AppNotification from './AppNotification';
+import GameNotification from './GameNotification';
 
 export default {
   name: 'NotificationContainer',
-  components: { AppNotification },
+  components: { GameNotification, AppNotification },
   computed: {
-    ...mapState('notification', ['notifications']),
+    ...mapGetters('notification', ['appNotifications', 'gameNotifications']),
+    currentGameNotification() {
+      return this.gameNotifications[0];
+    },
   },
 };
 </script>
@@ -31,9 +47,24 @@ export default {
   z-index: 100
   position: fixed
   right: 0
-  top: base-unit(40)
-  display: flex
-  flex-direction: column
+  left: 0
+  top: 0
+
+  .app
+    display: flex
+    flex-direction: column
+    position: absolute
+    top: base-unit(40)
+    right: 0
+
+  .game
+    display: flex
+    flex-direction: column
+    align-items: center
+    position: absolute
+    top: base-unit(40)
+    right: 0
+    left: 0
 
 .notification
   margin: base-unit(5) 0
@@ -58,4 +89,16 @@ export default {
 
 .slide-right-move
   transition: all .5s
+
+.slide-top-leave-active
+  position: fixed
+
+.slide-top-leave-active,
+.slide-top-enter-active
+  transition: all .5s
+
+.slide-top-enter,
+.slide-top-leave-to
+  opacity: 0
+  transform: translate(0, -100%)
 </style>

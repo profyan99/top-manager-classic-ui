@@ -132,7 +132,7 @@ export default {
       this.disconnectForced = true;
       await this.$router.push({
         name: 'games',
-        params: { gamePreviewId: this.$route.params.gameId },
+        query: { gamePreviewId: this.$route.params.gameId },
       });
     }
   },

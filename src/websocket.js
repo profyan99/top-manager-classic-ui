@@ -80,10 +80,7 @@ function websocketHandler(message, _flags) {
       break;
     }
     case 'DISCONNECT': {
-      if (body.force) {
-        store.dispatch('game/disconnectPlayer', body);
-      }
-      // TODO
+      store.dispatch('game/disconnectPlayer', body);
       break;
     }
     case 'UPDATE': {

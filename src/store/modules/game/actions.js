@@ -7,6 +7,14 @@ const sendServerMessage = (dispatch, message) => {
     isServer: true,
   };
   dispatch('chat/addMessage', payload, { root: true });
+  dispatch(
+    'notification/addNotification',
+    {
+      type: 'GAME',
+      text: message,
+    },
+    { root: true },
+  );
 };
 
 const actions = {

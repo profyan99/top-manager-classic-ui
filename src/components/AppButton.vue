@@ -57,8 +57,8 @@ export default {
   justify-content: center
 
   &.disabled
-    background-color: $light-grey
-    color: $grey
+    background-color: $light-light-grey
+    color: $light-grey
     cursor: auto
 
     &:hover

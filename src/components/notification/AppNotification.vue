@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     isError() {
-      return this.type === 'error';
+      return this.type === 'ERROR';
     },
     icon() {
       return this.isError ? 'exclamation' : 'info';

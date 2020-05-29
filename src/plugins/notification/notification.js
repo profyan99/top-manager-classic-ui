@@ -11,13 +11,13 @@ const notificationPlugin = {
 
     vue.prototype.$notification = {
       error: (text) => {
-        addNotification(text, 'error');
+        addNotification(text, 'ERROR');
       },
       info: (text) => {
-        addNotification(text, 'info');
+        addNotification(text, 'INFO');
       },
       game: (text) => {
-        addNotification(text, 'game');
+        addNotification(text, 'GAME');
       },
     };
   },

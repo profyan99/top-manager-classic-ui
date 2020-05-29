@@ -72,8 +72,7 @@ export default {
   opacity: 0.4
 
 .confirm
-  max-width: base-unit(500)
-  min-width: base-unit(300)
+  max-width: base-unit(300)
   width: fit-content
   max-height: base-unit(300)
   min-height: base-unit(100)
@@ -81,7 +80,7 @@ export default {
   box-sizing: border-box
   border-bottom-left-radius: $base-border-radius
   border-bottom-right-radius: $base-border-radius
-  background-color: $grey
+  background-color: $dark-fg-main
   display: flex
   flex-direction: column
   position: absolute
@@ -98,7 +97,7 @@ export default {
     width: 100%
     padding: base-unit(16)
     box-sizing: border-box
-    color: $fg-main
+    color: $grey
     font-size: base-unit(14)
     font-weight: 400
     +sub-font
