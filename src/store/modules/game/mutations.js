@@ -38,9 +38,19 @@ const mutations = {
   },
 
   addPlayer(state, data) {
-    addPlayerCommon(state, data);
+    if (state.players[data.id]) {
+      updatePlayerCommon(state, data);
+    } else {
+      addPlayerCommon(state, data);
+    }
   },
   updatePlayer(state, data) {
+    if (data.id === state.currentPlayer.id) {
+      state.currentPlayer = {
+        ...state.currentPlayer,
+        ...data,
+      };
+    }
     updatePlayerCommon(state, data);
   },
   removePlayer(state, data) {
@@ -53,6 +63,47 @@ const mutations = {
   },
   updateGameTick(state, amount) {
     state.currentSecond += amount;
+  },
+  setNewGame(state, game) {
+    state.newGame = game;
+  },
+  clearNewGame(state) {
+    state.newGame = {
+      id: 0,
+    };
+  },
+  clearGame(state) {
+    state.gameData = null;
+    state.players = {};
+    state.playersList = [];
+    state.currentPlayer = {
+      id: -1,
+      state: '',
+      userName: '',
+      companyName: '',
+      company: {},
+      solutions: {
+        price: 0,
+        production: 0,
+        marketing: 0,
+        investments: 0,
+        nir: 0,
+      },
+    };
+    state.currentSolutions = {
+      price: 0,
+      production: 0,
+      marketing: 0,
+      investments: 0,
+      nir: 0,
+    };
+    state.currentSecond = 0;
+    state.newGame = {
+      id: 0,
+    };
+    /* Object.keys(initial).forEach((key) => {
+      Object.assign(state[key], initial[key]);
+    }); */
   },
 };
 

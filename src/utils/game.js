@@ -1,5 +1,11 @@
-export function convertRoomState(roomState, playerState) {
-  switch (roomState) {
+export const GameState = {
+  PREPARE: 'PREPARE',
+  PLAY: 'PLAY',
+  END: 'END',
+};
+
+export function convertGameState(gameState, playerState) {
+  switch (gameState) {
   case 'PREPARE':
     return 'Ожидание';
   case 'PLAY':
@@ -15,5 +21,13 @@ export function convertRoomState(roomState, playerState) {
 }
 
 export function convertSecondsToMinutes(seconds) {
-  return `${Math.floor(seconds / 60)}:${(`0${Math.floor(seconds % 60)}`).slice(-2)}`;
+  return `${Math.floor(seconds / 60)}:${`0${Math.floor(seconds % 60)}`.slice(
+    -2,
+  )}`;
 }
+
+export default {
+  GameState,
+  convertGameState,
+  convertSecondsToMinutes,
+};

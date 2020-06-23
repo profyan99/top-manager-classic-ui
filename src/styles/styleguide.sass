@@ -1,6 +1,7 @@
 // The base unit
 $base: 16
 $base-font-size: $base * 1px
+$title-font-size: 20px
 
 @function base-unit($num)
   @return ($num / $base) * 1rem
@@ -14,7 +15,9 @@ $fg-main: white
 $dark-fg-main: #D8D8D8
 $grey: #2B2B2D
 $light-grey: #555555
+$light-light-grey: #989898
 $red: #CA4747
+$dark-red: #7c1b1b
 $blue: #22425d
 
 // Fonts
@@ -26,6 +29,7 @@ $blue: #22425d
 
 @mixin sub-font
   font-family: 'Open Sans', sans-serif
+  font-weight: 400
 
 // flex 12 columns grid
 $grid__bp-sm: 576
@@ -86,7 +90,7 @@ $map-grid-props: ('': 0, '-sm': $grid__bp-sm, '-md': $grid__bp-md, '-lg': $grid_
 
 // Common mixins
 @mixin title
-  font-size: base-unit(28)
+  font-size: $title-font-size
   font-weight: bold
   font-style: normal
   color: $fg-main

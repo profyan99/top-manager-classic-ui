@@ -2,17 +2,15 @@ import axios from 'axios';
 
 const actions = {
   async getCurrentUser({ commit }) {
-    return axios.get('/profile')
-      .then((user) => {
-        commit('setUser', user);
-      });
+    return axios.get('/profile').then((user) => {
+      commit('setUser', user);
+    });
   },
   async signIn({ commit }, form) {
-    return axios.post('/signin', form)
-      .then(({ accessToken, refreshToken }) => {
-        commit('SetAccessToken', accessToken);
-        commit('SetRefreshToken', refreshToken);
-      });
+    return axios.post('/signin', form).then(({ accessToken, refreshToken }) => {
+      commit('SetAccessToken', accessToken);
+      commit('SetRefreshToken', refreshToken);
+    });
   },
   signInThrowSocial({ commit }, { access_token, refresh_token }) {
     commit('SetAccessToken', access_token);
@@ -31,9 +29,10 @@ const actions = {
     commit('SetRefreshToken', localStorage.getItem('refreshToken'));
   },
   refreshToken({ state: { refreshToken: oldRefreshToken }, commit }) {
-    return axios.post('/auth/token', {
-      refreshToken: oldRefreshToken,
-    })
+    return axios
+      .post('/auth/token', {
+        refreshToken: oldRefreshToken,
+      })
       .then(({ accessToken, refreshToken }) => {
         commit('SetAccessToken', accessToken);
         commit('SetRefreshToken', refreshToken);

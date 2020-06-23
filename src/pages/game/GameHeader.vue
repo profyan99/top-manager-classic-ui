@@ -1,71 +1,99 @@
 <template>
   <div class="game-header">
-    <div>
-      <span class="game-header-title">Состояние</span>
-      <span class="game-header-value">{{ currentState }}</span>
+    <div class="left-part">
+      <span>
+        Игра <span class="title"> {{ gameData.name }}</span>
+      </span>
+      <span class="company-name">
+        Компания <span class="title">{{ currentPlayer.companyName }}</span>
+      </span>
     </div>
-    <div>
-      <span class="game-header-title">Квартал</span>
-      <span class="game-header-value">{{ gameData.currentPeriod }}</span>
-    </div>
-    <div>
-      <span class="game-header-title">Игроки</span>
-      <span class="game-header-value">{{ gameData.currentPlayers }}</span>
-    </div>
-    <div>
-      <span class="game-header-title">Время</span>
-      <span class="game-header-value">{{ currentTime }}</span>
-    </div>
+    <div class="spacer"></div>
+    <app-button
+      v-if="isRestartButtonShowing"
+      label="Рестарт"
+      @click="restartGame"
+      class="header-button"
+    />
+    <app-button icon="user-plus" @click="invitePlayer" class="header-button" />
+    <app-button
+      icon="sign-out-alt"
+      @click="exitFromGame"
+      class="header-button"
+    />
+    <confirm-restart-game-modal
+      v-if="isModalActive"
+      @close="isModalActive = false"
+    />
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import { convertRoomState, convertSecondsToMinutes } from '~/helpers/room';
+import { mapState } from 'vuex';
+import ConfirmRestartGameModal from './modal/ConfirmRestartGameModal';
 
-  export default {
-    name: 'GameHeader',
-    computed: {
-      ...mapState('game', [
-        'currentSecond',
-        'gameData',
-        'currentPlayer',
-      ]),
-      currentState() {
-        return convertRoomState(this.gameData.state, this.currentPlayer.state);
-      },
-      currentTime() {
-        const { currentSecond, gameData } = this;
-        const timeLeft = gameData.periodDuration - currentSecond;
-        return convertSecondsToMinutes(timeLeft < 0 ? 0 : timeLeft);
-      },
+import { GameState } from '~/utils';
+import AppButton from '~/components/AppButton';
+
+export default {
+  name: 'GameHeader',
+  components: {
+    ConfirmRestartGameModal,
+    AppButton,
+  },
+  data() {
+    return {
+      isModalActive: false,
+    };
+  },
+  computed: {
+    ...mapState('game', ['gameData', 'currentPlayer']),
+    isRestartButtonShowing() {
+      const { gameData, currentPlayer } = this;
+      return (
+        gameData.state === GameState.END &&
+        gameData.owner.userName === currentPlayer.userName
+      );
     },
-  };
+  },
+  methods: {
+    exitFromGame() {
+      this.$router.push({ name: 'games' });
+    },
+    invitePlayer() {},
+    restartGame() {
+      this.isModalActive = true;
+    },
+  },
+};
 </script>
 
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
+@import "~/styles/styleguide.sass"
 
-  .game-header
+.game-header
+  display: flex
+  flex-direction: row
+  align-items: flex-end
+  height: base-unit(32)
+
+  .spacer
+    flex: 1
+
+  .left-part
     display: flex
-    flex-direction: row
-    justify-content: space-between
-    align-items: center
-    background-color: $red
-    border-radius: $base-border-radius
-    color: $bg-main
-    min-height: base-unit(40)
-    padding: 0 base-unit(20)
-    margin-top: base-unit(10)
+    align-items: baseline
+    font-size: $title-font-size
+    font-weight: normal
+    font-style: normal
+    color: $dark-fg-main
 
-    &-title
-      margin-right: base-unit(5)
-      font-size: base-unit(16)
-      font-weight: bold
-      font-style: normal
-      color: $bg-main
+    .company-name
+      margin-left: base-unit(15)
 
-    &-value
-      +black-frame
+  .header-button
+    margin-left: base-unit(15)
 
+.title
+  +title
 </style>

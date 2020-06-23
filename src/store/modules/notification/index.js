@@ -1,11 +1,10 @@
+import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
-import actions from './actions';
 
 const state = {
-  rooms: {},
-  roomsIds: [],
-  scenarios: [],
+  notifications: [],
+  lastNotificationId: 0,
 };
 
 export default {

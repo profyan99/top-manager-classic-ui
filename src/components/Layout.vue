@@ -1,92 +1,95 @@
 <template>
   <div class="wrapper">
+    <notification-container />
     <div class="layout-container" v-if="isLoggedIn">
       <div class="header-wrapper">
-        <nav-bar/>
+        <nav-bar />
       </div>
       <div class="content-wrapper">
-        <router-view/>
+        <router-view :key="$route.fullPath" />
       </div>
-      <div class="footer-wrapper">
-
-      </div>
+      <div class="footer-wrapper"></div>
     </div>
-    <login v-else/>
+    <login v-else />
   </div>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex';
-  import Login from '~/pages/login';
-  import NavBar from '~/components/NavBar';
+import { mapActions, mapGetters } from 'vuex';
+import NotificationContainer from './notification/NotificationContainer';
+import Login from '~/pages/login';
+import NavBar from '~/components/NavBar';
 
-  export default {
-    name: 'layout',
-    components: {
-      Login,
-      NavBar,
-    },
-    computed: {
-      ...mapGetters('user', ['isLoggedIn']),
-    },
-    async created() {
-      const {
-        $route: { query },
-        getCurrentUser,
-        signInThrowSocial,
-        fetchAuthTokens,
-      } = this;
-      if (query.access_token && query.refresh_token) {
-        signInThrowSocial(query)
-          .then(getCurrentUser())
-          .then(() => this.$router.replace('/'));
-      } else {
-        await fetchAuthTokens();
-        await getCurrentUser()
-          .catch((_error) => {
-
-          });
-      }
-    },
-    methods: {
-      ...mapActions('user', [
-        'getCurrentUser',
-        'signInThrowSocial',
-        'fetchAuthTokens',
-      ]),
-    },
-  };
+export default {
+  name: 'layout',
+  components: {
+    NotificationContainer,
+    Login,
+    NavBar,
+  },
+  computed: {
+    ...mapGetters('user', ['isLoggedIn']),
+  },
+  async created() {
+    const {
+      $route: { query },
+      getCurrentUser,
+      signInThrowSocial,
+      fetchAuthTokens,
+    } = this;
+    if (query.access_token && query.refresh_token) {
+      signInThrowSocial(query)
+        .then(getCurrentUser())
+        .then(() => this.$router.replace('/'));
+    } else {
+      await fetchAuthTokens();
+      await getCurrentUser().catch((_error) => {});
+    }
+  },
+  methods: {
+    ...mapActions('user', [
+      'getCurrentUser',
+      'signInThrowSocial',
+      'fetchAuthTokens',
+    ]),
+  },
+};
 </script>
 
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
+@import "~/styles/styleguide.sass"
 
-  .wrapper
-    font-size: $base-font-size
-    min-height: 100vh
-    color: $fg-main
-    +main-font()
-    margin: 0 auto
-    display: flex
+$header_height: 50
 
-  .layout-container
-    margin: auto
-    display: flex
-    flex-direction: column
-    min-height: 100vh
-    width: 100%
-    padding: 0 base-unit(40)
-    box-sizing: border-box
+.wrapper
+  font-size: $base-font-size
+  min-height: 100vh
+  color: $fg-main
+  +main-font()
+  margin: 0 auto
+  display: flex
 
-  .header-wrapper
-    flex-direction: column
-    flex: 0 0 auto
+.layout-container
+  margin: auto
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+  max-height: 100vh
+  width: 100%
+  padding: 0 base-unit(40)
+  box-sizing: border-box
 
-  .content-wrapper
-    flex: 1 0 auto
-    display: flex
+.header-wrapper
+  height: base-unit($header_height)
+  flex-direction: column
+  flex: 0 0 auto
 
-  .footer-wrapper
-    flex: 0 0 auto
+.content-wrapper
+  flex: 1 0 auto
+  display: flex
+  min-height: 0
+  max-height: calc(100vh - #{base-unit($header_height)})
 
+.footer-wrapper
+  flex: 0 0 auto
 </style>

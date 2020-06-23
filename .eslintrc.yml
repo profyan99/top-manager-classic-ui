@@ -2,9 +2,10 @@ env:
   browser: true
   es6: true
 extends:
-  - "eslint:recommended"
   - "plugin:vue/essential"
-  - "eslint-config-airbnb-base"
+  - "eslint:recommended"
+  - "prettier/vue"
+  - "plugin:prettier/recommended"
 parserOptions:
   extraFileExtensions: [".vue"]
   ecmaVersion: 2018
@@ -41,7 +42,6 @@ rules:
   vue/script-indent:
     - error
     - 2
-    - baseIndent: 1
 overrides:
   -
     files: ["*.vue"]

@@ -43,15 +43,17 @@
       ...mapGetters('game', ['players']),
       companies() {
         const { players } = this;
-        return players.sort((player1, player2) => {
-          if (player1.isBankrupt) {
-            return 1;
-          }
-          if (player2.isBankrupt) {
-            return -1;
-          }
-          return player2.stats.rating - player1.stats.rating;
-        });
+        return players
+          .filter((company) => company.companyName.length)
+          .sort((player1, player2) => {
+            if (player1.isBankrupt) {
+              return 1;
+            }
+            if (player2.isBankrupt) {
+              return -1;
+            }
+            return player2.stats.rating - player1.stats.rating;
+          });
       },
     },
   };
@@ -92,13 +94,15 @@
         margin-left: base-unit(5)
         margin-right: base-unit(5)
         overflow-x: auto
-        padding-bottom: base-unit(10) //for scroll
 
         &::-webkit-scrollbar
           background: transparent
-          height: base-unit(5)
+          height: base-unit(20)
 
         &::-webkit-scrollbar-thumb
+          border: base-unit(7.5) solid rgba(0, 0, 0, 0)
+          background-clip: padding-box
+          height: base-unit(5)
           border-radius: $base-border-radius
           background-color: $light-grey
 

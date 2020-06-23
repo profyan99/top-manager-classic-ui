@@ -4,24 +4,27 @@
       <span class="main">Top Manager</span>
     </div>
     <div class="links">
-      <div class="link-item"
-           v-for="link in links"
-           @click="performLinkAction(link)"
-           :class="{ 'link-selected': link.title === activePage }"
-           :key="link.title">
-        <span>{{ link.title }}</span>
+      <div
+        class="link-item"
+        v-for="link in links"
+        @click="performLinkAction(link)"
+        :class="{ 'link-selected': link.name === activePage }"
+        :key="link.label"
+      >
+        <span>{{ link.label }}</span>
       </div>
     </div>
-    <div class="profile"
-         @click="modalActive = !modalActive">
+    <div class="profile" @click="modalActive = !modalActive">
       <div class="avatar">
-        <img v-if="user.avatar" class="avatar" :src="user.avatar" alt="avatar">
+        <img
+          v-if="user.avatar"
+          class="avatar"
+          :src="user.avatar"
+          alt="avatar"
+        />
       </div>
       <span class="user-name">{{ user.userName }}</span>
-      <div class="modal"
-           v-if="modalActive"
-           @focusout="modalActive = false"
-      >
+      <div class="modal" v-if="modalActive" @focusout="modalActive = false">
         <span @click="logout">Выход</span>
       </div>
     </div>
@@ -29,146 +32,135 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
+import routes from '~/routes';
 
-  export default {
-    name: 'navbar',
-    data() {
-      return {
-        activePage: 'Игры',
-        modalActive: false,
-        links: [
-          {
-            title: 'Игры',
-            route: 'rooms',
-          },
-          {
-            title: 'Поддержка',
-            route: 'support',
-          },
-          {
-            title: 'Оставить отзыв',
-            route: 'feedback',
-          },
-        ],
-      };
+export default {
+  name: 'navbar',
+  data() {
+    return {
+      modalActive: false,
+    };
+  },
+  computed: {
+    ...mapState('user', ['user']),
+    activePage() {
+      return this.$route.name;
     },
-    computed: {
-      ...mapState('user', ['user']),
+    links() {
+      return routes.filter((route) => route.label);
     },
-    methods: {
-      ...mapActions('user', ['logout']),
-      performLinkAction({ title, route }) {
-        this.activePage = title;
-        this.$router.push({ name: route });
-      },
+  },
+  methods: {
+    ...mapActions('user', ['logout']),
+    performLinkAction({ name }) {
+      this.$router.push({ name });
     },
-  };
+  },
+};
 </script>
 
-
 <style scoped lang="sass">
-  @import "~/styles/styleguide.sass"
+@import "~/styles/styleguide.sass"
 
-  $nav-font-size: base-unit(14)
+$nav-font-size: base-unit(14)
 
-  .nav-bar
-    padding: base-unit(10) 0
-    display: flex
-    flex-direction: row
-    align-items: center
+.nav-bar
+  padding: base-unit(5) 0
+  display: flex
+  flex-direction: row
+  align-items: center
 
-  .logo
-    display: flex
-    flex-direction: column
+.logo
+  display: flex
+  flex-direction: column
 
-    .main
-      font-size: base-unit(16)
-      font-style: normal
-      font-weight: 900
-      color: $fg-main
-      text-transform: uppercase
+  .main
+    font-size: base-unit(16)
+    font-style: normal
+    font-weight: 900
+    color: $fg-main
+    text-transform: uppercase
 
-    .sub
-      font-size: base-unit(8)
-      font-style: normal
-      font-weight: 300
-      letter-spacing: 0.93em
-      color: $fg-main
-      text-transform: uppercase
+  .sub
+    font-size: base-unit(8)
+    font-style: normal
+    font-weight: 300
+    letter-spacing: 0.93em
+    color: $fg-main
+    text-transform: uppercase
 
-  .links
-    display: flex
-    flex-direction: row
-    flex: 1
-    align-items: center
-    margin-left: base-unit(40)
+.links
+  display: flex
+  flex-direction: row
+  flex: 1
+  align-items: center
+  margin-left: base-unit(40)
 
-    .link-item
-      padding: base-unit(10)
-      margin-right: base-unit(5)
-      cursor: pointer
-
-      &:hover span
-        color: #b1b1b1
-
-      span
-        font-weight: 500
-        font-size: $nav-font-size
-        font-style: normal
-        color: $dark-fg-main
-        padding: base-unit(5) 0
-
-    .link-selected
-
-      &:hover span
-        color: $dark-fg-main
-
-      span
-        color: $fg-main
-        border-bottom: base-unit(2) solid $red
-
-  .profile
-    display: flex
-    flex-direction: row
-    align-items: center
+  .link-item
+    padding: base-unit(10)
+    margin-right: base-unit(5)
     cursor: pointer
-    position: relative
 
-    .user-name
+    &:hover span
+      color: #b1b1b1
+
+    span
       font-weight: 500
       font-size: $nav-font-size
       font-style: normal
       color: $dark-fg-main
-      margin-left: base-unit(20)
+      padding: base-unit(5) 0
 
-  .modal
-    position: absolute
-    top: base-unit(40)
-    right: 0
-    box-sizing: border-box
-    width: 100%
-    background-color: $grey
-    padding: base-unit(10)
+  .link-selected
+
+    &:hover span
+      color: $dark-fg-main
 
     span
-      width: 100%
-      padding-left: base-unit(42)
-      color: $dark-fg-main
-      font-weight: normal
-      font-size: $nav-font-size
-      font-style: normal
+      color: $fg-main
+      border-bottom: base-unit(2) solid $red
 
-    &:hover
-      color: #b1b1b1
+.profile
+  display: flex
+  flex-direction: row
+  align-items: center
+  cursor: pointer
+  position: relative
 
-  .modal-wrapper
-    position: fixed
-    z-index: 15
-    width: 100vw
-    height: 100vh
-    left: 0
-    top: 0
-    opacity: 0
+  .user-name
+    font-weight: 500
+    font-size: $nav-font-size
+    font-style: normal
+    color: $dark-fg-main
+    margin-left: base-unit(20)
 
+.modal
+  position: absolute
+  top: base-unit(40)
+  right: 0
+  box-sizing: border-box
+  width: 100%
+  background-color: $grey
+  padding: base-unit(10)
+
+  span
+    width: 100%
+    padding-left: base-unit(42)
+    color: $dark-fg-main
+    font-weight: normal
+    font-size: $nav-font-size
+    font-style: normal
+
+  &:hover
+    color: #b1b1b1
+
+.modal-wrapper
+  position: fixed
+  z-index: 15
+  width: 100vw
+  height: 100vh
+  left: 0
+  top: 0
+  opacity: 0
 </style>
